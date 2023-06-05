@@ -13,11 +13,11 @@ import java.util.UUID;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.lipari.app.controller.AdminController;
-import com.lipari.app.controller.OrderController;
-import com.lipari.app.controller.UserController;
 import com.lipari.app.model.vo.Order;
 import com.lipari.app.model.vo.Product;
+import com.lipari.app.services.AdminController;
+import com.lipari.app.services.OrderController;
+import com.lipari.app.services.UserController;
 
 public class App {
 

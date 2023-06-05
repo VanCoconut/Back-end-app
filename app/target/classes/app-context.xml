@@ -33,21 +33,21 @@
 	</bean>
 	
 	<!-- DataSource config -->
-	<bean id="configBean" class="com.lipari.app.services.ConfigBean" scope="singleton">
+	<bean id="configBean" class="com.lipari.app.utils.ConfigBean" scope="singleton">
 		<constructor-arg name="databaseUrl" value="${database.url}"></constructor-arg>
 		<constructor-arg name="databaseUsername" value="${database.username}"></constructor-arg>
 		<constructor-arg name="databasePassword" value="${database.password}"></constructor-arg>
 	</bean>
 
 	<bean id="adminController"
-		class="com.lipari.app.controller.AdminController" scope="prototype">
+		class="com.lipari.app.services.AdminController" scope="prototype">
 		<!-- <property name="c2" ref="class2"></property> Setter Injection -->
 		<!-- Constructor Injection -->
 		<constructor-arg name="od" ref="orderDao"></constructor-arg>
 	</bean>
 
 	<bean id="orderController"
-		class="com.lipari.app.controller.OrderController" scope="prototype">
+		class="com.lipari.app.services.OrderController" scope="prototype">
 		<!-- <property name="c2" ref="class2"></property> Setter Injection -->
 		<!-- Constructor Injection -->
 		<constructor-arg name="orderDao" ref="orderDao"></constructor-arg>
@@ -58,7 +58,7 @@
 	</bean>
 
 	<bean id="userController"
-		class="com.lipari.app.controller.UserController" scope="singleton">
+		class="com.lipari.app.services.UserController" scope="singleton">
 		<constructor-arg name="userDao" ref="userDao"></constructor-arg>
 		<constructor-arg name="addressDao" ref="addressDao"></constructor-arg>
 	</bean>

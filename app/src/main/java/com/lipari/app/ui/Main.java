@@ -10,12 +10,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.lipari.app.controller.AdminController;
-import com.lipari.app.controller.OrderController;
 import com.lipari.app.model.dao.OrderDao;
 import com.lipari.app.model.vo.Order;
 import com.lipari.app.model.vo.User;
-import com.lipari.app.services.ConfigBean;
+import com.lipari.app.services.AdminController;
+import com.lipari.app.services.OrderController;
+import com.lipari.app.utils.ConfigBean;
 
 
 public class Main {

@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.lipari.app.services.ConfigBean;
+import com.lipari.app.utils.ConfigBean;
 
 public class DbConnection {
 

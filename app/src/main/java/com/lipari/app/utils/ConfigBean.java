@@ -1,4 +1,4 @@
-package com.lipari.app.services;
+package com.lipari.app.utils;
 
 public class ConfigBean {
 	
