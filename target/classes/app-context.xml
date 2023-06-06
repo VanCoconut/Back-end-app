@@ -27,15 +27,5 @@
 	<!--  i due seguenti tag attivano le annotation in Spring -->
 	<aop:config proxy-target-class="true" />
 	<context:annotation-config />
-	<bean
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" scope = "singleton">
-		<property name="locations" value="/*.properties" />
-	</bean>
-	
-	<!-- DataSource config -->
-	<bean id="configBean" class="com.lipari.app.utils.ConfigBean" scope="singleton">
-		<constructor-arg name="databaseUrl" value="${database.url}"></constructor-arg>
-		<constructor-arg name="databaseUsername" value="${database.username}"></constructor-arg>
-		<constructor-arg name="databasePassword" value="${database.password}"></constructor-arg>
-	</bean>
+
 </beans>

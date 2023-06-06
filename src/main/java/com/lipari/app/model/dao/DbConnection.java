@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import com.lipari.app.config.ConfigurationBean;
 import com.lipari.app.ui.App;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,11 +18,14 @@ import com.lipari.app.utils.ConfigBean;
 
 public class DbConnection {
 
-	//ApplicationContext context = new ClassPathXmlApplicationContext("/app-context.xml");
-	ApplicationContext context = new AnnotationConfigApplicationContext(App.class);
+	
+	//ApplicationContext context = new AnnotationConfigApplicationContext(ConfigurationBean.class);
 	private static DbConnection _instance = null;
 	
-	private ConfigBean configBean = context.getBean(ConfigBean.class);
+	//private ConfigBean configBean = context.getBean(ConfigBean.class);
+	
+	@Autowired
+	private ConfigBean configBean;
 	
 	private DbConnection() {}
 	
