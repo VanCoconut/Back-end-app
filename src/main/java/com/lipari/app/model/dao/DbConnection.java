@@ -19,13 +19,14 @@ import com.lipari.app.utils.ConfigBean;
 public class DbConnection {
 
 	
-	//ApplicationContext context = new AnnotationConfigApplicationContext(ConfigurationBean.class);
+	ApplicationContext context = new AnnotationConfigApplicationContext(ConfigurationBean.class);
 	private static DbConnection _instance = null;
 	
-	//private ConfigBean configBean = context.getBean(ConfigBean.class);
+	private ConfigBean configBean = context.getBean(ConfigBean.class);
 	
-	@Autowired
-	private ConfigBean configBean;
+	/*
+	 * @Autowired private ConfigBean configBean;
+	 */
 	
 	private DbConnection() {}
 	
