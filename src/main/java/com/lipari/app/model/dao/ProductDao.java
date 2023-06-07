@@ -12,13 +12,18 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class ProductDao extends BaseDao {
+
+	public ProductDao(DbConnection dbConnection) {
+		super(dbConnection);
+	}
+
 	public List<Product> getAllProduct() throws DataException {
 		List<Product> l = new ArrayList<>();
 		String sql = "SELECT * FROM t_product";
-		try (PreparedStatement ps = getConnection().prepareStatement(sql)) {			
+		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				l.add(new Product(rs.getInt(1),rs.getInt(2), rs.getString(3), rs.getFloat(4), rs.getInt(5)));
+				l.add(new Product(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getFloat(4), rs.getInt(5)));
 			}
 			return l;
 		} catch (SQLException e) {
@@ -27,15 +32,16 @@ public class ProductDao extends BaseDao {
 			throw new DataException(e);
 		}
 	}
+
 	public Product getProduct(int id) throws DataException {
 
 		String sql = "SELECT * FROM t_product WHERE id=?";
-		try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
+		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
 			ps.setInt(1, id);
-			
+
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				return new Product(rs.getInt(1),rs.getInt(2), rs.getString(3), rs.getFloat(4), rs.getInt(5));
+				return new Product(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getFloat(4), rs.getInt(5));
 			}
 		} catch (SQLException e) {
 			throw new DataException(e);
@@ -44,17 +50,18 @@ public class ProductDao extends BaseDao {
 		}
 		return null;
 	}
-	public boolean setProduct(int codice,String descrizione,float costo,int magazzino) throws DataException {
+
+	public boolean setProduct(int codice, String descrizione, float costo, int magazzino) throws DataException {
 
 		String sql = "INSERT INTO t_product (codice,descrizione,costo,magazzino) VALUES (?,?,?,?)";
-		try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
+		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
 			ps.setInt(1, codice);
 			ps.setString(2, descrizione);
 			ps.setFloat(3, costo);
 			ps.setInt(4, codice);
-			
+
 			var rs = ps.executeUpdate();
-			if (rs==1) {
+			if (rs == 1) {
 				return true;
 			}
 		} catch (SQLException e) {
@@ -64,17 +71,19 @@ public class ProductDao extends BaseDao {
 		}
 		return false;
 	}
-	public boolean updateProduct(int id,int codice,String descrizione,float costo,int magazzino) throws DataException {
+
+	public boolean updateProduct(int id, int codice, String descrizione, float costo, int magazzino)
+			throws DataException {
 
 		String sql = "UPDATE t_product SET codice=?,descrizione=?,costo=?,magazzino=? WHERE id=?";
-		try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
-			ps.setInt(1, codice);	
+		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
+			ps.setInt(1, codice);
 			ps.setString(2, descrizione);
 			ps.setFloat(3, costo);
 			ps.setInt(4, magazzino);
-			ps.setInt(5, id);			
+			ps.setInt(5, id);
 			var rs = ps.executeUpdate();
-			if (rs==1) {
+			if (rs == 1) {
 				return true;
 			}
 		} catch (SQLException e) {
@@ -84,13 +93,14 @@ public class ProductDao extends BaseDao {
 		}
 		return false;
 	}
+
 	public boolean deleteProduct(int id) throws DataException {
 
 		String sql = "DELETE FROM t_product WHERE id=?";
-		try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
-			ps.setInt(1, id);			
+		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
+			ps.setInt(1, id);
 			var rs = ps.executeUpdate();
-			if (rs==1) {
+			if (rs == 1) {
 				return true;
 			}
 		} catch (SQLException e) {

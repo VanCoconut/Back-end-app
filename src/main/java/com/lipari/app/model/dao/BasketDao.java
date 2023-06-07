@@ -13,12 +13,17 @@ import com.lipari.app.model.vo.Basket;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class BasketDao extends BaseDao {
+public class BasketDao extends BaseDao{
+
+	public BasketDao(DbConnection dbConnection) {
+		super(dbConnection);
+		
+	}
 
 	public List<Basket> getBasket(String orderId) throws DataException {
 		List<Basket> l = new ArrayList<>();
 		String sql = "SELECT * FROM t_basket WHERE orderId=?";
-		try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
+		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
 			ps.setString(1, orderId);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -46,7 +51,7 @@ public class BasketDao extends BaseDao {
 
 	public boolean setBasket(String orderId, int productId, int qta) throws DataException {
 		String sql = "INSERT INTO t_basket (orderId,productId,quantita) VALUES (?,?,?);";
-		try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
+		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
 			ps.setString(1, orderId);
 			ps.setInt(2, productId);
 			ps.setInt(3, qta);
@@ -64,7 +69,7 @@ public class BasketDao extends BaseDao {
 
 	public boolean updateBasket(String orderId, int productId, int qta) throws DataException {
 		String sql = "UPDATE t_basket SET productId=?,quantita=? WHERE orderId=?";
-		try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
+		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
 			ps.setInt(2, productId);
 			ps.setInt(3, qta);
 			ps.setString(1, orderId);
@@ -82,7 +87,7 @@ public class BasketDao extends BaseDao {
 
 	public boolean deleteBasket(String orderId, int productId) throws DataException {
 		String sql = "DELETE from t_basket WHERE orderId=? AND productId=? ";
-		try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
+		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
 			ps.setString(1, orderId);
 			ps.setInt(2, productId);
 			var rs = ps.executeUpdate();

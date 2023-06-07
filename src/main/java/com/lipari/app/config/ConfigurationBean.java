@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
-import com.lipari.app.utils.ConfigBean;
+import com.lipari.app.utils.DatabaseConfigBean;
 
 @Configuration
 
@@ -27,8 +27,8 @@ public class ConfigurationBean {
 	private String databasePassword;
 
 	@Bean(name = "datasource")
-	public ConfigBean getDatabaseConfigurationBean() {
-		ConfigBean datasource = new ConfigBean();		
+	public DatabaseConfigBean getDatabaseConfigurationBean() {
+		DatabaseConfigBean datasource = new DatabaseConfigBean();		
 		datasource.setDatabasePassword(databasePassword);
 		datasource.setDatabaseUsername(databaseUsername);
 		datasource.setDatabaseUrl(databaseUrl);

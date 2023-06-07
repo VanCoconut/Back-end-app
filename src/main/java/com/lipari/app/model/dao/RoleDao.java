@@ -12,10 +12,16 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class RoleDao extends BaseDao {
+	
+	public RoleDao(DbConnection dbConnection) {
+		super(dbConnection);
+		
+	}
+	
 	public List<Role> getAllRoles() throws DataException {
 		List<Role> l = new ArrayList<>();
 		String sql = "SELECT * FROM t_role";
-		try (PreparedStatement ps = getConnection().prepareStatement(sql)) {			
+		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {			
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				l.add(new Role(rs.getInt(1),rs.getString(2)));
@@ -30,7 +36,7 @@ public class RoleDao extends BaseDao {
 	public Role getRole(int id) throws DataException {
 
 		String sql = "SELECT * FROM t_role WHERE id=?";
-		try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
+		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
 			ps.setInt(1, id);
 			
 			ResultSet rs = ps.executeQuery();
@@ -47,7 +53,7 @@ public class RoleDao extends BaseDao {
 	public Role getRole(String descrizione) throws DataException {
 
 		String sql = "SELECT * FROM t_role WHERE descrizione=?";
-		try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
+		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
 			ps.setString(1, descrizione.toLowerCase());			
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -63,7 +69,7 @@ public class RoleDao extends BaseDao {
 	public boolean setRole(int id,String descrizione) throws DataException {
 
 		String sql = "INSERT INTO t_role (id,descrizione) VALUES (?,?)";
-		try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
+		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
 			ps.setInt(1, id);
 			ps.setString(1, descrizione.toLowerCase());			
 			var rs = ps.executeUpdate();
@@ -80,7 +86,7 @@ public class RoleDao extends BaseDao {
 	public boolean updateRole(int id,int newId, String newDescr) throws DataException {
 
 		String sql = "UPDATE t_role SET id=?, descrizione=? WHERE id=?; ";
-		try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
+		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
 			ps.setInt(1, newId);			
 			ps.setString(2, newDescr.toLowerCase());
 			ps.setInt(1, id);	
@@ -98,7 +104,7 @@ public class RoleDao extends BaseDao {
 	public boolean deleteRole(int id) throws DataException {
 
 		String sql = "DELETE from t_role WHERE id=? ";
-		try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
+		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
 			ps.setInt(1, id);			
 			var rs = ps.executeUpdate();
 			if (rs==1) {

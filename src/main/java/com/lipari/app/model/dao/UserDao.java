@@ -3,6 +3,7 @@ package com.lipari.app.model.dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Base64;
 
 import com.lipari.app.exception.DataException;
 import com.lipari.app.model.vo.User;
@@ -11,10 +12,15 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UserDao extends BaseDao {
 
+	public UserDao(DbConnection dbConnection) {
+		super(dbConnection);
+		// TODO Auto-generated constructor stub
+	}
+
 	public User getUser(String usr, String psw) throws DataException {
 
 		String sql = "SELECT * FROM t_user WHERE username=? AND password=?";
-		try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
+		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
 			ps.setString(1, usr);
 			ps.setString(2, psw);
 			ResultSet rs = ps.executeQuery();
@@ -34,7 +40,7 @@ public class UserDao extends BaseDao {
 			throws DataException {
 
 		String sql = "INSERT INTO t_user (nome,cognome,username,password,email,role) VALUES (?,?,?,?,?,?)";
-		try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
+		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
 			ps.setString(1, nome);
 			ps.setString(2, cognome);
 			ps.setString(3, username);
@@ -57,7 +63,7 @@ public class UserDao extends BaseDao {
 			int role) throws DataException {
 
 		String sql = "UPDATE t_user SET nome=?,cognome=?,username=?,password=?,email=?,role=? WHERE id=?";
-		try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
+		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
 			ps.setString(1, nome);
 			ps.setString(2, cognome);
 			ps.setString(3, username);
@@ -80,7 +86,7 @@ public class UserDao extends BaseDao {
 	public boolean deleteUser(int id) throws DataException {
 
 		String sql = "DELETE FROM t_user WHERE id=?";
-		try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
+		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
 			ps.setInt(1, id);
 			var rs = ps.executeUpdate();
 			if (rs == 1) {

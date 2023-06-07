@@ -2,23 +2,23 @@ package com.lipari.app.model.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Objects;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import com.lipari.app.exception.DataException;
-import org.springframework.stereotype.Repository;
+
 
 public class BaseDao {
 
-	DbConnection dbCon = null;
+	protected DbConnection dbConnection;
 
-	public Connection getConnection() throws DataException {
-		try {
-			dbCon = DbConnection.getInstance();
-			return dbCon.initService();
-		} catch (SQLException e) {
-			throw new DataException(e);
-		} catch (Exception e) {
-			throw new DataException(e);
-		}
+	@Autowired
+	public BaseDao(DbConnection dbConnection) {
+		this.dbConnection = Objects.requireNonNull(dbConnection);
 	}
-
+	
+	
 }
