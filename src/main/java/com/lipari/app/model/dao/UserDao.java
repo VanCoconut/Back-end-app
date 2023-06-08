@@ -59,7 +59,7 @@ public class UserDao extends BaseDao {
 		return false;
 	}
 
-	public boolean updateUser(int id, String nome, String cognome, String username, String password, String email,
+	public boolean updateUser(int currentUserId, String nome, String cognome, String username, String password, String email,
 			int role) throws DataException {
 
 		String sql = "UPDATE t_user SET nome=?,cognome=?,username=?,password=?,email=?,role=? WHERE id=?";
