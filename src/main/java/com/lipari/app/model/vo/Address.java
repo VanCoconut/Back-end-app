@@ -3,6 +3,9 @@ package com.lipari.app.model.vo;
 public class Address {
 	private int userId;
 	private String indirizzo;
+	
+	public Address() {}
+	
 	public Address(int userId, String indirizzo) {
 		super();
 		this.userId = userId;

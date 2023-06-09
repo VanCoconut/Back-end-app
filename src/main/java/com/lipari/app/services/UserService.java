@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.lipari.app.exception.DataException;
 import com.lipari.app.model.dao.AddressDao;
 import com.lipari.app.model.dao.UserDao;
+import com.lipari.app.model.vo.Address;
 import com.lipari.app.model.vo.User;
 
 @Service
@@ -22,6 +23,11 @@ public class UserService {
 		this.addressDao = addressDao;
 	}
 
+	public String hello() {
+		return "hello";
+		
+	}
+	
 	public User loging(String username, String pass) {
 
 		try {
@@ -124,6 +130,16 @@ public class UserService {
 	public boolean addAddress(int userId, String newAddress) {
 		try {
 			return addressDao.setAddress(userId, newAddress);
+		} catch (DataException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public boolean addAddress(Address address) {
+		try {
+			return addressDao.setAddress(address.getUserId(), address.getIndirizzo());
 		} catch (DataException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

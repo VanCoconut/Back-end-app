@@ -42,8 +42,8 @@ public class AddressDao extends BaseDao{
 	public boolean setAddress( int userId, String indirizzo) throws DataException {
 		String sql = "INSERT INTO t_address (userId,indirizzo) VALUES (?,?);";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
-			ps.setInt(3, userId);
-			ps.setString(1, indirizzo);			
+			ps.setInt(1, userId);
+			ps.setString(2, indirizzo);			
 			var rs = ps.executeUpdate();
 			while (rs == 1) {
 				return true;
@@ -68,8 +68,8 @@ public class AddressDao extends BaseDao{
 	public boolean deleteAddress( int userId, String indirizzo) throws DataException {
 		String sql = "DELETE FROM t_address WHERE userId=? AND indirizzo=?";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
-			ps.setInt(3, userId);
-			ps.setString(1, indirizzo);			
+			ps.setInt(1, userId);
+			ps.setString(2, indirizzo);			
 			var rs = ps.executeUpdate();
 			while (rs == 1) {
 				return true;

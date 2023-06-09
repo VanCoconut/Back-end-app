@@ -70,7 +70,7 @@ public class UserDao extends BaseDao {
 			ps.setString(4, password);
 			ps.setString(5, email);
 			ps.setInt(6, role);
-			ps.setInt(7, id);
+			ps.setInt(7, currentUserId);
 			var rs = ps.executeUpdate();
 			if (rs == 1) {
 				return true;
