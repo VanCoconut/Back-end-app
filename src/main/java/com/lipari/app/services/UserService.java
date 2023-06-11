@@ -50,6 +50,17 @@ public class UserService {
 
 		return null;
 	}
+	
+	public boolean changeUser(User user) {
+		try {
+			return userDao.updateUser(user.getId(), user.getNome(), user.getCognome(), user.getUsername(), user.getPassword(),
+					user.getEmail(), user.getRole());
+		} catch (DataException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
 
 	public boolean changeUserName(User user, String newName) {
 		try {
