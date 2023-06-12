@@ -25,8 +25,6 @@ public class App {
 	private static boolean stop = true;
 	private static boolean flag = true;
 	private static boolean flag2 = true;
-
-
 	public static void main(String[] args) {
 		ApplicationContext context = new AnnotationConfigApplicationContext(ConfigurationBean.class);
 		AdminService adminService = context.getBean(AdminService.class);

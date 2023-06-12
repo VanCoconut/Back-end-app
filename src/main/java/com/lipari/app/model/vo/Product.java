@@ -6,6 +6,8 @@ public class Product {
 	private float costo;
 	private int magazzino;
 
+	public Product(){}
+
 	public Product(int id, int codice, String descrizione, float costo, int magazzino) {
 		super();
 		this.id = id;

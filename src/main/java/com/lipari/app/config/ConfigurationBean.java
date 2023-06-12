@@ -12,7 +12,6 @@ import com.lipari.app.utils.DatabaseConfigBean;
 @Configuration
 
 @ComponentScan("com.lipari.app")
-
 @PropertySources(
 		{
 				@PropertySource("/database.properties")

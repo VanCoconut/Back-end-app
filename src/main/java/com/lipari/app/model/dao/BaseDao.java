@@ -19,6 +19,5 @@ public class BaseDao {
 	public BaseDao(DbConnection dbConnection) {
 		this.dbConnection = Objects.requireNonNull(dbConnection);
 	}
-	
-	
+
 }

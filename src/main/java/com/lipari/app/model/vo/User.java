@@ -6,7 +6,6 @@ public class User {
 	private int role;
 
 	public User(int id, String nome, String cognome, String username, String password, String email, int role) {
-		super();
 		this.id = id;
 		this.nome = nome;
 		this.cognome = cognome;

@@ -22,13 +22,14 @@ public class ProductDao extends BaseDao {
 		String sql = "SELECT * FROM t_product";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
 			ResultSet rs = ps.executeQuery();
+			if(!rs.isBeforeFirst()){
+				throw new DataException("no product found");
+			}
 			while (rs.next()) {
 				l.add(new Product(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getFloat(4), rs.getInt(5)));
 			}
 			return l;
 		} catch (SQLException e) {
-			throw new DataException(e);
-		} catch (Exception e) {
 			throw new DataException(e);
 		}
 	}
@@ -40,12 +41,14 @@ public class ProductDao extends BaseDao {
 			ps.setInt(1, id);
 
 			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
+			if(!rs.isBeforeFirst()){
+				throw new DataException("no product found");
+			}
+			while(rs.next()) {
 				return new Product(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getFloat(4), rs.getInt(5));
 			}
+
 		} catch (SQLException e) {
-			throw new DataException(e);
-		} catch (Exception e) {
 			throw new DataException(e);
 		}
 		return null;
@@ -72,41 +75,50 @@ public class ProductDao extends BaseDao {
 		return false;
 	}
 
-	public boolean updateProduct(int id, int codice, String descrizione, float costo, int magazzino)
+	public void updateProduct(Product product)
 			throws DataException {
-
 		String sql = "UPDATE t_product SET codice=?,descrizione=?,costo=?,magazzino=? WHERE id=?";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
-			ps.setInt(1, codice);
-			ps.setString(2, descrizione);
-			ps.setFloat(3, costo);
-			ps.setInt(4, magazzino);
-			ps.setInt(5, id);
-			var rs = ps.executeUpdate();
-			if (rs == 1) {
-				return true;
+
+			ps.setInt(1, product.getCodice());
+			ps.setString(2, product.getDescrizione());
+			ps.setFloat(3, product.getCosto());
+			ps.setInt(4, product.getMagazzino());
+			ps.setInt(5,product.getId());
+			int rowsAffected = ps.executeUpdate();
+			if (rowsAffected == 0) {
+				throw new DataException("Failed to update product");
 			}
 		} catch (SQLException e) {
-			throw new DataException(e);
-		} catch (Exception e) {
-			throw new DataException(e);
+			throw new DataException("Error updating product: "+ e.getMessage());
 		}
-		return false;
 	}
 
-	public boolean deleteProduct(int id) throws DataException {
+	public void deleteProduct(int id) throws DataException {
 
 		String sql = "DELETE FROM t_product WHERE id=?";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
 			ps.setInt(1, id);
-			var rs = ps.executeUpdate();
-			if (rs == 1) {
-				return true;
+			int rowsAffected = ps.executeUpdate();
+			if (rowsAffected == 0) {
+				throw new DataException("Failed to delete product");
 			}
 		} catch (SQLException e) {
-			throw new DataException(e);
-		} catch (Exception e) {
-			throw new DataException(e);
+			throw new DataException("Error deleting product: "+ e.getMessage());
+		}
+	}
+
+	public boolean existsById(int productId){
+		String query= "SELECT COUNT(*) FROM t_product WHERE id=?";
+		try(PreparedStatement ps = dbConnection.openConnection().prepareStatement(query)) {
+			ps.setInt(1,productId);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()){
+				int count = rs.getInt(1);
+				return count > 0;
+			}
+		}catch (SQLException e){
+			e.printStackTrace();
 		}
 		return false;
 	}
