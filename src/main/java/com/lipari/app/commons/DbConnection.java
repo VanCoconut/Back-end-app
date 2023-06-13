@@ -1,4 +1,4 @@
-package com.lipari.app.model.dao;
+package com.lipari.app.commons;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

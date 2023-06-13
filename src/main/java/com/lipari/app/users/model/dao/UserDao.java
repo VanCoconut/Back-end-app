@@ -1,13 +1,15 @@
-package com.lipari.app.model.dao;
+package com.lipari.app.users.model.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Base64;
 
-import com.lipari.app.exception.DataException;
-import com.lipari.app.model.vo.User;
 import org.springframework.stereotype.Repository;
+
+import com.lipari.app.commons.BaseDao;
+import com.lipari.app.commons.DbConnection;
+import com.lipari.app.exception.DataException;
+import com.lipari.app.users.model.vo.User;
 
 @Repository
 public class UserDao extends BaseDao {
