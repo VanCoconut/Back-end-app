@@ -32,8 +32,8 @@ public class UserDao extends BaseDao {
 				user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
 						rs.getString(6), rs.getInt(7));
 			}
-			if (user == null)
-				throw new AuthException("Accesso negato : username o password errati");
+			//if (user == null)
+			//	throw new AuthException("Accesso non autorizzato password o username errati");
 			return user;
 		} catch (SQLException e) {
 			throw new DataException("Error during sql log in");

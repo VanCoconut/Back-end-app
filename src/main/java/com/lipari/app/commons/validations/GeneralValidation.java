@@ -35,7 +35,7 @@ public class GeneralValidation {
 	public void minimumLenght8(String ...strings) {
 
 		for (String s : strings) {
-			if (s.isBlank())
+			if (s.length()<8)
 				throw new InvalidDataException("i campi non possono contenere meno di 8 caratteri");
 		}
 	}

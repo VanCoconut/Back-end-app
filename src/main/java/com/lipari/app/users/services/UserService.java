@@ -54,6 +54,8 @@ public class UserService {
 		try {
 			signInValidation.validation(username, pass);
 			User u = userDao.getUser(username, pass);
+			if (u == null)
+				throw new AuthException("Accesso non autorizzato password o username errati");
 			return u;
 		} catch (InvalidDataException e) {
 			throw new AuthException("Accesso non autorizzato " + e.getMessage());

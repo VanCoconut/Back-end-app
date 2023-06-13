@@ -43,11 +43,11 @@ public class UserController {
 	// POST
 
 	@PostMapping("/login")
-	public User login(@RequestBody User log) {
+	public User login(@RequestBody LoggInDto log) {
 		return userService.loging(log.getUsername(), log.getPassword());
 	}
 
-	@PostMapping("/")
+	@PostMapping("")
 	public boolean addUser(@RequestBody User user) {
 		return userService.createUser(user);
 	}
@@ -75,7 +75,7 @@ public class UserController {
 		return "deleted user ID : " + userId + " " + userService.cancelUser(userId);
 	}
 
-	@DeleteMapping("/{id}/address/")
+	@DeleteMapping("/{id}/address")
 	public String deleteAddress(@PathVariable int id) {
 
 		return "deleted address ID : " + id + " " + userService.cancelAddress(id);
