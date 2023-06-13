@@ -1,10 +1,12 @@
-package com.lipari.app.model.vo;
+package com.lipari.app.users.entities;
 
 public class User {
 	private int id;
 	private String nome, cognome, username, password, email;
 	private int role;
 
+	public User() {}
+	
 	public User(int id, String nome, String cognome, String username, String password, String email, int role) {
 		super();
 		this.id = id;

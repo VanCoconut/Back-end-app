@@ -1,13 +1,15 @@
-package com.lipari.app.model.dao;
+package com.lipari.app.users.repositories;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Base64;
 
-import com.lipari.app.exception.DataException;
-import com.lipari.app.model.vo.User;
 import org.springframework.stereotype.Repository;
+
+import com.lipari.app.commons.BaseDao;
+import com.lipari.app.commons.DbConnection;
+import com.lipari.app.exception.DataException;
+import com.lipari.app.users.entities.User;
 
 @Repository
 public class UserDao extends BaseDao {
@@ -24,16 +26,19 @@ public class UserDao extends BaseDao {
 			ps.setString(1, usr);
 			ps.setString(2, psw);
 			ResultSet rs = ps.executeQuery();
+			User user = null;
 			while (rs.next()) {
-				return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+				 user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
 						rs.getString(6), rs.getInt(7));
 			}
+			if(user==null) throw new DataException("username o password errati");
+			return user;
 		} catch (SQLException e) {
 			throw new DataException(e);
-		} catch (Exception e) {
+		} catch (Exception e) {			
 			throw new DataException(e);
 		}
-		return null;
+		
 	}
 
 	public boolean setUser(String nome, String cognome, String username, String password, String email, int role)
@@ -59,7 +64,7 @@ public class UserDao extends BaseDao {
 		return false;
 	}
 
-	public boolean updateUser(int id, String nome, String cognome, String username, String password, String email,
+	public boolean updateUser(int currentUserId, String nome, String cognome, String username, String password, String email,
 			int role) throws DataException {
 
 		String sql = "UPDATE t_user SET nome=?,cognome=?,username=?,password=?,email=?,role=? WHERE id=?";
@@ -70,7 +75,7 @@ public class UserDao extends BaseDao {
 			ps.setString(4, password);
 			ps.setString(5, email);
 			ps.setInt(6, role);
-			ps.setInt(7, id);
+			ps.setInt(7, currentUserId);
 			var rs = ps.executeUpdate();
 			if (rs == 1) {
 				return true;

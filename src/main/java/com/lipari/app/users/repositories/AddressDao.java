@@ -1,16 +1,16 @@
-package com.lipari.app.model.dao;
+package com.lipari.app.users.repositories;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import com.lipari.app.exception.DataException;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import com.lipari.app.commons.BaseDao;
+import com.lipari.app.commons.DbConnection;
+import com.lipari.app.exception.DataException;
 
 @Repository
 public class AddressDao extends BaseDao{
@@ -24,7 +24,7 @@ public class AddressDao extends BaseDao{
 
 	public List<String> getAllAddress(int userId) throws DataException {
 		List<String> l = new ArrayList<>();
-		String sql = "SELECT indirizzo FROM t_address WHERE userId=?";
+		String sql = "SELECT indirizzo FROM t_address WHERE user_id=?";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
 			ps.setInt(1, userId);
 			ResultSet rs = ps.executeQuery();
@@ -40,10 +40,10 @@ public class AddressDao extends BaseDao{
 	}
 
 	public boolean setAddress( int userId, String indirizzo) throws DataException {
-		String sql = "INSERT INTO t_address (userId,indirizzo) VALUES (?,?);";
+		String sql = "INSERT INTO t_address (user_id,indirizzo) VALUES (?,?);";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
-			ps.setInt(3, userId);
-			ps.setString(1, indirizzo);			
+			ps.setInt(1, userId);
+			ps.setString(2, indirizzo);			
 			var rs = ps.executeUpdate();
 			while (rs == 1) {
 				return true;
@@ -66,10 +66,10 @@ public class AddressDao extends BaseDao{
 		return false;
 	}
 	public boolean deleteAddress( int userId, String indirizzo) throws DataException {
-		String sql = "DELETE FROM t_address WHERE userId=? AND indirizzo=?";
+		String sql = "DELETE FROM t_address WHERE user_id=? AND indirizzo=?";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
-			ps.setInt(3, userId);
-			ps.setString(1, indirizzo);			
+			ps.setInt(1, userId);
+			ps.setString(2, indirizzo);			
 			var rs = ps.executeUpdate();
 			while (rs == 1) {
 				return true;

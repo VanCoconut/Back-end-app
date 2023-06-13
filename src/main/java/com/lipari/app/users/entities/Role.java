@@ -1,4 +1,4 @@
-package com.lipari.app.model.vo;
+package com.lipari.app.users.entities;
 
 public class Role {
 	private int id;
