@@ -2,7 +2,7 @@ package com.lipari.app.users.validations;
 
 import org.springframework.stereotype.Component;
 
-import com.lipari.app.users.model.vo.User;
+import com.lipari.app.users.entities.User;
 @Component
 public class SignUpValidation extends GeneralValidation {
 

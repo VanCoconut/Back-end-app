@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 import com.lipari.app.exception.AuthException;
 import com.lipari.app.exception.DataException;
 import com.lipari.app.exception.ValidationException;
-import com.lipari.app.users.model.dao.AddressDao;
-import com.lipari.app.users.model.dao.UserDao;
-import com.lipari.app.users.model.vo.Address;
-import com.lipari.app.users.model.vo.User;
+import com.lipari.app.users.entities.Address;
+import com.lipari.app.users.entities.User;
+import com.lipari.app.users.repositories.AddressDao;
+import com.lipari.app.users.repositories.UserDao;
 import com.lipari.app.users.validations.GeneralValidation;
 import com.lipari.app.users.validations.SignInValidation;
 import com.lipari.app.users.validations.SignUpValidation;
@@ -50,12 +50,11 @@ public class UserService {
 			User u = userDao.getUser(username, pass);
 			return u;
 		} catch (DataException e) {
-			e.printStackTrace();
+			throw new DataException("Accesso non autorizzato " + e.getMessage());
 		} catch (RuntimeException e) {
-			throw new AuthException("Accesso non autorizzato " + e.getMessage() + "\n");
+			e.printStackTrace();
+			throw new AuthException("Accesso non autorizzato " + e.getMessage());
 		}
-
-		return null;
 	}
 
 	public List<String> adressList(int userId) {
@@ -68,12 +67,12 @@ public class UserService {
 
 		return null;
 	}
-
-	public boolean changeUser(User user) {
+	
+	public boolean createUser(User user) {
 		try {
 			signUpUpValidation.validation(user);
-			return userDao.updateUser(user.getId(), user.getNome(), user.getCognome(), user.getUsername(),
-					user.getPassword(), user.getEmail(), user.getRole());
+			return userDao.setUser(user.getNome(), user.getCognome(), user.getUsername(), user.getPassword(),
+					user.getEmail(), user.getRole());
 		} catch (DataException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -83,11 +82,11 @@ public class UserService {
 		return false;
 	}
 
-	public boolean createUser(User user) {
+	public boolean changeUser(User user) {
 		try {
 			signUpUpValidation.validation(user);
-			return userDao.setUser(user.getNome(), user.getCognome(), user.getUsername(), user.getPassword(),
-					user.getEmail(), user.getRole());
+			return userDao.updateUser(user.getId(), user.getNome(), user.getCognome(), user.getUsername(),
+					user.getPassword(), user.getEmail(), user.getRole());
 		} catch (DataException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

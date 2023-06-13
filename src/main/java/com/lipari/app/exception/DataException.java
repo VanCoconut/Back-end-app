@@ -1,6 +1,6 @@
 package com.lipari.app.exception;
 
-public class DataException extends Exception {
+public class DataException extends RuntimeException {
 
 	/**
 	 * 

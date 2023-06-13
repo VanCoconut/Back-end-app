@@ -1,4 +1,4 @@
-package com.lipari.app.users.model.dao;
+package com.lipari.app.users.repositories;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

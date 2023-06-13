@@ -1,4 +1,4 @@
-package com.lipari.app.users.model.vo;
+package com.lipari.app.users.entities;
 
 public class Address {
 	private int userId;

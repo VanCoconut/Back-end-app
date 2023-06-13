@@ -3,17 +3,17 @@ package com.lipari.app.users.responses;
 public class UserErrorResponse {
 
 	private int status;
-	private String massage;
+	private String message;
 	private long timeStamp;
 
 	public UserErrorResponse() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public UserErrorResponse(int status, String massage, long timeStamp) {
+	public UserErrorResponse(int status, String message, long timeStamp) {
 		super();
 		this.status = status;
-		this.massage = massage;
+		this.message = message;
 		this.timeStamp = timeStamp;
 	}
 
@@ -24,13 +24,13 @@ public class UserErrorResponse {
 	public void setStatus(int status) {
 		this.status = status;
 	}
-
-	public String getMassage() {
-		return massage;
+	
+	public String getMessage() {
+		return message;
 	}
 
-	public void setMassage(String massage) {
-		this.massage = massage;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	public long getTimeStamp() {

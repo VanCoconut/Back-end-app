@@ -1,4 +1,4 @@
-package com.lipari.app.users.controller;
+package com.lipari.app.users.controllers;
 
 import java.util.List;
 
@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lipari.app.users.model.vo.Address;
-import com.lipari.app.users.model.vo.User;
+import com.lipari.app.exception.AuthException;
+import com.lipari.app.users.entities.Address;
+import com.lipari.app.users.entities.User;
 import com.lipari.app.users.requests.LoggInRequest;
 import com.lipari.app.users.services.UserService;
 

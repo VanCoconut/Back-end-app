@@ -1,4 +1,4 @@
-package com.lipari.app.users.model.dao;
+package com.lipari.app.users.repositories;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.lipari.app.commons.BaseDao;
 import com.lipari.app.commons.DbConnection;
 import com.lipari.app.exception.DataException;
-import com.lipari.app.users.model.vo.User;
+import com.lipari.app.users.entities.User;
 
 @Repository
 public class UserDao extends BaseDao {
@@ -26,16 +26,19 @@ public class UserDao extends BaseDao {
 			ps.setString(1, usr);
 			ps.setString(2, psw);
 			ResultSet rs = ps.executeQuery();
+			User user = null;
 			while (rs.next()) {
-				return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+				 user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
 						rs.getString(6), rs.getInt(7));
 			}
+			if(user==null) throw new DataException("username o password errati");
+			return user;
 		} catch (SQLException e) {
 			throw new DataException(e);
-		} catch (Exception e) {
+		} catch (Exception e) {			
 			throw new DataException(e);
 		}
-		return null;
+		
 	}
 
 	public boolean setUser(String nome, String cognome, String username, String password, String email, int role)

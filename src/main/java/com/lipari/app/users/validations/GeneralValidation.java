@@ -26,7 +26,7 @@ public class GeneralValidation {
 	public void stringNoSpace(String ...strings) {
 
 		for (String s : strings) {
-			if (s.isBlank())
+			if (s.contains(" "))
 				throw new RuntimeException("i campi non possono contenere spazi");
 		}
 	}

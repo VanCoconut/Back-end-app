@@ -1,4 +1,4 @@
-package com.lipari.app.users.model.dao;
+package com.lipari.app.users.repositories;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.lipari.app.commons.BaseDao;
 import com.lipari.app.commons.DbConnection;
 import com.lipari.app.exception.DataException;
-import com.lipari.app.users.model.vo.Role;
+import com.lipari.app.users.entities.Role;
 
 @Repository
 public class RoleDao extends BaseDao {
