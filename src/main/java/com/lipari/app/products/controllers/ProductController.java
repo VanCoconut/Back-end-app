@@ -1,8 +1,8 @@
-package com.lipari.app.product.controllers;
+package com.lipari.app.products.controllers;
 
 import com.lipari.app.commons.exception.utils.DataException;
-import com.lipari.app.product.services.ProductService;
-import com.lipari.app.product.entities.Product;
+import com.lipari.app.products.services.ProductService;
+import com.lipari.app.products.entities.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

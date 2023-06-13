@@ -15,10 +15,10 @@ import org.springframework.stereotype.Service;
 import com.lipari.app.commons.exception.utils.DataException;
 import com.lipari.app.users.repositories.AddressDao;
 import com.lipari.app.basket.repositories.BasketDao;
-import com.lipari.app.product.repositories.ProductDao;
+import com.lipari.app.products.repositories.ProductDao;
 import com.lipari.app.users.repositories.UserDao;
 import com.lipari.app.basket.entities.Basket;
-import com.lipari.app.product.entities.Product;
+import com.lipari.app.products.entities.Product;
 
 @Service
 public class OrderService {

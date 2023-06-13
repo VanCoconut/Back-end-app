@@ -1,4 +1,4 @@
-package com.lipari.app.product.entities;
+package com.lipari.app.products.entities;
 
 public class Product {
 	private int id, codice;

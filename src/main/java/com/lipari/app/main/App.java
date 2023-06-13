@@ -15,7 +15,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import com.lipari.app.utils.ConfigurationBean;
 import com.lipari.app.orders.entities.Order;
-import com.lipari.app.product.entities.Product;
+import com.lipari.app.products.entities.Product;
 import com.lipari.app.users.services.AdminService;
 import com.lipari.app.orders.services.OrderService;
 import com.lipari.app.users.services.UserService;

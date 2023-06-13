@@ -1,11 +1,11 @@
-package com.lipari.app.product.services;
+package com.lipari.app.products.services;
 
 
 import com.lipari.app.commons.exception.utils.AlreadyExistsException;
 import com.lipari.app.commons.exception.utils.InvalidDataException;
 import com.lipari.app.commons.exception.utils.NotFoundException;
-import com.lipari.app.product.repositories.ProductDao;
-import com.lipari.app.product.entities.Product;
+import com.lipari.app.products.repositories.ProductDao;
+import com.lipari.app.products.entities.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,9 +33,7 @@ public class ProductService {
     }
 
     public Product getProductById(int id) {
-        Product product;
-        product = productDao.getProduct(id);
-        return product;
+        return productDao.getProduct(id);
     }
     public List<Product> getAllProducts() {
         List<Product> products;

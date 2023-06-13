@@ -1,4 +1,4 @@
-package com.lipari.app.product.repositories;
+package com.lipari.app.products.repositories;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.lipari.app.commons.exception.utils.DataException;
 import com.lipari.app.commons.repositories.BaseDao;
-import com.lipari.app.product.entities.Product;
+import com.lipari.app.products.entities.Product;
 import com.lipari.app.utils.DbConnection;
 import org.springframework.stereotype.Repository;
 
@@ -49,7 +49,6 @@ public class ProductDao extends BaseDao {
 			while(rs.next()) {
 				return new Product(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getFloat(4), rs.getInt(5));
 			}
-
 		} catch (SQLException e) {
 			throw new DataException(e);
 		}
