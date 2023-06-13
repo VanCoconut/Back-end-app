@@ -1,6 +1,5 @@
 package com.lipari.app.product.controllers;
 
-import com.lipari.app.commons.exception.entities.DataErrorResponse;
 import com.lipari.app.commons.exception.utils.DataException;
 import com.lipari.app.product.services.ProductService;
 import com.lipari.app.product.entities.Product;
@@ -23,36 +22,27 @@ public class ProductController {
 
     @PostMapping()
     public ResponseEntity<String> insertProduct(@RequestBody Product product)  {
-        return productService.createProduct(product);
+        return ResponseEntity.ok(productService.createProduct(product));
     }
 
     @GetMapping()
     public ResponseEntity<List<Product>> getAllProducts() throws DataException {
-        return productService.getAllProducts();
+        return ResponseEntity.ok(productService.getAllProducts());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductbyId(@PathVariable int id) throws DataException {
-        return productService.getProductbyId(id);
+        return ResponseEntity.ok(productService.getProductById(id));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateProductById(@RequestBody Product product, @PathVariable int id) throws DataException {
-        return productService.updateProductById(product, id);
+        return ResponseEntity.ok(productService.updateProductById(product, id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> removeProductById(@PathVariable int id) throws DataException {
-        return productService.removeProductById(id);
+        return ResponseEntity.ok(productService.removeProductById(id));
     }
 
-    @ExceptionHandler(DataException.class)
-    public ResponseEntity<DataErrorResponse> handlerException(DataException ex) {
-        return productService.handlerException(ex);
-    }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<DataErrorResponse> handleGenericException(Exception ex) {
-        return productService.handleGenericException(ex);
-    }
 }

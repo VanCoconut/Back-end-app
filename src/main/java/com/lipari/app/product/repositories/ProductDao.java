@@ -19,7 +19,7 @@ public class ProductDao extends BaseDao {
 		super(dbConnection);
 	}
 
-	public List<Product> getAllProduct() throws DataException {
+	public List<Product> getAllProduct() {
 		List<Product> l = new ArrayList<>();
 		String sql = "SELECT * FROM t_product";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
@@ -32,11 +32,11 @@ public class ProductDao extends BaseDao {
 			}
 			return l;
 		} catch (SQLException e) {
-			throw new DataException(e);
+			throw new DataException("Error retrieving products from the database", e);
 		}
 	}
 
-	public Product getProduct(int id) throws DataException {
+	public Product getProduct(int id) {
 
 		String sql = "SELECT * FROM t_product WHERE id=?";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
@@ -56,7 +56,7 @@ public class ProductDao extends BaseDao {
 		return null;
 	}
 
-	public boolean setProduct(int codice, String descrizione, float costo, int magazzino) throws DataException, SQLException {
+	public boolean setProduct(int codice, String descrizione, float costo, int magazzino) {
 
 		String sql = "INSERT INTO t_product (codice,descrizione,costo,magazzino) VALUES (?,?,?,?)";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
@@ -69,16 +69,13 @@ public class ProductDao extends BaseDao {
 			if (rs == 1) {
 				return true;
 			}
-		} catch (SQLException e) {
-			throw new SQLException(e);
 		} catch (Exception e) {
 			throw new DataException(e);
 		}
 		return false;
 	}
 
-	public void updateProduct(Product product)
-			throws DataException {
+	public void updateProduct(Product product) {
 		String sql = "UPDATE t_product SET codice=?,descrizione=?,costo=?,magazzino=? WHERE id=?";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
 
@@ -96,7 +93,7 @@ public class ProductDao extends BaseDao {
 		}
 	}
 
-	public void deleteProduct(int id) throws DataException {
+	public void deleteProduct(int id) {
 
 		String sql = "DELETE FROM t_product WHERE id=?";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
@@ -120,7 +117,22 @@ public class ProductDao extends BaseDao {
 				return count > 0;
 			}
 		}catch (SQLException e){
-			e.printStackTrace();
+			throw new DataException("Error checking existence of codice: " + e.getMessage());
+		}
+		return false;
+	}
+
+	public boolean existsByCodice(int codice) {
+		String sql = "SELECT COUNT(*) FROM t_product WHERE codice = ?";
+		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
+			ps.setInt(1, codice);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				int count = rs.getInt(1);
+				return count > 0;
+			}
+		} catch (SQLException e) {
+			throw new DataException("Error checking existence of codice: " + e.getMessage());
 		}
 		return false;
 	}
