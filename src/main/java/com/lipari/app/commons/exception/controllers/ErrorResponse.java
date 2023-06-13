@@ -1,15 +1,17 @@
 package com.lipari.app.commons.exception.controllers;
 
-import com.lipari.app.commons.exception.entities.DataErrorResponse;
-import com.lipari.app.commons.exception.utils.AlreadyExistsException;
-import com.lipari.app.commons.exception.utils.DataException;
-import com.lipari.app.commons.exception.utils.InvalidDataException;
-import com.lipari.app.commons.exception.utils.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import com.lipari.app.exception.AuthException;
+
+import com.lipari.app.commons.exception.entities.DataErrorResponse;
+import com.lipari.app.commons.exception.utils.AlreadyExistsException;
+import com.lipari.app.commons.exception.utils.AuthException;
+import com.lipari.app.commons.exception.utils.DataException;
+import com.lipari.app.commons.exception.utils.InvalidDataException;
+import com.lipari.app.commons.exception.utils.NotFoundException;
+
 
 @RestControllerAdvice
 public class ErrorResponse {

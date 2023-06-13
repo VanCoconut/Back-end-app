@@ -1,4 +1,4 @@
-package com.lipari.app.exception;
+package com.lipari.app.commons.exception.utils;
 
 public class ValidationException extends RuntimeException {
 

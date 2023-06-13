@@ -2,17 +2,17 @@ package com.lipari.app.users.services;
 
 import java.util.List;
 
-import com.lipari.app.commons.exception.utils.DataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lipari.app.exception.AuthException;
-import com.lipari.app.exception.ValidationException;
+import com.lipari.app.commons.exception.utils.AuthException;
+import com.lipari.app.commons.exception.utils.DataException;
+import com.lipari.app.commons.exception.utils.ValidationException;
+import com.lipari.app.commons.validations.GeneralValidation;
 import com.lipari.app.users.entities.Address;
 import com.lipari.app.users.entities.User;
 import com.lipari.app.users.repositories.AddressDao;
 import com.lipari.app.users.repositories.UserDao;
-import com.lipari.app.commons.validations.GeneralValidation;
 import com.lipari.app.users.validations.SignInValidation;
 import com.lipari.app.users.validations.SignUpValidation;
 

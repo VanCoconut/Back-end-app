@@ -2,8 +2,6 @@ package com.lipari.app.commons.validations;
 
 import org.springframework.stereotype.Component;
 
-import com.lipari.app.exception.ValidationException;
-
 @Component
 public class GeneralValidation {
 
