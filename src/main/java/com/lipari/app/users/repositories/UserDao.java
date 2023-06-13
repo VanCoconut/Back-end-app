@@ -4,11 +4,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.springframework.stereotype.Repository;
+
+import com.lipari.app.commons.exception.utils.AuthException;
 import com.lipari.app.commons.exception.utils.DataException;
+import com.lipari.app.commons.exception.utils.NotFoundException;
 import com.lipari.app.commons.repositories.BaseDao;
 import com.lipari.app.users.entities.User;
 import com.lipari.app.utils.DbConnection;
-import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserDao extends BaseDao {
@@ -25,18 +28,18 @@ public class UserDao extends BaseDao {
 			ps.setString(2, psw);
 			ResultSet rs = ps.executeQuery();
 			User user = null;
-			while (rs.next()) {
-				 user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+			if (rs.next()) {
+				user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
 						rs.getString(6), rs.getInt(7));
 			}
-			if(user==null) throw new DataException("username o password errati");
+			if (user == null)
+				throw new AuthException("Accesso negato : username o password errati");
 			return user;
 		} catch (SQLException e) {
-			throw new DataException(e);
+			throw new DataException("Error during sql log in");
 		} catch (Exception e) {
 			throw new DataException(e);
 		}
-
 	}
 
 	public boolean setUser(String nome, String cognome, String username, String password, String email, int role)
@@ -53,17 +56,18 @@ public class UserDao extends BaseDao {
 			var rs = ps.executeUpdate();
 			if (rs == 1) {
 				return true;
+			} else {
+				throw new DataException("Error creating new user");
 			}
 		} catch (SQLException e) {
 			throw new DataException(e);
 		} catch (Exception e) {
 			throw new DataException(e);
 		}
-		return false;
 	}
 
-	public boolean updateUser(int currentUserId, String nome, String cognome, String username, String password, String email,
-			int role) throws DataException {
+	public boolean updateUser(int currentUserId, String nome, String cognome, String username, String password,
+			String email, int role) throws DataException {
 
 		String sql = "UPDATE t_user SET nome=?,cognome=?,username=?,password=?,email=?,role=? WHERE id=?";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
@@ -77,13 +81,14 @@ public class UserDao extends BaseDao {
 			var rs = ps.executeUpdate();
 			if (rs == 1) {
 				return true;
+			} else {
+				throw new DataException("Error updating  user");
 			}
 		} catch (SQLException e) {
 			throw new DataException(e);
 		} catch (Exception e) {
 			throw new DataException(e);
 		}
-		return false;
 	}
 
 	public boolean deleteUser(int id) throws DataException {
@@ -94,42 +99,49 @@ public class UserDao extends BaseDao {
 			var rs = ps.executeUpdate();
 			if (rs == 1) {
 				return true;
+			} else {
+				throw new DataException("Error deleting new user");
 			}
 		} catch (SQLException e) {
 			throw new DataException(e);
 		} catch (Exception e) {
 			throw new DataException(e);
 		}
-		return false;
+
 	}
 
-	public User getUserById(int userId){
-		String query= "SELECT * FROM t_user WHERE id = ?";
+	public User getUserById(int userId) {
+		String query = "SELECT * FROM t_user WHERE id = ?";
 
-		try(PreparedStatement ps = dbConnection.openConnection().prepareStatement(query)){
-			ps.setInt(1,userId);
+		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(query)) {
+			ps.setInt(1, userId);
 			ResultSet rs = ps.executeQuery();
-			if(rs.next()) {
-				return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+			User user = null;
+			if (rs.next()) {
+				user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
 						rs.getString(6), rs.getInt(7));
 			}
-		} catch (SQLException e){
-			e.printStackTrace();
+			if (user == null)
+				throw new NotFoundException("utente non trovato");
+			return user;
+		} catch (SQLException e) {
+			throw new DataException(e);
+		} catch (Exception e) {
+			throw new DataException(e);
 		}
-		return null;
 	}
 
-	public boolean existsById(int userId){
-		String query= "SELECT COUNT(*) FROM t_user WHERE id=?";
-		try(PreparedStatement ps = dbConnection.openConnection().prepareStatement(query)) {
-			ps.setInt(1,userId);
+	public boolean existsById(int userId) {
+		String query = "SELECT COUNT(*) FROM t_user WHERE id=?";
+		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(query)) {
+			ps.setInt(1, userId);
 			ResultSet rs = ps.executeQuery();
-			if(rs.next()){
+			if (rs.next()) {
 				int count = rs.getInt(1);
 				return count > 0;
 			}
-		}catch (SQLException e){
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new DataException(e);
 		}
 		return false;
 	}

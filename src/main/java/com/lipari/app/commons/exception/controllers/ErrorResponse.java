@@ -11,22 +11,37 @@ import com.lipari.app.commons.exception.utils.AuthException;
 import com.lipari.app.commons.exception.utils.DataException;
 import com.lipari.app.commons.exception.utils.InvalidDataException;
 import com.lipari.app.commons.exception.utils.NotFoundException;
+import com.lipari.app.commons.exception.utils.ValidationException;
 
 
 @RestControllerAdvice
 public class ErrorResponse {
 
     @ExceptionHandler(DataException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public DataErrorResponse dataExceptionHandler(DataException ex) {
 
         DataErrorResponse error = new DataErrorResponse();
-        error.setStatus(HttpStatus.UNAUTHORIZED.value());
+        error.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         error.setMessage(ex.getMessage());
         error.setTimeStamp(System.currentTimeMillis());
 
         return error;
     }
+    
+    @ExceptionHandler(ValidationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public DataErrorResponse validationExceptionHandler(ValidationException ex) {
+
+        DataErrorResponse error = new DataErrorResponse();
+        error.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        error.setMessage(ex.getMessage());
+        error.setTimeStamp(System.currentTimeMillis());
+
+        return error;
+    }
+    
+    
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public DataErrorResponse notFoundExceptionHandler(NotFoundException ex) {
@@ -63,7 +78,7 @@ public class ErrorResponse {
     }
 
     @ExceptionHandler(AuthException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public DataErrorResponse authExceptionHandler(AuthException exc){
 
         DataErrorResponse error = new DataErrorResponse();
@@ -81,7 +96,6 @@ public class ErrorResponse {
         error.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         error.setMessage(ex.getMessage());
         error.setTimeStamp(System.currentTimeMillis());
-
         return error;
     }
 

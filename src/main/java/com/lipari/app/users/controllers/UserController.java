@@ -29,18 +29,23 @@ public class UserController {
 	}
 
 	// GET
-
-	@PostMapping("/login") 
-	public User login(@RequestBody LoggInDto log) {
-		return userService.loging(log.getUsername(), log.getPassword());
+	
+	@GetMapping("/{id}")
+	public User getuserById(@PathVariable Integer id) {
+		return userService.findUserById(id);
 	}
-
+	
 	@GetMapping("/{userId}/address")
 	public List<String> listAddressByUserId(@PathVariable Integer userId) {
 		return userService.adressList(userId);
 	}
 
 	// POST
+
+	@PostMapping("/login")
+	public User login(@RequestBody User log) {
+		return userService.loging(log.getUsername(), log.getPassword());
+	}
 
 	@PostMapping("/")
 	public boolean addUser(@RequestBody User user) {
@@ -52,27 +57,27 @@ public class UserController {
 		return userService.addAddress(userId, address);
 	}
 
-	@PostMapping("/address")
-	public boolean addAddress1(@RequestBody Address address) {
-		return userService.addAddress(address);
-	}
+	// PUT
 
-	@PutMapping("/user")
-	public boolean updateUser(@RequestBody User user) {
-		return userService.changeUser(user);
+	@PutMapping("/{id}")
+	public User updateUser(@PathVariable Integer id, @RequestBody User user) {
+		User u = user;
+		u.setId(id);
+		userService.changeUser(u);
+		return userService.findUserById(id);
+
 	}
 
 	// DELETE
-	@DeleteMapping("/user/{userId}")
+	@DeleteMapping("/{userId}")
 	public String deleteUserById(@PathVariable int userId) {
 
 		return "deleted user ID : " + userId + " " + userService.cancelUser(userId);
 	}
 
-	@DeleteMapping("/user/address")
-	public String deleteAddress(@RequestBody Address address) {
+	@DeleteMapping("/{id}/address/")
+	public String deleteAddress(@PathVariable int id) {
 
-		return "deleted user ID : " + address.getUserId() + " e indirizzo : " + address.getIndirizzo() + " "
-				+ userService.cancelAddress(address.getUserId(), address.getIndirizzo());
+		return "deleted address ID : " + id + " " + userService.cancelAddress(id);
 	}
 }

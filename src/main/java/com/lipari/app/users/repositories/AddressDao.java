@@ -36,7 +36,7 @@ public class AddressDao extends BaseDao{
 		}
 	}
 
-	public boolean setAddress( int userId, String indirizzo) {
+	public boolean setAddress(int userId, String indirizzo) {
 		String sql = "INSERT INTO t_address (user_id,indirizzo) VALUES (?,?);";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
 			ps.setInt(1, userId);
@@ -52,11 +52,10 @@ public class AddressDao extends BaseDao{
 		}
 		return false;
 	}
-	public boolean deleteAddress( int userId, String indirizzo) {
-		String sql = "DELETE FROM t_address WHERE user_id=? AND indirizzo=?";
+	public boolean deleteAddress( int id) {
+		String sql = "DELETE FROM t_address WHERE id=?";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
-			ps.setInt(1, userId);
-			ps.setString(2, indirizzo);			
+			ps.setInt(1, id);					
 			var rs = ps.executeUpdate();
 			while (rs == 1) {
 				return true;

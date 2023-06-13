@@ -2,6 +2,8 @@ package com.lipari.app.commons.validations;
 
 import org.springframework.stereotype.Component;
 
+import com.lipari.app.commons.exception.utils.InvalidDataException;
+
 @Component
 public class GeneralValidation {
 
@@ -9,7 +11,7 @@ public class GeneralValidation {
 		
 		for (String s : strings) {
 			if (s.isBlank())
-				throw new RuntimeException("i campi non possono essere vuoti");
+				throw new InvalidDataException("i campi non possono essere vuoti");
 		}
 	
 	}
@@ -17,7 +19,7 @@ public class GeneralValidation {
 	public void positiveInt(Integer ...integers) {
 		for (Integer i : integers) {
 			if (i==null || i<0)
-				throw new RuntimeException("il numero è nullo o minore di zero");
+				throw new InvalidDataException("il numero è nullo o minore di zero");
 		}
 	}
 
@@ -25,7 +27,7 @@ public class GeneralValidation {
 
 		for (String s : strings) {
 			if (s.contains(" "))
-				throw new RuntimeException("i campi non possono contenere spazi");
+				throw new InvalidDataException("i campi non possono contenere spazi");
 		}
 	}
 	
@@ -34,7 +36,7 @@ public class GeneralValidation {
 
 		for (String s : strings) {
 			if (s.isBlank())
-				throw new RuntimeException("i campi non possono contenere meno di 8 caratteri");
+				throw new InvalidDataException("i campi non possono contenere meno di 8 caratteri");
 		}
 	}
 

@@ -6,10 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lipari.app.commons.exception.utils.AuthException;
-import com.lipari.app.commons.exception.utils.DataException;
+import com.lipari.app.commons.exception.utils.InvalidDataException;
 import com.lipari.app.commons.exception.utils.ValidationException;
 import com.lipari.app.commons.validations.GeneralValidation;
-import com.lipari.app.users.entities.Address;
 import com.lipari.app.users.entities.User;
 import com.lipari.app.users.repositories.AddressDao;
 import com.lipari.app.users.repositories.UserDao;
@@ -35,12 +34,19 @@ public class UserService {
 	public UserService(UserDao userDao, AddressDao addressDao) {
 		this.userDao = userDao;
 		this.addressDao = addressDao;
-
 	}
 
-	public String hello() {
-		return "hello";
+	// USER
 
+	public User findUserById(int id) {
+
+		try {
+			generalValidation.positiveInt(id);
+			User u = userDao.getUserById(id);
+			return u;
+		} catch (InvalidDataException e) {
+			throw new AuthException("Accesso non autorizzato " + e.getMessage());
+		}
 	}
 
 	public User loging(String username, String pass) {
@@ -49,23 +55,9 @@ public class UserService {
 			signInValidation.validation(username, pass);
 			User u = userDao.getUser(username, pass);
 			return u;
-		} catch (DataException e) {
-			throw new DataException("Accesso non autorizzato " + e.getMessage());
-		} catch (RuntimeException e) {
-			e.printStackTrace();
+		} catch (InvalidDataException e) {
 			throw new AuthException("Accesso non autorizzato " + e.getMessage());
 		}
-	}
-
-	public List<String> adressList(int userId) {
-
-		try {
-			return addressDao.getAllAddress(userId);
-		} catch (DataException e) {
-			e.printStackTrace();
-		}
-
-		return null;
 	}
 
 	public boolean createUser(User user) {
@@ -73,12 +65,9 @@ public class UserService {
 			signUpUpValidation.validation(user);
 			return userDao.setUser(user.getNome(), user.getCognome(), user.getUsername(), user.getPassword(),
 					user.getEmail(), user.getRole());
-		} catch (DataException e) {
-			e.printStackTrace();
-		} catch (RuntimeException e) {
+		} catch (InvalidDataException e) {
 			throw new ValidationException(e.getMessage());
 		}
-		return false;
 	}
 
 	public boolean changeUser(User user) {
@@ -86,24 +75,26 @@ public class UserService {
 			signUpUpValidation.validation(user);
 			return userDao.updateUser(user.getId(), user.getNome(), user.getCognome(), user.getUsername(),
 					user.getPassword(), user.getEmail(), user.getRole());
-		} catch (DataException e) {
-			e.printStackTrace();
-		} catch (RuntimeException e) {
-			throw new ValidationException(e.getMessage());
+		} catch (InvalidDataException e) {
+			throw new ValidationException("Operzione negata " + e.getMessage());
 		}
-		return false;
+
 	}
 
 	public boolean cancelUser(int userId) {
 		try {
 			generalValidation.positiveInt(userId);
 			return userDao.deleteUser(userId);
-		} catch (DataException e) {
-			e.printStackTrace();
-		} catch (RuntimeException e) {
-			throw new ValidationException(e.getMessage());
+		} catch (InvalidDataException e) {
+			throw new ValidationException("Operzione negata " + e.getMessage());
 		}
-		return false;
+
+	}
+
+	// ADDRESS
+
+	public List<String> adressList(int userId) {
+		return addressDao.getAllAddress(userId);
 	}
 
 	public boolean addAddress(int userId, String newAddress) {
@@ -111,88 +102,18 @@ public class UserService {
 			generalValidation.positiveInt(userId);
 			generalValidation.stringNotBlank(newAddress);
 			return addressDao.setAddress(userId, newAddress);
-		} catch (DataException e) {
-			e.printStackTrace();
-		} catch (RuntimeException e) {
-			throw new ValidationException(e.getMessage());
+		} catch (InvalidDataException e) {
+			throw new ValidationException("Operzione negata " + e.getMessage());
 		}
-		return false;
 	}
 
-	public boolean addAddress(Address address) {
+	public boolean cancelAddress(int id) {
 		try {
-			generalValidation.positiveInt(address.getUserId());
-			generalValidation.stringNotBlank(address.getIndirizzo());
-			return addressDao.setAddress(address.getUserId(), address.getIndirizzo());
-		} catch (DataException e) {
-			e.printStackTrace();
-		} catch (RuntimeException e) {
-			throw new ValidationException(e.getMessage());
+			generalValidation.positiveInt(id);
+			return addressDao.deleteAddress(id);
+		} catch (InvalidDataException e) {
+			throw new ValidationException("Operzione negata " + e.getMessage());
 		}
-		return false;
-	}
-
-	public boolean cancelAddress(int userId, String newAddress) {
-		try {
-			generalValidation.positiveInt(userId);
-			generalValidation.stringNotBlank(newAddress);
-			return addressDao.deleteAddress(userId, newAddress);
-		} catch (DataException e) {
-			e.printStackTrace();
-		} catch (RuntimeException e) {
-			throw new ValidationException(e.getMessage());
-		}
-		return false;
-	}
-
-	public boolean changeUserName(User user, String newName) {
-		try {
-			return userDao.updateUser(user.getId(), newName, user.getCognome(), user.getUsername(), user.getPassword(),
-					user.getEmail(), user.getRole());
-		} catch (DataException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-
-	public boolean changeUserSurname(User user, String newSurname) {
-		try {
-			return userDao.updateUser(user.getId(), user.getNome(), newSurname, user.getUsername(), user.getPassword(),
-					user.getEmail(), user.getRole());
-		} catch (DataException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-
-	public boolean changeUserEmail(User user, String newEmail) {
-		try {
-			return userDao.updateUser(user.getId(), user.getNome(), user.getCognome(), user.getUsername(),
-					user.getPassword(), newEmail, user.getRole());
-		} catch (DataException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-
-	public boolean changeUserPassword(User user, String newPsw) {
-		try {
-			return userDao.updateUser(user.getId(), user.getNome(), user.getCognome(), user.getUsername(), newPsw,
-					user.getEmail(), user.getRole());
-		} catch (DataException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-
-	public boolean changeUserRole(User user, int newRole) {
-		try {
-			return userDao.updateUser(user.getId(), user.getNome(), user.getCognome(), user.getUsername(),
-					user.getPassword(), user.getEmail(), newRole);
-		} catch (DataException e) {
-			e.printStackTrace();
-		}
-		return false;
 	}
 
 }
