@@ -12,6 +12,7 @@ import com.lipari.app.commons.validations.GeneralValidation;
 import com.lipari.app.users.entities.User;
 import com.lipari.app.users.repositories.AddressDao;
 import com.lipari.app.users.repositories.UserDao;
+import com.lipari.app.users.validations.ChangePasswordValidation;
 import com.lipari.app.users.validations.SignInValidation;
 import com.lipari.app.users.validations.SignUpValidation;
 
@@ -29,6 +30,9 @@ public class UserService {
 
 	@Autowired
 	private GeneralValidation generalValidation;
+	
+	@Autowired
+	private ChangePasswordValidation changePasswordValidation;
 
 	@Autowired
 	public UserService(UserDao userDao, AddressDao addressDao) {
@@ -75,6 +79,18 @@ public class UserService {
 	public boolean changeUser(User user) {
 		try {
 			signUpUpValidation.validation(user);
+			return userDao.updateUser(user.getId(), user.getNome(), user.getCognome(), user.getUsername(),
+					user.getPassword(), user.getEmail(), user.getRole());
+		} catch (InvalidDataException e) {
+			throw new ValidationException("Operzione negata " + e.getMessage());
+		}
+
+	}
+	
+	public boolean changePassword(User user, String oldPsw, String newPsw, String confPsw) {
+		try {
+			changePasswordValidation.validation(oldPsw,newPsw,confPsw);
+			user.setPassword(newPsw);
 			return userDao.updateUser(user.getId(), user.getNome(), user.getCognome(), user.getUsername(),
 					user.getPassword(), user.getEmail(), user.getRole());
 		} catch (InvalidDataException e) {

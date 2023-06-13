@@ -29,12 +29,12 @@ public class UserController {
 	}
 
 	// GET
-	
+
 	@GetMapping("/{id}")
 	public User getuserById(@PathVariable Integer id) {
 		return userService.findUserById(id);
 	}
-	
+
 	@GetMapping("/{userId}/address")
 	public List<String> listAddressByUserId(@PathVariable Integer userId) {
 		return userService.adressList(userId);
@@ -64,6 +64,15 @@ public class UserController {
 		User u = user;
 		u.setId(id);
 		userService.changeUser(u);
+		return userService.findUserById(id);
+
+	}
+
+	@PutMapping("/{id}/password")
+	public User updateUserPassword(@PathVariable Integer id, @RequestParam String oldPassword,
+			@RequestParam String newPassword, @RequestParam String confirmPassword) {
+		User u = userService.findUserById(id);
+		userService.changePassword(u, oldPassword, newPassword, confirmPassword);
 		return userService.findUserById(id);
 
 	}
