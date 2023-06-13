@@ -5,6 +5,8 @@ public class User {
 	private String nome, cognome, username, password, email;
 	private int role;
 
+	public User() {}
+	
 	public User(int id, String nome, String cognome, String username, String password, String email, int role) {
 		this.id = id;
 		this.nome = nome;

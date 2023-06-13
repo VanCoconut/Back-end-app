@@ -3,6 +3,9 @@ package com.lipari.app.users.entities;
 public class Address {
 	private int userId;
 	private String indirizzo;
+	
+	public Address() {}
+	
 	public Address(int userId, String indirizzo) {
 		super();
 		this.userId = userId;

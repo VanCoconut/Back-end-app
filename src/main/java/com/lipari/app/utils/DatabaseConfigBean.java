@@ -1,7 +1,5 @@
 package com.lipari.app.utils;
 
-import org.springframework.stereotype.Component;
-
 
 public class DatabaseConfigBean {
 	

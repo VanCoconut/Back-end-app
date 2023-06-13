@@ -9,16 +9,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import com.lipari.app.exception.AuthException;
 
 @RestControllerAdvice
 public class ErrorResponse {
 
     @ExceptionHandler(DataException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public DataErrorResponse dataExceptionHandler(DataException ex) {
 
         DataErrorResponse error = new DataErrorResponse();
-        error.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        error.setStatus(HttpStatus.UNAUTHORIZED.value());
         error.setMessage(ex.getMessage());
         error.setTimeStamp(System.currentTimeMillis());
 
@@ -56,9 +57,20 @@ public class ErrorResponse {
         error.setStatus(HttpStatus.CONFLICT.value());
         error.setMessage(ex.getMessage());
         error.setTimeStamp(System.currentTimeMillis());
-
         return error;
     }
+
+    @ExceptionHandler(AuthException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public DataErrorResponse authExceptionHandler(AuthException exc){
+
+        DataErrorResponse error = new DataErrorResponse();
+        error.setStatus(HttpStatus.BAD_REQUEST.value());
+        error.setMessage(exc.getMessage());
+        error.setTimeStamp(System.currentTimeMillis());
+        return error;
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public DataErrorResponse genericExceptionHandler(Exception ex) {
@@ -70,4 +82,5 @@ public class ErrorResponse {
 
         return error;
     }
+
 }

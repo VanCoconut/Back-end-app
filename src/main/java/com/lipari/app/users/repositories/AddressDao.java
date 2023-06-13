@@ -7,24 +7,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lipari.app.commons.exception.utils.DataException;
-
-import com.lipari.app.commons.repositories.BaseDao;
 import com.lipari.app.utils.DbConnection;
 import org.springframework.stereotype.Repository;
 
+import com.lipari.app.commons.repositories.BaseDao;
+
 @Repository
-public class AddressDao extends BaseDao {
-	
-	
+public class AddressDao extends BaseDao{
 	
 	public AddressDao(DbConnection dbConnection) {
 		super(dbConnection);
-		// TODO Auto-generated constructor stub
 	}
 
-	public List<String> getAllAddress(int userId) throws DataException {
+	public List<String> getAllAddress(int userId) {
 		List<String> l = new ArrayList<>();
-		String sql = "SELECT indirizzo FROM t_address WHERE userId=?";
+		String sql = "SELECT indirizzo FROM t_address WHERE user_id=?";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
 			ps.setInt(1, userId);
 			ResultSet rs = ps.executeQuery();
@@ -39,11 +36,11 @@ public class AddressDao extends BaseDao {
 		}
 	}
 
-	public boolean setAddress( int userId, String indirizzo) throws DataException {
-		String sql = "INSERT INTO t_address (userId,indirizzo) VALUES (?,?);";
+	public boolean setAddress( int userId, String indirizzo) {
+		String sql = "INSERT INTO t_address (user_id,indirizzo) VALUES (?,?);";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
-			ps.setInt(3, userId);
-			ps.setString(1, indirizzo);			
+			ps.setInt(1, userId);
+			ps.setString(2, indirizzo);			
 			var rs = ps.executeUpdate();
 			while (rs == 1) {
 				return true;
@@ -55,21 +52,11 @@ public class AddressDao extends BaseDao {
 		}
 		return false;
 	}
-	public boolean updateAddress( int userId, String indirizzo) throws DataException {
-		/*
-		 * String sql = "INSERT INTO t_address (userId,indirizzo) VALUES (?,?);"; try
-		 * (PreparedStatement ps = getConnection().prepareStatement(sql)) { ps.setInt(3,
-		 * userId); ps.setString(1, indirizzo); var rs = ps.executeUpdate(); while (rs
-		 * == 1) { return true; } } catch (SQLException e) { throw new DataException(e);
-		 * } catch (Exception e) { throw new DataException(e); }
-		 */
-		return false;
-	}
-	public boolean deleteAddress( int userId, String indirizzo) throws DataException {
-		String sql = "DELETE FROM t_address WHERE userId=? AND indirizzo=?";
+	public boolean deleteAddress( int userId, String indirizzo) {
+		String sql = "DELETE FROM t_address WHERE user_id=? AND indirizzo=?";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
-			ps.setInt(3, userId);
-			ps.setString(1, indirizzo);			
+			ps.setInt(1, userId);
+			ps.setString(2, indirizzo);			
 			var rs = ps.executeUpdate();
 			while (rs == 1) {
 				return true;

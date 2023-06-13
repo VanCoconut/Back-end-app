@@ -12,6 +12,8 @@ import com.lipari.app.users.entities.Role;
 import com.lipari.app.utils.DbConnection;
 import org.springframework.stereotype.Repository;
 
+
+
 @Repository
 public class RoleDao extends BaseDao {
 	
@@ -20,7 +22,7 @@ public class RoleDao extends BaseDao {
 		
 	}
 	
-	public List<Role> getAllRoles() throws DataException {
+	public List<Role> getAllRoles() {
 		List<Role> l = new ArrayList<>();
 		String sql = "SELECT * FROM t_role";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {			
@@ -35,7 +37,7 @@ public class RoleDao extends BaseDao {
 			throw new DataException(e);
 		}
 	}
-	public Role getRole(int id) throws DataException {
+	public Role getRole(int id) {
 
 		String sql = "SELECT * FROM t_role WHERE id=?";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
@@ -52,7 +54,7 @@ public class RoleDao extends BaseDao {
 		}
 		return null;
 	}
-	public Role getRole(String descrizione) throws DataException {
+	public Role getRole(String descrizione){
 
 		String sql = "SELECT * FROM t_role WHERE descrizione=?";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
@@ -68,7 +70,7 @@ public class RoleDao extends BaseDao {
 		}
 		return null;
 	}
-	public boolean setRole(int id,String descrizione) throws DataException {
+	public boolean setRole(int id,String descrizione) {
 
 		String sql = "INSERT INTO t_role (id,descrizione) VALUES (?,?)";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
@@ -85,7 +87,7 @@ public class RoleDao extends BaseDao {
 		}
 		return false;
 	}
-	public boolean updateRole(int id,int newId, String newDescr) throws DataException {
+	public boolean updateRole(int id,int newId, String newDescr) {
 
 		String sql = "UPDATE t_role SET id=?, descrizione=? WHERE id=?; ";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
@@ -103,7 +105,7 @@ public class RoleDao extends BaseDao {
 		}
 		return false;
 	}
-	public boolean deleteRole(int id) throws DataException {
+	public boolean deleteRole(int id) {
 
 		String sql = "DELETE from t_role WHERE id=? ";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {

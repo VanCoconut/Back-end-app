@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
+import com.lipari.app.commons.repositories.BaseDao;
 import com.lipari.app.commons.exception.utils.DataException;
 
 import com.lipari.app.orders.entities.Order;
@@ -17,13 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class OrderDao {
-
-	private final DbConnection dbConnection;
+public class OrderDao extends BaseDao {
 
 	@Autowired
 	public OrderDao(DbConnection dbConnection) {
-		this.dbConnection = Objects.requireNonNull(dbConnection);
+		super(dbConnection);
 	}
 
 	public List<Order> getAadminOrders() throws DataException {

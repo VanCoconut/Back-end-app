@@ -6,8 +6,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lipari.app.commons.exception.utils.DataException;
 import com.lipari.app.commons.repositories.BaseDao;
+import com.lipari.app.commons.exception.utils.DataException;
 import com.lipari.app.products.entities.Product;
 import com.lipari.app.utils.DbConnection;
 import org.springframework.stereotype.Repository;

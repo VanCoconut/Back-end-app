@@ -7,14 +7,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
-import com.lipari.app.utils.DatabaseConfigBean;
 
 @Configuration
 
 @ComponentScan("com.lipari.app")
 @PropertySources(
 		{
-				@PropertySource("/database.properties")
+				@PropertySource("database.properties")
 		})
 public class ConfigurationBean {
 
