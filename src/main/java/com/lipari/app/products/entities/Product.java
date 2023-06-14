@@ -1,14 +1,30 @@
 package com.lipari.app.products.entities;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name="products")
 public class Product {
-	private int id, codice;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private Integer id;
+
+	@Column(name = "codice", columnDefinition = "int")
+	private int codice;
+
+	@Column(name = "descrizione", columnDefinition = "varchar(255)")
 	private String descrizione;
-	private float costo;
+
+	@Column(name = "costo", columnDefinition = "double(10, 2)")
+	private double costo;
+
+	@Column(name = "magazzino", columnDefinition = "int")
 	private int magazzino;
 
 	public Product(){}
 
-	public Product(int id, int codice, String descrizione, float costo, int magazzino) {
+	public Product(Integer id, int codice, String descrizione, double costo, int magazzino) {
 		super();
 		this.id = id;
 		this.codice = codice;
@@ -23,11 +39,11 @@ public class Product {
 				+ ", magazzino=" + magazzino + "]";
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -47,11 +63,11 @@ public class Product {
 		this.descrizione = descrizione;
 	}
 
-	public float getCosto() {
+	public double getCosto() {
 		return costo;
 	}
 
-	public void setCosto(float costo) {
+	public void setCosto(double costo) {
 		this.costo = costo;
 	}
 

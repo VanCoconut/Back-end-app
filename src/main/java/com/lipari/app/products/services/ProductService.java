@@ -32,7 +32,7 @@ public class ProductService {
         return "Product created";
     }
 
-    public Product getProductById(int id) {
+    public Product getProductById(Integer id) {
         return productDao.getProduct(id);
     }
     public List<Product> getAllProducts() {
@@ -41,7 +41,7 @@ public class ProductService {
         return products;
     }
 
-    public String updateProductById(Product updatedProduct, int id) {
+    public String updateProductById(Product updatedProduct, Integer id) {
             if (!productDao.existsById(id)) {
                 throw new NotFoundException("Product not found");
             }
@@ -60,7 +60,7 @@ public class ProductService {
             return "the product has been successfully updated:\n"+ productDao.getProduct(id);
     }
 
-    public String removeProductById(int id) {
+    public String removeProductById(Integer id) {
         if(productDao.existsById(id)){
             productDao.deleteProduct(id);
             return "Deletion done";

@@ -36,11 +36,11 @@ public class ProductDao extends BaseDao {
 		}
 	}
 
-	public Product getProduct(int id) {
+	public Product getProduct(Integer id) {
 
 		String sql = "SELECT * FROM t_product WHERE id=?";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
-			ps.setInt(1, id);
+			ps.setLong(1, id);
 
 			ResultSet rs = ps.executeQuery();
 			if(!rs.isBeforeFirst()){
@@ -55,15 +55,14 @@ public class ProductDao extends BaseDao {
 		return null;
 	}
 
-	public boolean setProduct(int codice, String descrizione, float costo, int magazzino) {
+	public boolean setProduct(int codice, String descrizione, double costo, int magazzino) {
 
 		String sql = "INSERT INTO t_product (codice,descrizione,costo,magazzino) VALUES (?,?,?,?)";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
 			ps.setInt(1, codice);
 			ps.setString(2, descrizione);
-			ps.setFloat(3, costo);
-			ps.setInt(4, codice);
-
+			ps.setDouble(3, costo);
+			ps.setInt(4, magazzino);
 			var rs = ps.executeUpdate();
 			if (rs == 1) {
 				return true;
@@ -80,9 +79,9 @@ public class ProductDao extends BaseDao {
 
 			ps.setInt(1, product.getCodice());
 			ps.setString(2, product.getDescrizione());
-			ps.setFloat(3, product.getCosto());
+			ps.setDouble(3, product.getCosto());
 			ps.setInt(4, product.getMagazzino());
-			ps.setInt(5,product.getId());
+			ps.setLong(5,product.getId());
 			int rowsAffected = ps.executeUpdate();
 			if (rowsAffected == 0) {
 				throw new DataException("Failed to update product");
@@ -92,11 +91,11 @@ public class ProductDao extends BaseDao {
 		}
 	}
 
-	public void deleteProduct(int id) {
+	public void deleteProduct(Integer id) {
 
 		String sql = "DELETE FROM t_product WHERE id=?";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
-			ps.setInt(1, id);
+			ps.setLong(1, id);
 			int rowsAffected = ps.executeUpdate();
 			if (rowsAffected == 0) {
 				throw new DataException("Failed to delete product");
@@ -106,10 +105,10 @@ public class ProductDao extends BaseDao {
 		}
 	}
 
-	public boolean existsById(int productId){
+	public boolean existsById(Integer productId){
 		String query= "SELECT COUNT(*) FROM t_product WHERE id=?";
 		try(PreparedStatement ps = dbConnection.openConnection().prepareStatement(query)) {
-			ps.setInt(1,productId);
+			ps.setLong(1,productId);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()){
 				int count = rs.getInt(1);

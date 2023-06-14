@@ -1,4 +1,4 @@
-package com.lipari.app.orders.controller;
+package com.lipari.app.orders.controllers;
 
 import com.lipari.app.orders.entities.Order;
 import com.lipari.app.orders.repositories.OrderDao;
