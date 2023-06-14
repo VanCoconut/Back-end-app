@@ -134,7 +134,8 @@ public class OrderService {
         if (!userDao.existsById(userId)){
             throw new NotFoundException("User not found");
         }
-        return addressDao.getAllAddress(userId).stream().filter(e -> e.equalsIgnoreCase(indirizzo)).toList().isEmpty();
+        //return addressDao.getAllAddress(userId).stream().filter(e -> e.equalsIgnoreCase(indirizzo)).toList().isEmpty();
+        return false;
 
     }
     public String update(Order updateOrder, String id){
