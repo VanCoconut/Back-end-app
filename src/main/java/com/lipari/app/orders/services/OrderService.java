@@ -122,14 +122,13 @@ public class OrderService {
 
 	}
 
-	public boolean findAddress(int userId, String indirizzo) {
-
-		try {
-			return addressDao.getAllAddress(userId).stream().filter(e -> e.equalsIgnoreCase(indirizzo)).toList().isEmpty();
-		} catch (DataException e) {
-			e.printStackTrace();
-		}
-
-		return false;
-	}
+	/*
+	 * public boolean findAddress(int userId, String indirizzo) {
+	 * 
+	 * try { return addressDao.getAllAddress(userId).stream().filter(e ->
+	 * e.equalsIgnoreCase(indirizzo)).toList().isEmpty(); } catch (DataException e)
+	 * { e.printStackTrace(); }
+	 * 
+	 * return false; }
+	 */
 }

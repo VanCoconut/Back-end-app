@@ -4,11 +4,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lipari.app.commons.exception.utils.AuthException;
 import com.lipari.app.commons.exception.utils.InvalidDataException;
+import com.lipari.app.commons.exception.utils.NotFoundException;
 import com.lipari.app.commons.exception.utils.ValidationException;
 import com.lipari.app.commons.validations.GeneralValidation;
+import com.lipari.app.users.entities.Address;
 import com.lipari.app.users.entities.User;
 import com.lipari.app.users.repositories.AddressDao;
 import com.lipari.app.users.repositories.UserDao;
@@ -30,7 +33,7 @@ public class UserService {
 
 	@Autowired
 	private GeneralValidation generalValidation;
-	
+
 	@Autowired
 	private ChangePasswordValidation changePasswordValidation;
 
@@ -46,7 +49,7 @@ public class UserService {
 
 		try {
 			generalValidation.positiveInt(id);
-			User u = userDao.getUserById(id);
+			User u = userDao.findById(id).orElseThrow(() -> new NotFoundException("user not found"));
 			return u;
 		} catch (InvalidDataException e) {
 			throw new AuthException("Accesso non autorizzato " + e.getMessage());
@@ -57,52 +60,53 @@ public class UserService {
 
 		try {
 			signInValidation.validation(username, pass);
-			User u = userDao.getUser(username, pass);
+			User u = userDao.getUserByCredential(username, pass);
 			if (u == null)
 				throw new AuthException("Accesso non autorizzato password o username errati");
 			return u;
 		} catch (InvalidDataException e) {
-			throw new AuthException("Accesso non autorizzato " + e.getMessage());
+			throw new InvalidDataException("Accesso non autorizzato " + e.getMessage());
 		}
 	}
 
-	public boolean createUser(User user) {
+	public User createUser(User user) {
 		try {
 			signUpUpValidation.validation(user);
-			return userDao.setUser(user.getNome(), user.getCognome(), user.getUsername(), user.getPassword(),
-					user.getEmail(), user.getRole());
+			return userDao.save(user);
 		} catch (InvalidDataException e) {
 			throw new ValidationException(e.getMessage());
 		}
 	}
 
-	public boolean changeUser(User user) {
+	public User changeUser(User user) {
 		try {
 			signUpUpValidation.validation(user);
-			return userDao.updateUser(user.getId(), user.getNome(), user.getCognome(), user.getUsername(),
-					user.getPassword(), user.getEmail(), user.getRole());
-		} catch (InvalidDataException e) {
-			throw new ValidationException("Operzione negata " + e.getMessage());
-		}
-
-	}
-	
-	public boolean changePassword(User user, String oldPsw, String newPsw, String confPsw) {
-		try {
-			changePasswordValidation.validation(oldPsw,newPsw,confPsw);
-			user.setPassword(newPsw);
-			return userDao.updateUser(user.getId(), user.getNome(), user.getCognome(), user.getUsername(),
-					user.getPassword(), user.getEmail(), user.getRole());
+			userDao.updateUser(user.getId(), user.getNome(), user.getCognome(), user.getUsername(), user.getPassword(),
+					user.getEmail(), user.getRole());
+			return userDao.findById(user.getId()).get();
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
 		}
 
 	}
 
-	public boolean cancelUser(int userId) {
+	/*
+	 * public boolean changePassword(User user, String oldPsw, String newPsw, String
+	 * confPsw) { try { changePasswordValidation.validation(oldPsw,newPsw,confPsw);
+	 * user.setPassword(newPsw); return userDao.updateUser(user.getId(),
+	 * user.getNome(), user.getCognome(), user.getUsername(), user.getPassword(),
+	 * user.getEmail(), user.getRole()); } catch (InvalidDataException e) { throw
+	 * new ValidationException("Operzione negata " + e.getMessage()); }
+	 * 
+	 * }
+	 */
+
+	public void cancelUser(int userId) {
 		try {
 			generalValidation.positiveInt(userId);
-			return userDao.deleteUser(userId);
+			if (userDao.getReferenceById(userId) != null)
+				throw new NotFoundException("user not found");
+			userDao.deleteById(userId);
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
 		}
@@ -112,25 +116,47 @@ public class UserService {
 	// ADDRESS
 
 	public List<String> adressList(int userId) {
-		return addressDao.getAllAddress(userId);
+		return addressDao.getAllUserAddress(userId);
 	}
 
-	public boolean addAddress(int userId, String newAddress) {
+	public Address addAddress(int userId, String newAddress) {
 		try {
 			generalValidation.positiveInt(userId);
 			generalValidation.stringNotBlank(newAddress);
-			return addressDao.setAddress(userId, newAddress);
+			Address a = new Address(userId, newAddress);
+			return addressDao.save(a);
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
 		}
 	}
-
-	public boolean cancelAddress(int id) {
+	
+	public Address getAddressById(int id) {
 		try {
 			generalValidation.positiveInt(id);
-			return addressDao.deleteAddress(id);
+		 Address a = addressDao.getAddressById(id).orElseThrow(() -> new NotFoundException("address not found"));
+		 return a;
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Transactional
+	public void cancelAddress(int id) {
+		try {
+			generalValidation.positiveInt(id);
+			Address a = addressDao.getAddressById(id).orElseThrow(() -> new NotFoundException("address not found"));
+			//Address a = addressDao.findById(id).orElseThrow(() -> new NotFoundException("address not found"));
+			addressDao.delete(a);
+		} catch (InvalidDataException e) {
+			throw new ValidationException("Operzione negata " + e.getMessage());
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 

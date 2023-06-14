@@ -1,13 +1,44 @@
 package com.lipari.app.users.entities;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "t_user")
 public class User {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private int id;
-	private String nome, cognome, username, password, email;
+
+	@Column(name = "nome")
+	private String nome;
+
+	@Column(name = "cognome")
+	private String cognome;
+
+	@Column(name = "username")
+	private String username;
+
+	@Column(name = "password")
+	private String password;
+
+	@Column(name = "email")
+	private String email;
+
+	@Column(name = "role")
 	private int role;
 
-	public User() {}
-	
+	public User() {
+	}
+
 	public User(int id, String nome, String cognome, String username, String password, String email, int role) {
+		super();
 		this.id = id;
 		this.nome = nome;
 		this.cognome = cognome;

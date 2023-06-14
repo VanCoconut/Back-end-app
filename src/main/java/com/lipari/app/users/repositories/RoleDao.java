@@ -1,124 +1,30 @@
 package com.lipari.app.users.repositories;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-import com.lipari.app.commons.exception.utils.DataException;
-import com.lipari.app.commons.repositories.BaseDao;
-import com.lipari.app.users.entities.Role;
-import com.lipari.app.utils.DbConnection;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import com.lipari.app.users.entities.Role;
+
+import jakarta.transaction.Transactional;
 
 
 
 @Repository
-public class RoleDao extends BaseDao {
+public interface RoleDao extends JpaRepository<Role, Integer> {
 	
-	public RoleDao(DbConnection dbConnection) {
-		super(dbConnection);
-		
-	}
+	@Query(value = "SELECT * FROM t_role WHERE descrizione = :descr", nativeQuery = true)
+	int getRoleByDescription(@Param("descr") String descrizione);
 	
-	public List<Role> getAllRoles() {
-		List<Role> l = new ArrayList<>();
-		String sql = "SELECT * FROM t_role";
-		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {			
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				l.add(new Role(rs.getInt(1),rs.getString(2)));
-			}
-			return l;
-		} catch (SQLException e) {
-			throw new DataException(e);
-		} catch (Exception e) {
-			throw new DataException(e);
-		}
-	}
-	public Role getRole(int id) {
 
-		String sql = "SELECT * FROM t_role WHERE id=?";
-		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
-			ps.setInt(1, id);
-			
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				return new Role(rs.getInt(1),rs.getString(2));
-			}
-		} catch (SQLException e) {
-			throw new DataException(e);
-		} catch (Exception e) {
-			throw new DataException(e);
-		}
-		return null;
-	}
-	public Role getRole(String descrizione){
-
-		String sql = "SELECT * FROM t_role WHERE descrizione=?";
-		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
-			ps.setString(1, descrizione.toLowerCase());			
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				return new Role(rs.getInt(1),rs.getString(2));
-			}
-		} catch (SQLException e) {
-			throw new DataException(e);
-		} catch (Exception e) {
-			throw new DataException(e);
-		}
-		return null;
-	}
-	public boolean setRole(int id,String descrizione) {
-
-		String sql = "INSERT INTO t_role (id,descrizione) VALUES (?,?)";
-		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
-			ps.setInt(1, id);
-			ps.setString(1, descrizione.toLowerCase());			
-			var rs = ps.executeUpdate();
-			if (rs==1) {
-				return true;
-			}
-		} catch (SQLException e) {
-			throw new DataException(e);
-		} catch (Exception e) {
-			throw new DataException(e);
-		}
-		return false;
-	}
-	public boolean updateRole(int id,int newId, String newDescr) {
-
-		String sql = "UPDATE t_role SET id=?, descrizione=? WHERE id=?; ";
-		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
-			ps.setInt(1, newId);			
-			ps.setString(2, newDescr.toLowerCase());
-			ps.setInt(1, id);	
-			var rs = ps.executeUpdate();
-			if (rs==1) {
-				return true;
-			}
-		} catch (SQLException e) {
-			throw new DataException(e);
-		} catch (Exception e) {
-			throw new DataException(e);
-		}
-		return false;
-	}
-	public boolean deleteRole(int id) {
-
-		String sql = "DELETE from t_role WHERE id=? ";
-		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
-			ps.setInt(1, id);			
-			var rs = ps.executeUpdate();
-			if (rs==1) {
-				return true;
-			}
-		} catch (SQLException e) {
-			throw new DataException(e);
-		} catch (Exception e) {
-			throw new DataException(e);
-		}
-		return false;
-	}
+	@Transactional
+	@Modifying
+	@Query(value = "UPDATE t_role SET id= :newId, descrizione= :descr WHERE id= :oldId", nativeQuery = true)
+	void addDeletedColumn(@Param("oldId") int oldId,@Param("newId") int newId,@Param("descr") String descrizione);
+	
 }
+

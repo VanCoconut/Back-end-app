@@ -20,14 +20,13 @@ public class AdminController {
         this.adminService=adminService;
     }
 
-    @GetMapping("/get-user-by-id/{idUser}")
-    public ResponseEntity<?> getUserById(@PathVariable int idUser){
-        return adminService.getUserById(idUser);
-    }
-
-    @GetMapping("/retrive-Order")
-    public List<Order> retrieveAdminOrders(){
-        return adminService.retrieveAdminOrders();
-    }
+	/*
+	 * @GetMapping("/get-user-by-id/{idUser}") public ResponseEntity<?>
+	 * getUserById(@PathVariable int idUser){ return
+	 * adminService.getUserById(idUser); }
+	 * 
+	 * @GetMapping("/retrive-Order") public List<Order> retrieveAdminOrders(){
+	 * return adminService.retrieveAdminOrders(); }
+	 */
 
 }

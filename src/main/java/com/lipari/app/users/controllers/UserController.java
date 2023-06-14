@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.lipari.app.users.entities.Address;
 import com.lipari.app.users.entities.User;
+import com.lipari.app.commons.exception.utils.NotFoundException;
 import com.lipari.app.users.dto.LoggInDto;
 import com.lipari.app.users.services.UserService;
 
@@ -39,6 +40,11 @@ public class UserController {
 	public List<String> listAddressByUserId(@PathVariable Integer userId) {
 		return userService.adressList(userId);
 	}
+	
+	@GetMapping("/address/{id}")
+	public Address getAddressbyId(@PathVariable int id) {
+		return userService.getAddressById(id);
+	}
 
 	// POST
 
@@ -48,12 +54,12 @@ public class UserController {
 	}
 
 	@PostMapping("")
-	public boolean addUser(@RequestBody User user) {
+	public User addUser(@RequestBody User user) {
 		return userService.createUser(user);
 	}
 
 	@PostMapping("/{userId}/address")
-	public boolean addAddress(@PathVariable Integer userId, @RequestParam String address) {
+	public Address addAddress(@PathVariable Integer userId, @RequestParam String address) {
 		return userService.addAddress(userId, address);
 	}
 
@@ -68,25 +74,28 @@ public class UserController {
 
 	}
 
-	@PutMapping("/{id}/password")
-	public User updateUserPassword(@PathVariable Integer id, @RequestParam String oldPassword,
-			@RequestParam String newPassword, @RequestParam String confirmPassword) {
-		User u = userService.findUserById(id);
-		userService.changePassword(u, oldPassword, newPassword, confirmPassword);
-		return userService.findUserById(id);
-
-	}
+	/*
+	 * @PutMapping("/{id}/password") public User updateUserPassword(@PathVariable
+	 * Integer id, @RequestParam String oldPassword,
+	 * 
+	 * @RequestParam String newPassword, @RequestParam String confirmPassword) {
+	 * User u = userService.findUserById(id); userService.changePassword(u,
+	 * oldPassword, newPassword, confirmPassword); return
+	 * userService.findUserById(id);
+	 * 
+	 * }
+	 */
 
 	// DELETE
 	@DeleteMapping("/{userId}")
-	public String deleteUserById(@PathVariable int userId) {
-
-		return "deleted user ID : " + userId + " " + userService.cancelUser(userId);
+	public String deleteUserById(@PathVariable int userId) {		
+		userService.cancelUser(userId);
+		return "deleted user ID : " + userId;
 	}
 
-	@DeleteMapping("/{id}/address")
+	@DeleteMapping("/address/{id}")
 	public String deleteAddress(@PathVariable int id) {
-
-		return "deleted address ID : " + id + " " + userService.cancelAddress(id);
+		userService.cancelAddress(id);
+		return "deleted address ID : " + id;
 	}
 }

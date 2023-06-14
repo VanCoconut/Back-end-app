@@ -3,7 +3,12 @@ package com.lipari.app.users.repositories;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.lipari.app.commons.exception.utils.AuthException;
@@ -13,136 +18,20 @@ import com.lipari.app.commons.repositories.BaseDao;
 import com.lipari.app.users.entities.User;
 import com.lipari.app.utils.DbConnection;
 
+import jakarta.transaction.Transactional;
+
 @Repository
-public class UserDao extends BaseDao {
+public interface UserDao extends JpaRepository<User, Integer> {
 
-	public UserDao(DbConnection dbConnection) {
-		super(dbConnection);
-	}
+	@Query(value = "SELECT * FROM t_user WHERE username = :usr AND password= :psw", nativeQuery = true)
+	User getUserByCredential(@Param("usr") String username, @Param("psw") String password);
 
-	public User getUser(String usr, String psw) throws DataException {
+	@Transactional
+	@Modifying
+	@Query(value = "UPDATE t_user SET nome= :nome,cognome= :cog,username= :usr,password= :psw,email= :email,role= :role WHERE id= :id", nativeQuery = true)
+	void updateUser(@Param("id") int currentUserId, @Param("nome") String nome, @Param("cog") String cognome,
+			@Param("usr") String username, @Param("psw") String password, @Param("email") String email,
+			@Param("role") int role);
 
-		String sql = "SELECT * FROM t_user WHERE username=? AND password=?";
-		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
-			ps.setString(1, usr);
-			ps.setString(2, psw);
-			ResultSet rs = ps.executeQuery();
-			User user = null;
-			if (rs.next()) {
-				user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
-						rs.getString(6), rs.getInt(7));
-			}
-			//if (user == null)
-			//	throw new AuthException("Accesso non autorizzato password o username errati");
-			return user;
-		} catch (SQLException e) {
-			throw new DataException("Error during sql log in");
-		} catch (Exception e) {
-			throw new DataException(e);
-		}
-	}
 
-	public boolean setUser(String nome, String cognome, String username, String password, String email, int role)
-			throws DataException {
-
-		String sql = "INSERT INTO t_user (nome,cognome,username,password,email,role) VALUES (?,?,?,?,?,?)";
-		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
-			ps.setString(1, nome);
-			ps.setString(2, cognome);
-			ps.setString(3, username);
-			ps.setString(4, password);
-			ps.setString(5, email);
-			ps.setInt(6, role);
-			var rs = ps.executeUpdate();
-			if (rs == 1) {
-				return true;
-			} else {
-				throw new DataException("Error creating new user");
-			}
-		} catch (SQLException e) {
-			throw new DataException(e);
-		} catch (Exception e) {
-			throw new DataException(e);
-		}
-	}
-
-	public boolean updateUser(int currentUserId, String nome, String cognome, String username, String password,
-			String email, int role) throws DataException {
-
-		String sql = "UPDATE t_user SET nome=?,cognome=?,username=?,password=?,email=?,role=? WHERE id=?";
-		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
-			ps.setString(1, nome);
-			ps.setString(2, cognome);
-			ps.setString(3, username);
-			ps.setString(4, password);
-			ps.setString(5, email);
-			ps.setInt(6, role);
-			ps.setInt(7, currentUserId);
-			var rs = ps.executeUpdate();
-			if (rs == 1) {
-				return true;
-			} else {
-				throw new DataException("Error updating  user");
-			}
-		} catch (SQLException e) {
-			throw new DataException(e);
-		} catch (Exception e) {
-			throw new DataException(e);
-		}
-	}
-
-	public boolean deleteUser(int id) throws DataException {
-
-		String sql = "DELETE FROM t_user WHERE id=?";
-		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
-			ps.setInt(1, id);
-			var rs = ps.executeUpdate();
-			if (rs == 1) {
-				return true;
-			} else {
-				throw new DataException("Error deleting new user");
-			}
-		} catch (SQLException e) {
-			throw new DataException(e);
-		} catch (Exception e) {
-			throw new DataException(e);
-		}
-
-	}
-
-	public User getUserById(int userId) {
-		String query = "SELECT * FROM t_user WHERE id = ?";
-
-		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(query)) {
-			ps.setInt(1, userId);
-			ResultSet rs = ps.executeQuery();
-			User user = null;
-			if (rs.next()) {
-				user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
-						rs.getString(6), rs.getInt(7));
-			}
-			if (user == null)
-				throw new NotFoundException("utente non trovato");
-			return user;
-		} catch (SQLException e) {
-			throw new DataException(e);
-		} catch (Exception e) {
-			throw new DataException(e);
-		}
-	}
-
-	public boolean existsById(int userId) {
-		String query = "SELECT COUNT(*) FROM t_user WHERE id=?";
-		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(query)) {
-			ps.setInt(1, userId);
-			ResultSet rs = ps.executeQuery();
-			if (rs.next()) {
-				int count = rs.getInt(1);
-				return count > 0;
-			}
-		} catch (SQLException e) {
-			throw new DataException(e);
-		}
-		return false;
-	}
 }

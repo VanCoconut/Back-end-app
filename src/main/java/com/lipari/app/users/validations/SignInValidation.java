@@ -10,6 +10,6 @@ public class SignInValidation extends GeneralValidation {
 	public void validation(String username, String password) {
 		stringNotBlank(username,password);
 		stringNoSpace(username,password);
-		minimumLenght8(username,password);
+		//minimumLenght8(username,password);
 	}
 }

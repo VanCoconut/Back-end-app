@@ -1,14 +1,30 @@
 package com.lipari.app.users.entities;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name="t_address")
 public class Address {
-	private int id,userId;
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="id")
+	private int id;
+	
+	@Column(name="user_id")
+	private int userId;
+	
+	@Column(name="indirizzo")
 	private String indirizzo;
 	
 	public Address() {}
 
-	public Address(int id, int userId, String indirizzo) {
-		super();
-		this.id = id;
+	public Address(int userId, String indirizzo) {		
 		this.userId = userId;
 		this.indirizzo = indirizzo;
 	}
