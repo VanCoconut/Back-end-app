@@ -31,17 +31,17 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductbyId(@PathVariable int id) throws DataException {
+    public ResponseEntity<Product> getProductbyId(@PathVariable Integer id) throws DataException {
         return ResponseEntity.ok(productService.getProductById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateProductById(@RequestBody Product product, @PathVariable int id) throws DataException {
+    public ResponseEntity<String> updateProductById(@RequestBody Product product, @PathVariable Integer id) throws DataException {
         return ResponseEntity.ok(productService.updateProductById(product, id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> removeProductById(@PathVariable int id) throws DataException {
+    public ResponseEntity<String> removeProductById(@PathVariable Integer id) throws DataException {
         return ResponseEntity.ok(productService.removeProductById(id));
     }
 

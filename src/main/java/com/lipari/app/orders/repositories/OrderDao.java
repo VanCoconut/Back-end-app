@@ -95,13 +95,13 @@ public class OrderDao extends BaseDao {
 		return false;
 	}
 
-	public boolean updateOrder(String id, LocalDate data, String indirizzo) throws DataException {
+	public boolean updateOrder(Order order) throws DataException {
 
 		String sql = "UPDATE t_order SET data=?,indirizzo=? WHERE id=?";
 		try (PreparedStatement ps = dbConnection.openConnection().prepareStatement(sql)) {
-			ps.setDate(1, Date.valueOf(data));
-			ps.setString(1, id);
-			ps.setString(1, id);
+			ps.setDate(1, Date.valueOf(order.getData()));
+			ps.setString(2, order.getIndirizzo());
+			ps.setString(3, order.getId());
 			var rs = ps.executeUpdate();
 			if (rs == 1) {
 				return true;
@@ -130,4 +130,20 @@ public class OrderDao extends BaseDao {
 		}
 		return false;
 	}
+
+	public boolean existsById(String orderId){
+		String query= "SELECT COUNT(*) FROM t_order WHERE id=?";
+		try(PreparedStatement ps = dbConnection.openConnection().prepareStatement(query)) {
+			ps.setString(1,orderId);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()){
+				int count = rs.getInt(1);
+				return count > 0;
+			}
+		}catch (SQLException e){
+			throw new DataException("Error checking existence of codice: " + e.getMessage());
+		}
+		return false;
+	}
+
 }
