@@ -12,6 +12,7 @@ import com.lipari.app.commons.exception.utils.InvalidDataException;
 import com.lipari.app.commons.exception.utils.NotFoundException;
 import com.lipari.app.orders.entities.Order;
 import com.lipari.app.orders.repositories.OrderDao;
+import com.lipari.app.products.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,15 +28,15 @@ public class OrderService {
 
     private final OrderDao orderDao ;
     private final UserDao userDao;
-    private final ProductDao productDao ;
+    private final ProductRepository productRepository ;
     private final AddressDao addressDao ;
     private final BasketDao basketDao ;
 
     @Autowired
-    public OrderService(OrderDao orderDao, UserDao userDao, ProductDao productDao, AddressDao addressDao, BasketDao basketDao) {
+    public OrderService(OrderDao orderDao, UserDao userDao, ProductRepository productRepository, AddressDao addressDao, BasketDao basketDao) {
         this.orderDao = orderDao;
         this.userDao = userDao;
-        this.productDao = productDao;
+        this.productRepository = productRepository;
         this.addressDao = addressDao;
         this.basketDao = basketDao;
     }
@@ -53,7 +54,7 @@ public class OrderService {
     public List<Product> retrieveAllProduct() {
 
         try {
-            return productDao.getAllProduct();
+            return productRepository.findAll();
         } catch (DataException e) {
             e.printStackTrace();
         }
@@ -69,7 +70,7 @@ public class OrderService {
             Iterator<Map.Entry<Integer, Integer>> iterator = m1.entrySet().iterator();
             while (iterator.hasNext()) {
                 Map.Entry<Integer, Integer> entry = iterator.next();
-                m.put(entry.getKey(), productDao.getProduct(entry.getValue()).getDescrizione());
+                m.put(entry.getKey(), productRepository.getProductById(entry.getValue()).getDescrizione());
             }
             return m;
         } catch (DataException e) {
@@ -83,7 +84,7 @@ public class OrderService {
         if (!orderDao.existsById(orderId)){
             throw new AlreadyExistsException("Order already exists");
         }
-        if (!productDao.existsById(productId)){
+        if (!productRepository.existsById(productId)){
             throw new NotFoundException("Product not found");
         }
         if (!(qta > 0)){
@@ -122,10 +123,10 @@ public class OrderService {
     }
 
     public Product findProduct(int productId) {
-        if (!productDao.existsById(productId)){
+        if (!productRepository.existsById(productId)){
             throw new NotFoundException("Product not found");
         }
-        return productDao.getProduct(productId);
+        return productRepository.getProductById(productId);
 
     }
 
