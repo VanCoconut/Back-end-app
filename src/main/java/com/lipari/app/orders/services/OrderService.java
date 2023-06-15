@@ -16,10 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lipari.app.commons.exception.utils.DataException;
-import com.lipari.app.users.repositories.AddressDao;
+import com.lipari.app.users.repositories.AddressRepo;
 import com.lipari.app.basket.repositories.BasketDao;
 import com.lipari.app.products.repositories.ProductDao;
-import com.lipari.app.users.repositories.UserDao;
+import com.lipari.app.users.repositories.UserRepo;
 import com.lipari.app.basket.entities.Basket;
 import com.lipari.app.products.entities.Product;
 
@@ -27,13 +27,13 @@ import com.lipari.app.products.entities.Product;
 public class OrderService {
 
     private final OrderDao orderDao ;
-    private final UserDao userDao;
+    private final UserRepo userDao;
     private final ProductDao productDao ;
-    private final AddressDao addressDao ;
+    private final AddressRepo addressDao ;
     private final BasketDao basketDao ;
 
     @Autowired
-    public OrderService(OrderDao orderDao, UserDao userDao, ProductDao productDao, AddressDao addressDao, BasketDao basketDao) {
+    public OrderService(OrderDao orderDao, UserRepo userDao, ProductDao productDao, AddressRepo addressDao, BasketDao basketDao) {
         this.orderDao = orderDao;
         this.userDao = userDao;
         this.productDao = productDao;

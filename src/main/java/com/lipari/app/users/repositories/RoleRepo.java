@@ -14,7 +14,7 @@ import com.lipari.app.users.entities.Role;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public interface RoleDao extends JpaRepository<Role, Integer> {
+public interface RoleRepo extends JpaRepository<Role, Integer> {
 
 	@Query(value = "SELECT * FROM t_role WHERE descrizione= :descr", nativeQuery = true)
 	Optional<Role> getRoleByDescription(@Param("descr") String descrizione);

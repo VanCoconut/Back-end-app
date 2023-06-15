@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lipari.app.users.dto.LoggInDto;
+import com.lipari.app.users.dto.LogInDto;
 import com.lipari.app.users.entities.Address;
 import com.lipari.app.users.entities.Role;
 import com.lipari.app.users.entities.User;
@@ -65,7 +65,7 @@ public class UserController {
 	// POST
 
 	@PostMapping("/login")
-	public User login(@RequestBody LoggInDto log) {
+	public User login(@RequestBody LogInDto log) {
 		return userService.loging(log.getUsername(), log.getPassword());
 	}
 

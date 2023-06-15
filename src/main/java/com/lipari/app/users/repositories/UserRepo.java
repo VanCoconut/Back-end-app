@@ -21,7 +21,7 @@ import com.lipari.app.utils.DbConnection;
 import jakarta.transaction.Transactional;
 
 @Repository
-public interface UserDao extends JpaRepository<User, Integer> {
+public interface UserRepo extends JpaRepository<User, Integer> {
 
 	@Query(value = "SELECT * FROM t_user WHERE username = :usr AND password= :psw", nativeQuery = true)
 	User getUserByCredential(@Param("usr") String username, @Param("psw") String password);

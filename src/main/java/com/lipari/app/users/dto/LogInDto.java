@@ -3,11 +3,11 @@ package com.lipari.app.users.dto;
 import org.springframework.stereotype.Component;
 
 @Component
-public class LoggInDto {
+public class LogInDto {
 
 	private String username,password;
 	
-	public LoggInDto() {
+	public LogInDto() {
 		
 	}
 

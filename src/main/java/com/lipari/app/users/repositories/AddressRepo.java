@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.lipari.app.users.entities.Address;
 
 @Repository
-public interface AddressDao extends JpaRepository<Address, Integer> {
+public interface AddressRepo extends JpaRepository<Address, Integer> {
 
 	@Query(value = "SELECT * FROM t_address WHERE user_id = :userId", nativeQuery = true)
 	List<String> getAllUserAddress(@Param("userId") int userId);

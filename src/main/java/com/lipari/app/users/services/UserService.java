@@ -14,9 +14,9 @@ import com.lipari.app.commons.validations.GeneralValidation;
 import com.lipari.app.users.entities.Address;
 import com.lipari.app.users.entities.Role;
 import com.lipari.app.users.entities.User;
-import com.lipari.app.users.repositories.AddressDao;
-import com.lipari.app.users.repositories.RoleDao;
-import com.lipari.app.users.repositories.UserDao;
+import com.lipari.app.users.repositories.AddressRepo;
+import com.lipari.app.users.repositories.RoleRepo;
+import com.lipari.app.users.repositories.UserRepo;
 import com.lipari.app.users.validations.ChangePasswordValidation;
 import com.lipari.app.users.validations.SignInValidation;
 import com.lipari.app.users.validations.SignUpValidation;
@@ -24,9 +24,9 @@ import com.lipari.app.users.validations.SignUpValidation;
 @Service
 public class UserService {
 
-	private UserDao userDao;
-	private AddressDao addressDao;
-	private RoleDao roleDao;
+	private UserRepo userDao;
+	private AddressRepo addressDao;
+	private RoleRepo roleDao;
 
 	@Autowired
 	private SignInValidation signInValidation;
@@ -42,7 +42,7 @@ public class UserService {
 	
 
 	@Autowired
-	public UserService(RoleDao roleDao, UserDao userDao, AddressDao addressDao) {
+	public UserService(RoleRepo roleDao, UserRepo userDao, AddressRepo addressDao) {
 		this.userDao = userDao;
 		this.addressDao = addressDao;
 		this.roleDao = roleDao;

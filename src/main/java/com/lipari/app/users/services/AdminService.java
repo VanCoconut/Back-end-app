@@ -2,7 +2,7 @@ package com.lipari.app.users.services;
 
 import java.util.List;
 
-import com.lipari.app.users.repositories.UserDao;
+import com.lipari.app.users.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
