@@ -12,10 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.lipari.app.users.entities.Address;
-import com.lipari.app.users.entities.User;
-import com.lipari.app.commons.exception.utils.NotFoundException;
+
 import com.lipari.app.users.dto.LoggInDto;
+import com.lipari.app.users.entities.Address;
+import com.lipari.app.users.entities.Role;
+import com.lipari.app.users.entities.User;
 import com.lipari.app.users.services.UserService;
 
 @RestController
@@ -36,11 +37,26 @@ public class UserController {
 		return userService.findUserById(id);
 	}
 
+	@GetMapping("/role/{id}")
+	public Role getRoleById(@PathVariable Integer id) {
+		return userService.findRoleById(id);
+	}
+
+	@GetMapping("/role/")
+	public Role getRoleByDescription(@RequestParam String descr) {
+		return userService.findRoleByDescription(descr);
+	}
+
+	@GetMapping("/role")
+	public List<Role> getAllRole() {
+		return userService.findAllRole();
+	}
+
 	@GetMapping("/{userId}/address")
 	public List<String> listAddressByUserId(@PathVariable Integer userId) {
 		return userService.adressList(userId);
 	}
-	
+
 	@GetMapping("/address/{id}")
 	public Address getAddressbyId(@PathVariable int id) {
 		return userService.getAddressById(id);
@@ -56,6 +72,11 @@ public class UserController {
 	@PostMapping("")
 	public User addUser(@RequestBody User user) {
 		return userService.createUser(user);
+	}
+
+	@PostMapping("/role")
+	public Role addRole(@RequestBody Role role) {
+		return userService.addRole(role);
 	}
 
 	@PostMapping("/{userId}/address")
@@ -74,23 +95,37 @@ public class UserController {
 
 	}
 
-	/*
-	 * @PutMapping("/{id}/password") public User updateUserPassword(@PathVariable
-	 * Integer id, @RequestParam String oldPassword,
-	 * 
-	 * @RequestParam String newPassword, @RequestParam String confirmPassword) {
-	 * User u = userService.findUserById(id); userService.changePassword(u,
-	 * oldPassword, newPassword, confirmPassword); return
-	 * userService.findUserById(id);
-	 * 
-	 * }
-	 */
+	@PutMapping("/{id}/password")
+	public User updateUserPassword(@PathVariable Integer id, @RequestParam String oldPassword,
+			@RequestParam String newPassword, @RequestParam String confirmPassword) {
+		userService.changePassword(id, oldPassword, newPassword, confirmPassword);
+		return userService.findUserById(id);
+
+	}
+
+	@PutMapping("/role/{id}")
+	public Role updateRole(@PathVariable Integer id, @RequestBody Role role) {
+		return userService.updateRole(id, role);
+
+	}
 
 	// DELETE
 	@DeleteMapping("/{userId}")
-	public String deleteUserById(@PathVariable int userId) {		
+	public String deleteUserById(@PathVariable int userId) {
 		userService.cancelUser(userId);
 		return "deleted user ID : " + userId;
+	}
+
+	@DeleteMapping("/role/{id}")
+	public String deleteRoleById(@PathVariable int id) {
+		userService.cancelRoleById(id);
+		return "deleted role ID : " + id;
+	}
+
+	@DeleteMapping("/role/")
+	public String deleteRoleByDescription(@RequestParam String descr) {
+		userService.cancelRoleByDescription(descr);
+		return "deleted role description : " + descr;
 	}
 
 	@DeleteMapping("/address/{id}")

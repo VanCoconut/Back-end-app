@@ -17,6 +17,8 @@ public class Role {
 	
 	@Column(name = "descrizione")
 	private String descrizione;
+	
+	public Role() {}
 
 	public Role(int id, String descrizione) {
 		super();

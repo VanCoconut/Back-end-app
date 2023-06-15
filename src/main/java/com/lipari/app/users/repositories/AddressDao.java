@@ -20,5 +20,8 @@ public interface AddressDao extends JpaRepository<Address, Integer> {
 	@Query(value = "SELECT * FROM t_address WHERE id = :id", nativeQuery = true)
 	Optional<Address> getAddressById(@Param("id") int id);
 	
+	@Query(value = "SELECT * FROM t_address WHERE user_id = :user_id AND idnirizzo = :i", nativeQuery = true)
+	Address addressAlreadyExist(@Param("user_id") int id, @Param("i") String indirizzo);
+	
 
 }
