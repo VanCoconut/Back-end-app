@@ -1,14 +1,15 @@
 package com.lipari.app.orders.controllers;
 
 import com.lipari.app.orders.entities.Order;
-import com.lipari.app.orders.repositories.OrderDao;
 import com.lipari.app.orders.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.lipari.app.orders.repositories.OrderRepository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/orders")
@@ -24,7 +25,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Order> findById(@PathVariable String id){
+    public ResponseEntity<Optional<Order>> findById(@PathVariable String id){
         return ResponseEntity.ok(orderService.findOrderById(id));
     }
 
