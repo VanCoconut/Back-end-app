@@ -1,8 +1,17 @@
 package com.lipari.app.basket.entities;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name="t_basket")
 public class Basket {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String orderId;
 	private int productId, quantita;
+
+	public Basket() {
+	}
 
 	public Basket(String orderId, int productId, int quantita) {
 		super();
