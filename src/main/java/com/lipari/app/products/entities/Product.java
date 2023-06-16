@@ -3,7 +3,7 @@ package com.lipari.app.products.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="products")
+@Table(name="t_product")
 public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

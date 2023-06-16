@@ -2,67 +2,82 @@ package com.lipari.app.products.services;
 
 
 import com.lipari.app.commons.exception.utils.AlreadyExistsException;
+import com.lipari.app.commons.exception.utils.DataException;
 import com.lipari.app.commons.exception.utils.InvalidDataException;
 import com.lipari.app.commons.exception.utils.NotFoundException;
-import com.lipari.app.products.repositories.ProductDao;
 import com.lipari.app.products.entities.Product;
+import com.lipari.app.products.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
 
-    ProductDao productDao;
+    ProductRepository productRepository;
 
     @Autowired
-    public ProductService(ProductDao productDao){
-        this.productDao = productDao;
+    public ProductService(ProductRepository productRepository){
+        this.productRepository = productRepository;
     }
 
+    @Transactional(rollbackFor = DataException.class)
     public String createProduct(Product product){
             if (!isValidProduct(product)) {
                 throw new InvalidDataException("Invalid product data");
             }
-            if (productDao.existsByCodice(product.getCodice())) {
+            if (productRepository.existsByCodice(product.getCodice())) {
                 throw new AlreadyExistsException("Codice already exists in the database");
             }
-            productDao.setProduct(product.getCodice(), product.getDescrizione(), product.getCosto(), product.getMagazzino());
+        productRepository.save(product);
         return "Product created";
     }
-
+    @Transactional(rollbackFor = DataException.class, readOnly = true)
     public Product getProductById(Integer id) {
-        return productDao.getProduct(id);
+        Optional<Product> result = productRepository.findById(id);
+        Product product = null;
+        if(result.isPresent()){
+            product = result.get();
+        }else {
+            throw new NotFoundException("Product not found id - "+id);
+        }
+
+        return product;
     }
+    @Transactional(rollbackFor = DataException.class,readOnly = true)
     public List<Product> getAllProducts() {
         List<Product> products;
-        products = productDao.getAllProduct();
+        products = productRepository.findAll();
         return products;
     }
-
+    @Transactional(rollbackFor = DataException.class)
     public String updateProductById(Product updatedProduct, Integer id) {
-            if (!productDao.existsById(id)) {
+            if (!productRepository.existsById(id)) {
                 throw new NotFoundException("Product not found");
             }
             if (!isValidProduct(updatedProduct)) {
                 throw new InvalidDataException("Invalid product data");
             }
-            if (!productDao.existsByCodice(updatedProduct.getCodice())) {
+            if (!productRepository.existsByCodice(updatedProduct.getCodice())) {
                 throw new AlreadyExistsException("Product code already exists");
             }
-            Product existingProduct = productDao.getProduct(id);
+            Product existingProduct = productRepository.getProductById(id);
+
             existingProduct.setCodice(updatedProduct.getCodice());
             existingProduct.setDescrizione(updatedProduct.getDescrizione());
             existingProduct.setCosto(updatedProduct.getCosto());
             existingProduct.setMagazzino(updatedProduct.getMagazzino());
-            productDao.updateProduct(existingProduct);
-            return "the product has been successfully updated:\n"+ productDao.getProduct(id);
+            productRepository.save(existingProduct);
+            return "the product has been successfully updated:\n"+ existingProduct;
     }
-
+    @Transactional(rollbackFor = DataException.class)
     public String removeProductById(Integer id) {
-        if(productDao.existsById(id)){
-            productDao.deleteProduct(id);
+        if(productRepository.existsById(id)){
+            Product existingProduct = productRepository.getProductById(id);
+            productRepository.delete(existingProduct);
             return "Deletion done";
         }else {
             throw new NotFoundException("Product not found");
