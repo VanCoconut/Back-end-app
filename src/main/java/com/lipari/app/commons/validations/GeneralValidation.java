@@ -16,8 +16,8 @@ public class GeneralValidation {
 
 	}
 
-	public void positiveInt(Integer... integers) {
-		for (Integer i : integers) {
+	public void positiveLong(Long... longs) {
+		for (Long i : longs) {
 			if (i == null || i < 0)
 				throw new InvalidDataException("il numero è nullo o minore di zero");
 		}

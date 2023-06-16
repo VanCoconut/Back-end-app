@@ -14,7 +14,7 @@ import com.lipari.app.users.entities.Role;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public interface RoleRepo extends JpaRepository<Role, Integer> {
+public interface RoleRepo extends JpaRepository<Role, Long> {
 
 	@Query(value = "SELECT * FROM t_role WHERE descrizione= :descr", nativeQuery = true)
 	Optional<Role> getRoleByDescription(@Param("descr") String descrizione);
@@ -22,8 +22,8 @@ public interface RoleRepo extends JpaRepository<Role, Integer> {
 	@Transactional(rollbackFor = DataException.class)
 	@Modifying
 	@Query(value = "UPDATE t_role SET id= :newId, descrizione= :descr WHERE id= :oldId", nativeQuery = true)
-	void updateRole(@Param("oldId") int oldId, @Param("newId") int newId, @Param("descr") String descrizione);
+	void updateRole(@Param("oldId") Long oldId, @Param("newId") Long newId, @Param("descr") String descrizione);
 
 	@Query(value = "SELECT * FROM t_role WHERE id = :id OR descrizione = :d LIMIT 1", nativeQuery = true)
-	Role roleAlreadyExist(@Param("id") int id, @Param("d") String d);
+	Role roleAlreadyExist(@Param("id") Long id, @Param("d") String d);
 }

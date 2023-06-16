@@ -11,6 +11,7 @@ import com.lipari.app.commons.exception.utils.NotFoundException;
 import com.lipari.app.orders.entities.Order;
 import com.lipari.app.orders.repositories.OrderRepository;
 import com.lipari.app.products.repositories.ProductRepository;
+import com.lipari.app.users.entities.User;
 import com.lipari.app.users.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,7 @@ public class OrderService {
 
 
 
-    public List<Order> retrieveAllOrders(Integer userId) {
+    public List<Order> retrieveAllOrders(Long userId) {
         List<Order> orders = orderRepository.findAllOrderByUserId(userId);
         if (!userRepository.existsById(userId)){
             throw new NotFoundException("User not found");
@@ -73,22 +74,25 @@ public class OrderService {
 
     }*/
 
-    public String addProduct(String orderId, int productId, int qta) {
-        if (orderRepository.existsById(orderId)){
-            throw new AlreadyExistsException("Order already exists");
+    public String addProduct(Long userId, Long productId, int qta) {
+        if (userId == null || productId == null || qta > 0){
+            throw new InvalidDataException("");
         }
-        if (!productRepository.existsById(productId)){
-            throw new NotFoundException("Product not found");
+        Basket basket;
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(""));
+        Product product = productRepository.findById(productId).orElseThrow(() -> new NotFoundException(""));
+        if (user.getBasket() == null){
+            basket = new Basket();
+        }else {
+            basket = user.getBasket();
         }
-        if (!(qta > 0)){
-            throw new InvalidDataException("Invalid product data");
-        }
-        Basket basket = new Basket(orderId, productId, qta);
-        basketRepository.save(basket);
+        basket.addProduct(product);
+        user.setBasket(basket);
+        userRepository.save(user);
         return "Product added";
     }
 
-    public Optional<Order> findOrderById(String id){
+    public Optional<Order> findOrderById(UUID id){
         if (!orderRepository.existsById(id)){
             throw new NotFoundException("Order not found");
         }
@@ -107,7 +111,7 @@ public class OrderService {
 
     }
 
-    public String deleteOrder(String orderId) {
+    public String deleteOrder(UUID orderId) {
         if (!orderRepository.existsById(orderId)) {
             throw new NotFoundException("Order not found");
         }
@@ -115,7 +119,7 @@ public class OrderService {
         return "Deletion done";
     }
 
-    public String update(Order updateOrder, String id){
+    public String update(Order updateOrder, UUID id){
         if (!orderRepository.existsById(id)){
             throw new NotFoundException("Order not found");
         }
@@ -134,7 +138,7 @@ public class OrderService {
 
     private boolean isValidOrder(Order order) {
         return order.getId() != null &&
-                order.getUserId() > 0 &&
+                order.getUser() != null &&
                 order.getData() != null &&
                 order.getIndirizzo() != null;
     }

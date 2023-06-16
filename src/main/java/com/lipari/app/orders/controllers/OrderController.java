@@ -10,6 +10,7 @@ import com.lipari.app.orders.repositories.OrderRepository;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/orders")
@@ -25,28 +26,28 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Order>> findById(@PathVariable String id){
+    public ResponseEntity<Optional<Order>> findById(@PathVariable UUID id){
         return ResponseEntity.ok(orderService.findOrderById(id));
     }
 
     @GetMapping("/allorders/{id}")
-    public ResponseEntity<List<Order>> allOrdersById(@PathVariable int id){
+    public ResponseEntity<List<Order>> allOrdersById(@PathVariable Long id){
         return ResponseEntity.ok(orderService.retrieveAllOrders(id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable String id){
+    public ResponseEntity<String> deleteById(@PathVariable UUID id){
         return ResponseEntity.ok(orderService.deleteOrder(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateById(@RequestBody Order order, @PathVariable String id){
+    public ResponseEntity<String> updateById(@RequestBody Order order, @PathVariable UUID id){
         return ResponseEntity.ok(orderService.update(order,id));
     }
 
     @PostMapping("/added")
-    public ResponseEntity<String> addBasket(@RequestParam String orderId, @RequestParam int productId, @RequestParam int qta){
-        return ResponseEntity.ok(orderService.addProduct(orderId, productId, qta));
+    public ResponseEntity<String> addBasket(@RequestParam Long userId, @RequestParam Long productId, @RequestParam int qta){
+        return ResponseEntity.ok(orderService.addProduct(userId, productId, qta));
     }
     /*@GetMapping("/viewbasket/{id}")
     public ResponseEntity<Map<Integer, String>> retrieveBasketOrder(@PathVariable String id){

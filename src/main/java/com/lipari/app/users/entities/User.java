@@ -1,5 +1,6 @@
 package com.lipari.app.users.entities;
 
+import com.lipari.app.basket.entities.Basket;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -29,8 +30,11 @@ public class User {
 
 	@Column(name = "email")
 	private String email;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "basket_id")
+	private Basket basket;
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "adddress_id")
+	@JoinColumn(name = "user_id")
 	private List<Address> addressList;
 	@OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE})
 	@JoinColumn(name = "role_id")
@@ -39,13 +43,14 @@ public class User {
 	public User() {
 	}
 
-	public User(String nome, String cognome, String username, String password, String email, List<Address> address, Role role) {
+	public User(String nome, String cognome, String username, String password, String email, Basket basket, List<Address> addressList, Role role) {
 		this.nome = nome;
 		this.cognome = cognome;
 		this.username = username;
 		this.password = password;
 		this.email = email;
-		this.addressList = address;
+		this.basket = basket;
+		this.addressList = addressList;
 		this.role = role;
 	}
 
@@ -132,5 +137,13 @@ public class User {
 			addressList = new ArrayList<>();
 		}
 		addressList.add(address);
+	}
+
+	public Basket getBasket() {
+		return basket;
+	}
+
+	public void setBasket(Basket basket) {
+		this.basket = basket;
 	}
 }

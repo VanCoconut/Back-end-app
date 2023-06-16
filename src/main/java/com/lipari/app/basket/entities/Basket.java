@@ -13,8 +13,8 @@ public class Basket {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@OneToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH})
-	@JoinColumn(name = "product_id")
+	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH})
+	//@JoinColumn(name = "basket_id")
 	private List<Product> productList;
 
 	private int qta;

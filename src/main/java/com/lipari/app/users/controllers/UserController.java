@@ -33,12 +33,12 @@ public class UserController {
 	// GET
 
 	@GetMapping("/{id}")
-	public User getuserById(@PathVariable Integer id) {
+	public User getuserById(@PathVariable Long id) {
 		return userService.findUserById(id);
 	}
 
 	@GetMapping("/role/{id}")
-	public Role getRoleById(@PathVariable Integer id) {
+	public Role getRoleById(@PathVariable Long id) {
 		return userService.findRoleById(id);
 	}
 
@@ -53,12 +53,12 @@ public class UserController {
 	}
 
 	@GetMapping("/{userId}/address")
-	public List<String> listAddressByUserId(@PathVariable Integer userId) {
+	public List<String> listAddressByUserId(@PathVariable Long userId) {
 		return userService.adressList(userId);
 	}
 
 	@GetMapping("/address/{id}")
-	public Address getAddressbyId(@PathVariable int id) {
+	public Address getAddressbyId(@PathVariable Long id) {
 		return userService.getAddressById(id);
 	}
 
@@ -80,14 +80,14 @@ public class UserController {
 	}
 
 	@PostMapping("/{userId}/address")
-	public Address addAddress(@PathVariable Integer userId, @RequestParam String address) {
+	public User addAddress(@PathVariable Long userId, @RequestParam String address) {
 		return userService.addAddress(userId, address);
 	}
 
 	// PUT
 
 	@PutMapping("/{id}")
-	public User updateUser(@PathVariable Integer id, @RequestBody User user) {
+	public User updateUser(@PathVariable Long id, @RequestBody User user) {
 		User u = user;
 		u.setId(id);
 		userService.changeUser(u);
@@ -96,7 +96,7 @@ public class UserController {
 	}
 
 	@PutMapping("/{id}/password")
-	public User updateUserPassword(@PathVariable Integer id, @RequestParam String oldPassword,
+	public User updateUserPassword(@PathVariable Long id, @RequestParam String oldPassword,
 			@RequestParam String newPassword, @RequestParam String confirmPassword) {
 		userService.changePassword(id, oldPassword, newPassword, confirmPassword);
 		return userService.findUserById(id);
@@ -104,20 +104,20 @@ public class UserController {
 	}
 
 	@PutMapping("/role/{id}")
-	public Role updateRole(@PathVariable Integer id, @RequestBody Role role) {
+	public Role updateRole(@PathVariable Long id, @RequestBody Role role) {
 		return userService.updateRole(id, role);
 
 	}
 
 	// DELETE
 	@DeleteMapping("/{userId}")
-	public String deleteUserById(@PathVariable int userId) {
+	public String deleteUserById(@PathVariable Long userId) {
 		userService.cancelUser(userId);
 		return "deleted user ID : " + userId;
 	}
 
 	@DeleteMapping("/role/{id}")
-	public String deleteRoleById(@PathVariable int id) {
+	public String deleteRoleById(@PathVariable Long id) {
 		userService.cancelRoleById(id);
 		return "deleted role ID : " + id;
 	}
@@ -129,7 +129,7 @@ public class UserController {
 	}
 
 	@DeleteMapping("/address/{id}")
-	public String deleteAddress(@PathVariable int id) {
+	public String deleteAddress(@PathVariable Long id) {
 		userService.cancelAddress(id);
 		return "deleted address ID : " + id;
 	}

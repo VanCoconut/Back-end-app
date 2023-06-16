@@ -36,7 +36,7 @@ public class ProductService {
         return "Product created";
     }
     @Transactional(rollbackFor = DataException.class, readOnly = true)
-    public Product getProductById(Integer id) {
+    public Product getProductById(Long id) {
         Optional<Product> result = productRepository.findById(id);
         Product product = null;
         if(result.isPresent()){
@@ -54,7 +54,7 @@ public class ProductService {
         return products;
     }
     @Transactional(rollbackFor = DataException.class)
-    public String updateProductById(Product updatedProduct, Integer id) {
+    public String updateProductById(Product updatedProduct, Long id) {
             if (!productRepository.existsById(id)) {
                 throw new NotFoundException("Product not found");
             }
@@ -74,7 +74,7 @@ public class ProductService {
             return "the product has been successfully updated:\n"+ existingProduct;
     }
     @Transactional(rollbackFor = DataException.class)
-    public String removeProductById(Integer id) {
+    public String removeProductById(Long id) {
         if(productRepository.existsById(id)){
             Product existingProduct = productRepository.getProductById(id);
             productRepository.delete(existingProduct);
