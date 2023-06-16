@@ -13,37 +13,25 @@ public class Address {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
-	private int id;
-	
-	@Column(name="user_id")
-	private int userId;
-	
-	@Column(name="indirizzo")
+	@Column(name="address_id")
+	private Long id;
+	@Column(name="address")
 	private String indirizzo;
 	
 	public Address() {}
 
-	public Address(int userId, String indirizzo) {		
-		this.userId = userId;
+	public Address(String indirizzo) {
 		this.indirizzo = indirizzo;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public int getUserId() {
-		return userId;
-	}
-
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
 
 	public String getIndirizzo() {
 		return indirizzo;
@@ -55,10 +43,9 @@ public class Address {
 
 	@Override
 	public String toString() {
-		return "Address [id=" + id + ", userId=" + userId + ", indirizzo=" + indirizzo + "]";
+		return "Address{" +
+				"id=" + id +
+				", indirizzo='" + indirizzo + '\'' +
+				'}';
 	}
-	
-
-	
-
 }

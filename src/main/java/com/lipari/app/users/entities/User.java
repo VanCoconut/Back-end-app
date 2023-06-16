@@ -1,11 +1,10 @@
 package com.lipari.app.users.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "t_user")
@@ -13,13 +12,13 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private int id;
+	@Column(name = "user_id")
+	private Long id;
 
-	@Column(name = "nome")
+	@Column(name = "name")
 	private String nome;
 
-	@Column(name = "cognome")
+	@Column(name = "surname")
 	private String cognome;
 
 	@Column(name = "username")
@@ -30,35 +29,45 @@ public class User {
 
 	@Column(name = "email")
 	private String email;
-
-	@Column(name = "role")
-	private int role;
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "adddress_id")
+	private List<Address> addressList;
+	@OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE})
+	@JoinColumn(name = "role_id")
+	private Role role;
 
 	public User() {
 	}
 
-	public User(int id, String nome, String cognome, String username, String password, String email, int role) {
-		super();
-		this.id = id;
+	public User(String nome, String cognome, String username, String password, String email, List<Address> address, Role role) {
 		this.nome = nome;
 		this.cognome = cognome;
 		this.username = username;
 		this.password = password;
 		this.email = email;
+		this.addressList = address;
 		this.role = role;
 	}
 
 	@Override
 	public String toString() {
-		return "Product [id=" + id + ", nome=" + nome + ", cognome=" + cognome + ", username=" + username
-				+ ", password=" + password + ", email=" + email + ", role=" + role + "]";
+		return "User{" +
+				"id=" + id +
+				", nome='" + nome + '\'' +
+				", cognome='" + cognome + '\'' +
+				", username='" + username + '\'' +
+				", password='" + password + '\'' +
+				", email='" + email + '\'' +
+				", address=" + addressList +
+				", role=" + role +
+				'}';
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -102,11 +111,26 @@ public class User {
 		this.email = email;
 	}
 
-	public int getRole() {
+	public List<Address> getAddressList() {
+		return addressList;
+	}
+
+	public void setAddressList(List<Address> addressList) {
+		this.addressList = addressList;
+	}
+
+	public Role getRole() {
 		return role;
 	}
 
-	public void setRole(int role) {
+	public void setRole(Role role) {
 		this.role = role;
+	}
+
+	public void addAddress(Address address){
+		if (addressList.size() == 0){
+			addressList = new ArrayList<>();
+		}
+		addressList.add(address);
 	}
 }

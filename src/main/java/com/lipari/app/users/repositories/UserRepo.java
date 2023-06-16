@@ -1,22 +1,12 @@
 package com.lipari.app.users.repositories;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.lipari.app.commons.exception.utils.AuthException;
-import com.lipari.app.commons.exception.utils.DataException;
-import com.lipari.app.commons.exception.utils.NotFoundException;
-import com.lipari.app.commons.repositories.BaseDao;
 import com.lipari.app.users.entities.User;
-import com.lipari.app.utils.DbConnection;
 
 import jakarta.transaction.Transactional;
 

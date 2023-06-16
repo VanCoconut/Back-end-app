@@ -12,17 +12,15 @@ import jakarta.persistence.Table;
 public class Role {
 	
 	@Id
-	@Column(name = "id")
-	private int id;
+	@Column(name = "role_id")
+	private Long id;
 	
-	@Column(name = "descrizione")
+	@Column(name = "description")
 	private String descrizione;
 	
 	public Role() {}
 
-	public Role(int id, String descrizione) {
-		super();
-		this.id = id;
+	public Role(String descrizione) {
 		this.descrizione = descrizione;
 	}
 
@@ -31,11 +29,11 @@ public class Role {
 		return "Role [id=" + id + ", descrizione=" + descrizione + "]";
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

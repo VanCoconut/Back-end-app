@@ -1,51 +1,67 @@
 package com.lipari.app.orders.entities;
 
+import com.lipari.app.basket.entities.Basket;
+import com.lipari.app.users.entities.Address;
+import com.lipari.app.users.entities.User;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.UUID;
+
 @Entity
 @Table(name = "t_order")
 public class Order {
 	@Id
-	@Column(name = "id")
-	private String id;
-	@Column(name = "userid")
-	private int userId;
-	@Column(name = "data")
+	@GeneratedValue(strategy = GenerationType.UUID)
+	@Column(name = "order_id")
+	private UUID id;
+	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE})
+	@JoinColumn(name = "user_id")
+	private User user;
+	@Column(name = "date")
 	private LocalDate data;
-	@Column(name = "indirizzo")
-	private String indirizzo;
+	@OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE})
+	@JoinColumn(name = "address_id")
+	private Address indirizzo;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "basket_id")
+	private Basket basket;
 
 	public Order() {
 	}
 
-	public Order(String id, int userId, LocalDate data, String indirizzo) {
-		super();
-		this.id = id;
-		this.userId = userId;
+	public Order(User user, LocalDate data, Address indirizzo, Basket basket) {
+		this.user = user;
 		this.data = data;
 		this.indirizzo = indirizzo;
+		this.basket = basket;
 	}
 
 	@Override
 	public String toString() {
-		return "Order [id=" + id + ", userId=" + userId + ", data=" + data + ", indirizzo=" + indirizzo + "]";
+		return "Order{" +
+				"id=" + id +
+				", user=" + user +
+				", data=" + data +
+				", indirizzo=" + indirizzo +
+				", basket=" + basket +
+				'}';
 	}
 
-	public String getId() {
+	public UUID getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(UUID id) {
 		this.id = id;
 	}
 
-	public int getUserId() {
-		return userId;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public LocalDate getData() {
@@ -56,12 +72,19 @@ public class Order {
 		this.data = data;
 	}
 
-	public String getIndirizzo() {
+	public Address getIndirizzo() {
 		return indirizzo;
 	}
 
-	public void setIndirizzo(String indirizzo) {
+	public void setIndirizzo(Address indirizzo) {
 		this.indirizzo = indirizzo;
 	}
 
+	public Basket getBasket() {
+		return basket;
+	}
+
+	public void setBasket(Basket basket) {
+		this.basket = basket;
+	}
 }

@@ -48,8 +48,8 @@ public class OrderController {
     public ResponseEntity<String> addBasket(@RequestParam String orderId, @RequestParam int productId, @RequestParam int qta){
         return ResponseEntity.ok(orderService.addProduct(orderId, productId, qta));
     }
-    @GetMapping("/viewbasket/{id}")
+    /*@GetMapping("/viewbasket/{id}")
     public ResponseEntity<Map<Integer, String>> retrieveBasketOrder(@PathVariable String id){
         return ResponseEntity.ok(orderService.retrieveBasketXOrder(id));
-    }
+    }*/
 }
