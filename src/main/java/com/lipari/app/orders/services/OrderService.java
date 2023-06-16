@@ -1,18 +1,16 @@
 package com.lipari.app.orders.services;
 
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.lipari.app.commons.exception.utils.AlreadyExistsException;
 import com.lipari.app.commons.exception.utils.InvalidDataException;
 import com.lipari.app.commons.exception.utils.NotFoundException;
 import com.lipari.app.orders.entities.Order;
-import com.lipari.app.orders.repositories.OrderDao;
+import com.lipari.app.orders.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.lipari.app.commons.exception.utils.DataException;
@@ -22,33 +20,35 @@ import com.lipari.app.products.repositories.ProductDao;
 import com.lipari.app.users.repositories.UserRepo;
 import com.lipari.app.basket.entities.Basket;
 import com.lipari.app.products.entities.Product;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OrderService {
 
-    private final OrderDao orderDao ;
-    private final UserRepo userDao;
+    private final OrderRepository orderRepository;
+    private final UserDao userDao;
     private final ProductDao productDao ;
     private final AddressRepo addressDao ;
     private final BasketDao basketDao ;
 
     @Autowired
-    public OrderService(OrderDao orderDao, UserRepo userDao, ProductDao productDao, AddressRepo addressDao, BasketDao basketDao) {
-        this.orderDao = orderDao;
+    public OrderService(OrderRepository orderRepository, UserDao userDao, ProductDao productDao, AddressDao addressDao, BasketDao basketDao) {
+        this.orderRepository = orderRepository;
         this.userDao = userDao;
         this.productDao = productDao;
         this.addressDao = addressDao;
         this.basketDao = basketDao;
     }
 
-    public List<Order> retrieveAllOrders(int userId) {
+    public List<Order> retrieveAllOrders(Integer userId) {
+        List<Order> orders = orderRepository.findAllOrderByUserId(userId);
         if (!userDao.existsById(userId)){
             throw new NotFoundException("User not found");
         }
         if (!(userId > 0)){
             throw new InvalidDataException("Invalid user data");
         }
-        return orderDao.getAllOrders(userId);
+        return orders;
     }
 
     public List<Product> retrieveAllProduct() {
@@ -63,6 +63,9 @@ public class OrderService {
     }
 
     public Map<Integer, String> retrieveBasketXOrder(String orderId) {
+        if (!orderRepository.existsById(orderId)){
+            throw new NotFoundException("Order not found");
+        }
         Map<Integer, String> m = new HashMap<>();
         Map<Integer, Integer> m1 = new HashMap<>();
         try {
@@ -81,7 +84,7 @@ public class OrderService {
     }
 
     public String addProduct(String orderId, int productId, int qta) {
-        if (!orderDao.existsById(orderId)){
+        if (orderRepository.existsById(orderId)){
             throw new AlreadyExistsException("Order already exists");
         }
         if (!productDao.existsById(productId)){
@@ -94,31 +97,30 @@ public class OrderService {
         return "Product added";
     }
 
-    public Order findOrderById(String id){
-        if (!orderDao.existsById(id)){
+    public Optional<Order> findOrderById(String id){
+        if (!orderRepository.existsById(id)){
             throw new NotFoundException("Order not found");
         }
-            return orderDao.getOrder(id);
+            return orderRepository.findById(id);
     }
-
     public String addOrder(Order order) {
         if (!isValidOrder(order)){
             throw new InvalidDataException("Invalid order data");
         }
-        if (orderDao.existsById(order.getId())){
+        if (orderRepository.existsById(order.getId())){
             throw new AlreadyExistsException("Order already exists");
         }
 
-        orderDao.setOrder(order.getId(), order.getUserId(), order.getData(),order.getIndirizzo());
+        orderRepository.save(order);
         return "Order created";
 
     }
 
     public String deleteOrder(String orderId) {
-        if (!orderDao.existsById(orderId)) {
+        if (!orderRepository.existsById(orderId)) {
             throw new NotFoundException("Order not found");
         }
-        orderDao.deleteOrder(orderId);
+        orderRepository.deleteById(orderId);
         return "Deletion done";
     }
 
@@ -139,19 +141,19 @@ public class OrderService {
 
     }
     public String update(Order updateOrder, String id){
-        if (!orderDao.existsById(id)){
+        if (!orderRepository.existsById(id)){
             throw new NotFoundException("Order not found");
         }
         if (!isValidOrder(updateOrder)){
             throw new InvalidDataException("Invalid order data");
         }
 
-        Order existingOrder = orderDao.getOrder(id);
-        existingOrder.setId(updateOrder.getId());
-        existingOrder.setData(updateOrder.getData());
-        existingOrder.setIndirizzo(updateOrder.getIndirizzo());
-        orderDao.updateOrder(existingOrder);
-        return "The order has been updated:\n" + orderDao.getOrder(id);
+        Optional<Order> existingOrder = orderRepository.findById(id);
+        existingOrder.get().setId(updateOrder.getId());
+        existingOrder.get().setData(updateOrder.getData());
+        existingOrder.get().setIndirizzo(updateOrder.getIndirizzo());
+        orderRepository.save(existingOrder.get());
+        return "The order has been updated";
     }
 
 

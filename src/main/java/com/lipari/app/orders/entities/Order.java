@@ -1,12 +1,23 @@
 package com.lipari.app.orders.entities;
 
-import java.time.LocalDate;
+import jakarta.persistence.*;
 
+import java.time.LocalDate;
+@Entity
+@Table(name = "t_order")
 public class Order {
+	@Id
+	@Column(name = "id")
 	private String id;
+	@Column(name = "userid")
 	private int userId;
+	@Column(name = "data")
 	private LocalDate data;
+	@Column(name = "indirizzo")
 	private String indirizzo;
+
+	public Order() {
+	}
 
 	public Order(String id, int userId, LocalDate data, String indirizzo) {
 		super();
