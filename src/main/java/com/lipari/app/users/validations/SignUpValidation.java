@@ -14,7 +14,7 @@ public class SignUpValidation extends GeneralValidation {
 		stringNoSpace(user.getUsername(), user.getPassword(), user.getEmail());
 		passwordNotContainUsername(user.getUsername(), user.getPassword());
 		minimumLenght8(user.getUsername(), user.getPassword());
-		positiveLong(user.getRole().getId());
+		//positiveLong(user.getRole().getId());
 	}
 	
 	private void passwordNotContainUsername(String username, String password) {

@@ -88,10 +88,7 @@ public class UserController {
 
 	@PutMapping("/{id}")
 	public User updateUser(@PathVariable Long id, @RequestBody User user) {
-		User u = user;
-		u.setId(id);
-		userService.changeUser(u);
-		return userService.findUserById(id);
+		return userService.changeUser(id,user);
 
 	}
 

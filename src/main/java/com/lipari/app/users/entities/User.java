@@ -30,13 +30,16 @@ public class User {
 
 	@Column(name = "email")
 	private String email;
+	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "basket_id")
 	private Basket basket;
+	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id")
 	private List<Address> addressList;
-	@OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE})
+	
+	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE})
 	@JoinColumn(name = "role_id")
 	private Role role;
 

@@ -20,7 +20,8 @@ public class Role {
 	
 	public Role() {}
 
-	public Role(String descrizione) {
+	public Role(Long id,String descrizione) {
+		this.id=id;
 		this.descrizione = descrizione;
 	}
 

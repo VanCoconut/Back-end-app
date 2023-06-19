@@ -17,10 +17,10 @@ public interface AddressRepo extends JpaRepository<Address, Long> {
 	List<String> getAllUserAddress(@Param("userId") Long userId);
 	
 	
-	@Query(value = "SELECT * FROM t_address WHERE id = :id", nativeQuery = true)
+	@Query(value = "SELECT * FROM t_address WHERE address_id = :id", nativeQuery = true)
 	Optional<Address> getAddressById(@Param("id") Long id);
 	
-	@Query(value = "SELECT * FROM t_address WHERE user_id = :user_id AND idnirizzo = :i", nativeQuery = true)
+	@Query(value = "SELECT * FROM t_address WHERE user_id = :user_id AND address = :i", nativeQuery = true)
 	Address addressAlreadyExist(@Param("user_id") Long id, @Param("i") String indirizzo);
 	
 

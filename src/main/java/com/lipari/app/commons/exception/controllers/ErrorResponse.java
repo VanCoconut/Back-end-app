@@ -94,6 +94,7 @@ public class ErrorResponse {
 
         DataErrorResponse error = new DataErrorResponse();
         error.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        ex.printStackTrace();
         error.setMessage(ex.getMessage());
         error.setTimeStamp(System.currentTimeMillis());
         return error;

@@ -99,12 +99,12 @@ public class OrderService {
             return orderRepository.findById(id);
     }
     public String addOrder(Order order) {
-        if (!isValidOrder(order)){
-            throw new InvalidDataException("Invalid order data");
-        }
-        if (orderRepository.existsById(order.getId())){
-            throw new AlreadyExistsException("Order already exists");
-        }
+		/*
+		 * if (!isValidOrder(order)){ throw new
+		 * InvalidDataException("Invalid order data"); } if
+		 * (orderRepository.existsById(order.getId())){ throw new
+		 * AlreadyExistsException("Order already exists"); }
+		 */
 
         orderRepository.save(order);
         return "Order created";
