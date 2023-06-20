@@ -15,14 +15,18 @@ public class Order {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	@Column(name = "order_id")
 	private UUID id;
+	
 	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE})
 	@JoinColumn(name = "user_id")
 	private User user;
+	
 	@Column(name = "date")
 	private LocalDate data;
+	
 	@OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE})
 	@JoinColumn(name = "address_id")
 	private Address indirizzo;
+	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "basket_id")
 	private Basket basket;

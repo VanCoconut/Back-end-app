@@ -1,12 +1,15 @@
 package com.lipari.app.users.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lipari.app.commons.exception.utils.AlreadyExistsException;
 import com.lipari.app.commons.exception.utils.AuthException;
+import com.lipari.app.commons.exception.utils.DataException;
 import com.lipari.app.commons.exception.utils.InvalidDataException;
 import com.lipari.app.commons.exception.utils.NotFoundException;
 import com.lipari.app.commons.exception.utils.ValidationException;
@@ -73,7 +76,8 @@ public class UserService {
 			throw new InvalidDataException("Accesso non autorizzato " + e.getMessage());
 		}
 	}
-
+	
+	@Transactional(rollbackFor = DataException.class)
 	public User createUser(User user) {
 		try {
 			signUpUpValidation.validation(user);
@@ -82,37 +86,42 @@ public class UserService {
 			throw new ValidationException(e.getMessage());
 		}
 	}
-
-	public User changeUser(User user) {
+	
+	@Transactional(rollbackFor = DataException.class)
+	public User changeUser(Long id,User user) {
 		try {
 			signUpUpValidation.validation(user);
-			user = userRepo.findById(user.getId()).orElseThrow(() -> new NotFoundException("user not found"));
-			userRepo.updateUser(user.getId(), user.getNome(), user.getCognome(), user.getUsername(), user.getPassword(),
-					user.getEmail(), user.getRole());
-			return userRepo.findById(user.getId()).get();
+			User u = userRepo.findById(id).orElseThrow(() -> new NotFoundException("user not found"));
+			//userRepo.updateUser(id, user.getNome(), user.getCognome(), user.getUsername(), user.getPassword(),
+			//		user.getEmail(), user.getRole());
+			user.setId(id);
+			user.setBasket(u.getBasket());
+			user.setRole(u.getRole());
+			user.setAddressList(u.getAddressList());
+			return userRepo.save(user);
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
 		}
 
 	}
 
+	@Transactional(rollbackFor = DataException.class)
 	public User changePassword(Long id, String oldPsw, String newPsw, String confPsw) {
 		try {
 			changePasswordValidation.validation(oldPsw, newPsw, confPsw);
 			User user = userRepo.findById(id).orElseThrow(() -> new NotFoundException("user not found"));
 			user.setPassword(newPsw);
-			userRepo.updateUser(user.getId(), user.getNome(), user.getCognome(), user.getUsername(),
-					user.getPassword(), user.getEmail(), user.getRole());
-			return user;
+			return userRepo.save(user);
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
 		}
 	}
 
+	@Transactional(rollbackFor = DataException.class)
 	public void cancelUser(Long userId) {
 		try {
 			generalValidation.positiveLong(userId);
-			if (userRepo.getReferenceById(userId) != null)
+			if (userRepo.getReferenceById(userId) == null)
 				throw new NotFoundException("user not found");
 			userRepo.deleteById(userId);
 		} catch (InvalidDataException e) {
@@ -127,14 +136,18 @@ public class UserService {
 		return addressRepo.getAllUserAddress(userId);
 	}
 
+	@Transactional(rollbackFor = DataException.class)
 	public User addAddress(Long userId, String newAddress) {
 		try {
 			generalValidation.positiveLong(userId);
 			generalValidation.stringNotBlank(newAddress);
-			if (addressRepo.addressAlreadyExist(userId,newAddress)!=null) throw new AlreadyExistsException("id already exist");
-			User user = userRepo.findById(userId).orElseThrow(() -> new NotFoundException(""));
+			if (addressRepo.addressAlreadyExist(userId,newAddress)!=null) throw new AlreadyExistsException("address' id already exist");
+			User user = userRepo.findById(userId).orElseThrow(() -> new NotFoundException("user not found"));
 			Address a = new Address(newAddress);
-			user.addAddress(a);
+			List<Address> l = new ArrayList<>();
+			l.add(a);
+			user.getAddressList().addAll(l);
+			//user.addAddress(a);
 			return userRepo.save(user);
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
@@ -155,6 +168,7 @@ public class UserService {
 		}
 	}
 
+	@Transactional(rollbackFor = DataException.class)
 	public void cancelAddress(Long id) {
 		try {
 			generalValidation.positiveLong(id);
@@ -178,7 +192,7 @@ public class UserService {
 	public Role findRoleById(Long id) {
 		try {
 			generalValidation.positiveLong(id);
-			return roleRepo.findById(id).orElseThrow(() -> new NotFoundException("address not found"));
+			return roleRepo.findById(id).orElseThrow(() -> new NotFoundException("role not found"));
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
 		}
@@ -193,25 +207,27 @@ public class UserService {
 		}
 	}
 	
+	@Transactional(rollbackFor = DataException.class)
 	public Role addRole(Role role) {
 		try {
 			generalValidation.positiveLong(role.getId());
 			generalValidation.stringNotBlank(role.getDescrizione());
-			if (roleRepo.roleAlreadyExist(role.getId(),role.getDescrizione())!=null) throw new AlreadyExistsException("id o description already exist");
-			Role r = new Role(role.getDescrizione());
+			if (roleRepo.roleAlreadyExist(role.getId(),role.getDescrizione())!=null) throw new AlreadyExistsException("id and/or description already exist");
+			Role r = new Role(role.getId(),role.getDescrizione());
 			return roleRepo.save(r);
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
 		}
 	}
 	
+	@Transactional(rollbackFor = DataException.class)
 	public Role updateRole(Long oldId, Role role) {
 		try {
 			generalValidation.positiveLong(role.getId());
 			generalValidation.positiveLong(oldId);
 			generalValidation.stringNotBlank(role.getDescrizione());
 			roleRepo.findById(oldId).orElseThrow(() -> new NotFoundException("id not found"));
-			if (roleRepo.roleAlreadyExist(role.getId(),role.getDescrizione())!=null) throw new AlreadyExistsException("id o description already exist");
+			if (roleRepo.roleAlreadyExist(role.getId(),role.getDescrizione())!=null) throw new AlreadyExistsException("id and/or description already exist");
 			roleRepo.updateRole(oldId, role.getId(), role.getDescrizione());
 			return roleRepo.findById(role.getId()).get();
 		} catch (InvalidDataException e) {
@@ -220,6 +236,7 @@ public class UserService {
 
 	}
 	
+	@Transactional(rollbackFor = DataException.class)
 	public void cancelRoleById(Long id) {
 		try {
 			generalValidation.positiveLong(id);
@@ -234,6 +251,7 @@ public class UserService {
 		}
 	}
 	
+	@Transactional(rollbackFor = DataException.class)
 	public void cancelRoleByDescription(String descr) {
 		try {
 			generalValidation.stringNotBlank(descr);

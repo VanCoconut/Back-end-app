@@ -88,19 +88,14 @@ public class UserController {
 
 	@PutMapping("/{id}")
 	public User updateUser(@PathVariable Long id, @RequestBody User user) {
-		User u = user;
-		u.setId(id);
-		userService.changeUser(u);
-		return userService.findUserById(id);
+		return userService.changeUser(id,user);
 
 	}
 
 	@PutMapping("/{id}/password")
 	public User updateUserPassword(@PathVariable Long id, @RequestParam String oldPassword,
 			@RequestParam String newPassword, @RequestParam String confirmPassword) {
-		userService.changePassword(id, oldPassword, newPassword, confirmPassword);
-		return userService.findUserById(id);
-
+		return userService.changePassword(id, oldPassword, newPassword, confirmPassword);
 	}
 
 	@PutMapping("/role/{id}")
