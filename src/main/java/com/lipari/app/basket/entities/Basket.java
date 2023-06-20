@@ -13,6 +13,7 @@ public class Basket {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH})
 	//@JoinColumn(name = "basket_id")
 	private List<Product> productList;
@@ -61,7 +62,7 @@ public class Basket {
 	}
 
 	public void addProduct(Product product){
-		if (productList.size() == 0){
+		if (productList == null){
 			productList = new ArrayList<>();
 		}
 		productList.add(product);
