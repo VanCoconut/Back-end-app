@@ -1,5 +1,6 @@
 package com.lipari.app.users.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,9 +111,7 @@ public class UserService {
 			changePasswordValidation.validation(oldPsw, newPsw, confPsw);
 			User user = userRepo.findById(id).orElseThrow(() -> new NotFoundException("user not found"));
 			user.setPassword(newPsw);
-			userRepo.updateUser(user.getId(), user.getNome(), user.getCognome(), user.getUsername(),
-					user.getPassword(), user.getEmail(), user.getRole());
-			return user;
+			return userRepo.save(user);
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
 		}
@@ -143,9 +142,12 @@ public class UserService {
 			generalValidation.positiveLong(userId);
 			generalValidation.stringNotBlank(newAddress);
 			if (addressRepo.addressAlreadyExist(userId,newAddress)!=null) throw new AlreadyExistsException("address' id already exist");
-			User user = userRepo.findById(userId).orElseThrow(() -> new NotFoundException(""));
+			User user = userRepo.findById(userId).orElseThrow(() -> new NotFoundException("user not found"));
 			Address a = new Address(newAddress);
-			user.addAddress(a);
+			List<Address> l = new ArrayList<>();
+			l.add(a);
+			user.getAddressList().addAll(l);
+			//user.addAddress(a);
 			return userRepo.save(user);
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());

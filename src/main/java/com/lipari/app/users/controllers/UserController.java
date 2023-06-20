@@ -95,9 +95,7 @@ public class UserController {
 	@PutMapping("/{id}/password")
 	public User updateUserPassword(@PathVariable Long id, @RequestParam String oldPassword,
 			@RequestParam String newPassword, @RequestParam String confirmPassword) {
-		userService.changePassword(id, oldPassword, newPassword, confirmPassword);
-		return userService.findUserById(id);
-
+		return userService.changePassword(id, oldPassword, newPassword, confirmPassword);
 	}
 
 	@PutMapping("/role/{id}")
