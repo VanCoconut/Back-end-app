@@ -42,7 +42,6 @@ public class UserService {
 
 	@Autowired
 	private ChangePasswordValidation changePasswordValidation;
-	
 
 	@Autowired
 	public UserService(RoleRepo roleDao, UserRepo userDao, AddressRepo addressDao) {
@@ -76,7 +75,7 @@ public class UserService {
 			throw new InvalidDataException("Accesso non autorizzato " + e.getMessage());
 		}
 	}
-	
+
 	@Transactional(rollbackFor = DataException.class)
 	public User createUser(User user) {
 		try {
@@ -86,18 +85,22 @@ public class UserService {
 			throw new ValidationException(e.getMessage());
 		}
 	}
-	
+
 	@Transactional(rollbackFor = DataException.class)
-	public User changeUser(Long id,User user) {
+	public User changeUser(Long id, User user) {
 		try {
 			signUpUpValidation.validation(user);
 			User u = userRepo.findById(id).orElseThrow(() -> new NotFoundException("user not found"));
-			//userRepo.updateUser(id, user.getNome(), user.getCognome(), user.getUsername(), user.getPassword(),
-			//		user.getEmail(), user.getRole());
+			// userRepo.updateUser(id, user.getNome(), user.getCognome(),
+			// user.getUsername(), user.getPassword(),
+			// user.getEmail(), user.getRole());
 			user.setId(id);
-			if(user.getBasket()==null)  user.setBasket(u.getBasket());
-			if(user.getRole()==null)  user.setRole(u.getRole());
-			if(user.getAddressList()==null)  user.setAddressList(u.getAddressList());
+			if (user.getBasket() == null)
+				user.setBasket(u.getBasket());
+			if (user.getRole() == null)
+				user.setRole(u.getRole());
+			if (user.getAddressList() == null)
+				user.setAddressList(u.getAddressList());
 			return userRepo.save(user);
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
@@ -141,13 +144,14 @@ public class UserService {
 		try {
 			generalValidation.positiveLong(userId);
 			generalValidation.stringNotBlank(newAddress);
-			if (addressRepo.addressAlreadyExist(userId,newAddress)!=null) throw new AlreadyExistsException("address' id already exist");
+			if (addressRepo.addressAlreadyExist(userId, newAddress) != null)
+				throw new AlreadyExistsException("address' id already exist");
 			User user = userRepo.findById(userId).orElseThrow(() -> new NotFoundException("user not found"));
 			Address a = new Address(newAddress);
 			List<Address> l = new ArrayList<>();
 			l.add(a);
 			user.getAddressList().addAll(l);
-			//user.addAddress(a);
+			// user.addAddress(a);
 			return userRepo.save(user);
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
@@ -182,9 +186,9 @@ public class UserService {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	//ROLE
-	
+
+	// ROLE
+
 	public List<Role> findAllRole() {
 		return roleRepo.findAll();
 	}
@@ -197,7 +201,7 @@ public class UserService {
 			throw new ValidationException("Operzione negata " + e.getMessage());
 		}
 	}
-	
+
 	public Role findRoleByDescription(String d) {
 		try {
 			generalValidation.stringNotBlank(d);
@@ -206,20 +210,21 @@ public class UserService {
 			throw new ValidationException("Operazione negata " + e.getMessage());
 		}
 	}
-	
+
 	@Transactional(rollbackFor = DataException.class)
 	public Role addRole(Role role) {
 		try {
 			generalValidation.positiveLong(role.getId());
 			generalValidation.stringNotBlank(role.getDescrizione());
-			if (roleRepo.roleAlreadyExist(role.getId(),role.getDescrizione())!=null) throw new AlreadyExistsException("id and/or description already exist");
-			Role r = new Role(role.getId(),role.getDescrizione());
+			if (roleRepo.roleAlreadyExist(role.getId(), role.getDescrizione()) != null)
+				throw new AlreadyExistsException("id and/or description already exist");
+			Role r = new Role(role.getId(), role.getDescrizione());
 			return roleRepo.save(r);
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
 		}
 	}
-	
+
 	@Transactional(rollbackFor = DataException.class)
 	public Role updateRole(Long oldId, Role role) {
 		try {
@@ -227,7 +232,8 @@ public class UserService {
 			generalValidation.positiveLong(oldId);
 			generalValidation.stringNotBlank(role.getDescrizione());
 			roleRepo.findById(oldId).orElseThrow(() -> new NotFoundException("id not found"));
-			if (roleRepo.roleAlreadyExist(role.getId(),role.getDescrizione())!=null) throw new AlreadyExistsException("id and/or description already exist");
+			if (roleRepo.roleAlreadyExist(role.getId(), role.getDescrizione()) != null)
+				throw new AlreadyExistsException("id and/or description already exist");
 			roleRepo.updateRole(oldId, role.getId(), role.getDescrizione());
 			return roleRepo.findById(role.getId()).get();
 		} catch (InvalidDataException e) {
@@ -235,20 +241,20 @@ public class UserService {
 		}
 
 	}
-	
+
 	@Transactional(rollbackFor = DataException.class)
 	public void cancelRoleById(Long id) {
 		try {
 			generalValidation.positiveLong(id);
 			Role r = roleRepo.findById(id).orElseThrow(() -> new NotFoundException("id not found"));
-			 List<User> userList = userRepo.findAll();
-			 
-			 for (User user : userList) {
-				if(user.getRole().getId()==id) {
+			List<User> userList = userRepo.findAll();
+
+			for (User user : userList) {
+				if (user.getRole().getId() == id) {
 					user.setRole(null);
 				}
 			}
-			 
+
 			roleRepo.delete(r);
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
@@ -258,13 +264,22 @@ public class UserService {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	@Transactional(rollbackFor = DataException.class)
 	public void cancelRoleByDescription(String descr) {
 		try {
 			generalValidation.stringNotBlank(descr);
-			Role r = roleRepo.getRoleByDescription(descr).orElseThrow(() -> new NotFoundException("description not found"));
-			roleRepo.delete(r);;
+			Role r = roleRepo.getRoleByDescription(descr)
+					.orElseThrow(() -> new NotFoundException("description not found"));
+			List<User> userList = userRepo.findAll();
+
+			for (User user : userList) {
+				if (user.getRole().getDescrizione().equals(descr)) {
+					user.setRole(null);
+				}
+			}
+			roleRepo.delete(r);
+			;
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
 		} catch (Exception e) {
@@ -273,6 +288,5 @@ public class UserService {
 			throw new RuntimeException(e);
 		}
 	}
-	
 
 }
