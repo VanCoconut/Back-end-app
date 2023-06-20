@@ -95,9 +95,9 @@ public class UserService {
 			//userRepo.updateUser(id, user.getNome(), user.getCognome(), user.getUsername(), user.getPassword(),
 			//		user.getEmail(), user.getRole());
 			user.setId(id);
-			user.setBasket(u.getBasket());
-			user.setRole(u.getRole());
-			user.setAddressList(u.getAddressList());
+			if(user.getBasket()==null)  user.setBasket(u.getBasket());
+			if(user.getRole()==null)  user.setRole(u.getRole());
+			if(user.getAddressList()==null)  user.setAddressList(u.getAddressList());
 			return userRepo.save(user);
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
@@ -241,6 +241,14 @@ public class UserService {
 		try {
 			generalValidation.positiveLong(id);
 			Role r = roleRepo.findById(id).orElseThrow(() -> new NotFoundException("id not found"));
+			 List<User> userList = userRepo.findAll();
+			 
+			 for (User user : userList) {
+				if(user.getRole().getId()==id) {
+					user.setRole(null);
+				}
+			}
+			 
 			roleRepo.delete(r);
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
