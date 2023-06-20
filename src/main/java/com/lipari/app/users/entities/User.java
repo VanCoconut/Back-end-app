@@ -39,7 +39,7 @@ public class User {
 	@JoinColumn(name = "user_id")
 	private List<Address> addressList;
 	
-	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
 	@JoinColumn(name = "role_id")
 	private Role role;
 

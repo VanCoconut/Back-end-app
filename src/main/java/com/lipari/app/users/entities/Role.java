@@ -20,8 +20,8 @@ public class Role {
 	@Column(name = "description")
 	private String descrizione;
 	
-	@OneToMany(mappedBy = "role", orphanRemoval = true, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
-    private List<User> appointments;
+	//@OneToMany(mappedBy = "role", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+    //private List<User> appointments;
 	
 	public Role() {}
 
