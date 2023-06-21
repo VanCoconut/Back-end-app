@@ -3,7 +3,9 @@ package com.lipari.app.orders.entities;
 import com.lipari.app.basket.entities.Basket;
 import com.lipari.app.users.entities.Address;
 import com.lipari.app.users.entities.User;
+import com.lipari.app.utils.RandomId;
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -12,9 +14,8 @@ import java.util.UUID;
 @Table(name = "t_order")
 public class Order {
 	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
 	@Column(name = "order_id")
-	private UUID id;
+	private String id;
 	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE})
 	@JoinColumn(name = "user_id")
 	private User user;
@@ -48,11 +49,11 @@ public class Order {
 				'}';
 	}
 
-	public UUID getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

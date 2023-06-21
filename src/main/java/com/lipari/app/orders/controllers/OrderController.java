@@ -26,7 +26,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Order>> findById(@PathVariable UUID id){
+    public ResponseEntity<Optional<Order>> findById(@PathVariable String id){
         return ResponseEntity.ok(orderService.findOrderById(id));
     }
 
@@ -36,19 +36,21 @@ public class OrderController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable UUID id){
+    public ResponseEntity<String> deleteById(@PathVariable String id){
         return ResponseEntity.ok(orderService.deleteOrder(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateById(@RequestBody Order order, @PathVariable UUID id){
+    public ResponseEntity<String> updateById(@RequestBody Order order, @PathVariable String id){
         return ResponseEntity.ok(orderService.update(order,id));
     }
-
     @PostMapping("/added")
     public ResponseEntity<String> addBasket(@RequestParam Long userId, @RequestParam Long productId, @RequestParam int qta){
         return ResponseEntity.ok(orderService.addProduct(userId, productId, qta));
     }
+
+
+
     /*@GetMapping("/viewbasket/{id}")
     public ResponseEntity<Map<Integer, String>> retrieveBasketOrder(@PathVariable String id){
         return ResponseEntity.ok(orderService.retrieveBasketXOrder(id));
