@@ -115,6 +115,7 @@ public class OrderService {
 		 //if (!isValidOrder(order)){ throw new InvalidDataException("Invalid order data"); }
          //if (orderRepository.existsById(order.getId())){ throw new AlreadyExistsException("Order already exists"); }
 
+        //2 problemi Id che da problemi e viene creato un'altro user con la chiamata
         orderRepository.save(order);
         return "Order created";
 
