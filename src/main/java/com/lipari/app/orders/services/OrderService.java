@@ -77,30 +77,6 @@ public class OrderService {
 
     }*/
 
-    public String addProduct(Long userId, Long productId, int qta) {
-        //problema con productlist, da null
-        if (userId == null || productId == null || qta < 0){throw new InvalidDataException("invalid data");}
-        Basket basket;
-        //List<Product> list = new ArrayList<>();
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user not found"));
-        Product product = productRepository.findById(productId).orElseThrow(() -> new NotFoundException("product not found"));
-        if (user.getBasket() == null){
-            basket = new Basket();
-        }else {
-            basket = user.getBasket();
-        }
-        /*if (basket.getProductList() == null){
-            list.add(product);
-            basket.setProductList(list);
-        }else {
-            basket.getProductList();
-        }*/
-        basket.addProduct(product);
-        basket.setQta(qta);
-        user.setBasket(basket);
-        userRepository.save(user);
-        return "Product added";
-    }
 
     public Optional<Order> findOrderById(Long id){
         if (!orderRepository.existsById(id)){
