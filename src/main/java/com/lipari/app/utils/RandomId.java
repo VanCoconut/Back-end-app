@@ -9,7 +9,7 @@ import java.util.Random;
 public class RandomId {
     @Autowired
     private OrderRepository orderRepository;
-    public String generateVarchar() {
+   /* public String generateVarchar() {
         int varcharLength = 36;
         String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         StringBuilder randomVarchar = new StringBuilder();
@@ -25,5 +25,5 @@ public class RandomId {
             string = randomVarchar.toString();
         }
         return string;
-    }
+    }*/
 }

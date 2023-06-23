@@ -102,14 +102,14 @@ public class OrderService {
         return "Product added";
     }
 
-    public Optional<Order> findOrderById(String id){
+    public Optional<Order> findOrderById(Long id){
         if (!orderRepository.existsById(id)){
             throw new NotFoundException("Order not found");
         }
             return orderRepository.findById(id);
     }
     public String addOrder(Order order) {
-        order.setId(randomId.generateVarchar());
+       // order.setId(randomId.generateVarchar());
         //order.setBasket(order.getUser().getBasket());
 
 		 //if (!isValidOrder(order)){ throw new InvalidDataException("Invalid order data"); }
@@ -121,7 +121,7 @@ public class OrderService {
 
     }
 
-    public String deleteOrder(String orderId) {
+    public String deleteOrder(Long orderId) {
         if (!orderRepository.existsById(orderId)) {
             throw new NotFoundException("Order not found");
         }
@@ -129,7 +129,7 @@ public class OrderService {
         return "Deletion done";
     }
 
-    public String update(Order updateOrder, String id){
+    public String update(Order updateOrder, Long id){
         if (!orderRepository.existsById(id)){
             throw new NotFoundException("Order not found");
         }

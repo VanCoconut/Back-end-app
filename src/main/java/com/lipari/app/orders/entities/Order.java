@@ -14,18 +14,19 @@ import java.util.UUID;
 @Table(name = "t_order")
 public class Order {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "order_id")
-	private String id;
+	private Long id;
 	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE})
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id", unique = false)
 	private User user;
 	@Column(name = "date")
 	private LocalDate data;
-	@OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE})
-	@JoinColumn(name = "address_id")
+	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE})
+	@JoinColumn(name = "address_id", unique = false)
 	private Address indirizzo;
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "basket_id")
+	@JoinColumn(name = "basket_id", unique = false)
 	private Basket basket;
 
 	public Order() {
@@ -38,6 +39,13 @@ public class Order {
 		this.basket = basket;
 	}
 
+	/*@PrePersist
+	public void generateRandomId() {
+		RandomId randomId = new RandomId();
+		String string = randomId.generateVarchar(); // Genera una stringa casuale come ID
+		this.id = string;
+	}*/
+
 	@Override
 	public String toString() {
 		return "Order{" +
@@ -49,11 +57,11 @@ public class Order {
 				'}';
 	}
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
