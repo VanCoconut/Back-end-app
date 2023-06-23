@@ -3,7 +3,9 @@ package com.lipari.app.orders.entities;
 import com.lipari.app.basket.entities.Basket;
 import com.lipari.app.users.entities.Address;
 import com.lipari.app.users.entities.User;
+import com.lipari.app.utils.RandomId;
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -12,23 +14,19 @@ import java.util.UUID;
 @Table(name = "t_order")
 public class Order {
 	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "order_id")
-	private UUID id;
-	
+	private Long id;
 	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE})
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id", unique = false)
 	private User user;
-	
 	@Column(name = "date")
 	private LocalDate data;
-	
-	@OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE})
-	@JoinColumn(name = "address_id")
+	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE})
+	@JoinColumn(name = "address_id", unique = false)
 	private Address indirizzo;
-	
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "basket_id")
+	@JoinColumn(name = "basket_id", unique = false)
 	private Basket basket;
 
 	public Order() {
@@ -41,6 +39,13 @@ public class Order {
 		this.basket = basket;
 	}
 
+	/*@PrePersist
+	public void generateRandomId() {
+		RandomId randomId = new RandomId();
+		String string = randomId.generateVarchar(); // Genera una stringa casuale come ID
+		this.id = string;
+	}*/
+
 	@Override
 	public String toString() {
 		return "Order{" +
@@ -52,11 +57,11 @@ public class Order {
 				'}';
 	}
 
-	public UUID getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
