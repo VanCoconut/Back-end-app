@@ -1,6 +1,9 @@
 package com.lipari.app.products.entities;
 
+import com.lipari.app.basket.entities.BasketItem;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name="t_product")
@@ -19,22 +22,31 @@ public class Product {
 	@Column(name = "cost", columnDefinition = "double(10, 2)")
 	private double costo;
 
-	@Column(name = "stock", columnDefinition = "int")
-	private int magazzino;
+	@Column(name = "quantity", columnDefinition = "int")
+	private int quantity;
 
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+	private List<BasketItem> basketItems;
 	public Product(){}
 
-	public Product(int codice, String descrizione, double costo, int magazzino) {
+	public Product(int codice, String descrizione, double costo, int quantity, List<BasketItem> basketItems) {
 		this.codice = codice;
 		this.descrizione = descrizione;
 		this.costo = costo;
-		this.magazzino = magazzino;
+		this.quantity = quantity;
+		this.basketItems = basketItems;
 	}
 
-	@Override
+    @Override
 	public String toString() {
-		return "Product [id=" + id + ", codice=" + codice + ", descrizione=" + descrizione + ", costo=" + costo
-				+ ", magazzino=" + magazzino + "]";
+		return "Product{" +
+				"id=" + id +
+				", codice=" + codice +
+				", descrizione='" + descrizione + '\'' +
+				", costo=" + costo +
+				", quantity=" + quantity +
+				", basketItems=" + basketItems +
+				'}';
 	}
 
 	public Long getId() {
@@ -69,12 +81,19 @@ public class Product {
 		this.costo = costo;
 	}
 
-	public int getMagazzino() {
-		return magazzino;
+	public int getQuantity() {
+		return quantity;
 	}
 
-	public void setMagazzino(int magazzino) {
-		this.magazzino = magazzino;
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
 
+	public List<BasketItem> getBasketItems() {
+		return basketItems;
+	}
+
+	public void setBasketItems(List<BasketItem> basketItems) {
+		this.basketItems = basketItems;
+	}
 }

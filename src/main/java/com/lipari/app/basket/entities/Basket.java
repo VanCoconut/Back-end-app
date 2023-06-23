@@ -13,26 +13,25 @@ public class Basket {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH})
-	//@JoinColumn(name = "basket_id")
-	private List<Product> productList;
-
-	private int qta;
+	@OneToMany(mappedBy = "basket", cascade = CascadeType.ALL)
+	private List<BasketItem> basketItems;
 
 	public Basket() {
 	}
 
-	public Basket(List<Product> productList, int qta) {
-		this.productList = productList;
-		this.qta = qta;
+	public Basket(Long id, List<BasketItem> basketItems) {
+		this.id = id;
+		this.basketItems = basketItems;
+	}
+
+	public Basket(Long basketId) {
 	}
 
 	@Override
 	public String toString() {
 		return "Basket{" +
 				"id=" + id +
-				", productList=" + productList +
-				", qta=" + qta +
+				", basketItems=" + basketItems +
 				'}';
 	}
 
@@ -44,26 +43,23 @@ public class Basket {
 		this.id = id;
 	}
 
-	public List<Product> getProductList() {
-		return productList;
+	public List<BasketItem> getBasketItems() {
+		return basketItems;
 	}
 
-	public void setProductList(List<Product> productList) {
-		this.productList = productList;
+	public void setBasketItems(List<BasketItem> basketItems) {
+		this.basketItems = basketItems;
 	}
 
-	public int getQta() {
-		return qta;
-	}
-
-	public void setQta(int qta) {
-		this.qta = qta;
-	}
-
-	public void addProduct(Product product){
-		if (productList.size() == 0){
-			productList = new ArrayList<>();
+	public void addItem(BasketItem basketItem) {
+		if (basketItems == null){
+			basketItems = new ArrayList<>();
 		}
-		productList.add(product);
+		basketItems.add(basketItem);
+	}
+
+	public void removeItem(BasketItem basketItem) {
+		basketItems.remove(basketItem);
+		basketItem.getProduct().getBasketItems().remove(basketItem);
 	}
 }

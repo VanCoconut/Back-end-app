@@ -1,6 +1,8 @@
 package com.lipari.app.products.services;
 
 
+import com.lipari.app.basket.entities.Basket;
+import com.lipari.app.basket.repositories.BasketRepository;
 import com.lipari.app.commons.exception.utils.AlreadyExistsException;
 import com.lipari.app.commons.exception.utils.DataException;
 import com.lipari.app.commons.exception.utils.InvalidDataException;
@@ -16,10 +18,12 @@ import java.util.List;
 public class ProductService {
 
     ProductRepository productRepository;
+    BasketRepository basketRepository;
 
     @Autowired
-    public ProductService(ProductRepository productRepository){
+    public ProductService(ProductRepository productRepository, BasketRepository basketRepository){
         this.productRepository = productRepository;
+        this.basketRepository = basketRepository;
     }
 
     @Transactional(rollbackFor = DataException.class)
@@ -56,19 +60,18 @@ public class ProductService {
             if (!productRepository.existsByCodice(updatedProduct.getCodice())) {
                 throw new AlreadyExistsException("Product code already exists");
             }
-            Product existingProduct = productRepository.getProductById(id);
-
-            existingProduct.setCodice(updatedProduct.getCodice());
-            existingProduct.setDescrizione(updatedProduct.getDescrizione());
-            existingProduct.setCosto(updatedProduct.getCosto());
-            existingProduct.setMagazzino(updatedProduct.getMagazzino());
-            productRepository.save(existingProduct);
-            return "the product has been successfully updated:\n"+ existingProduct;
+            updatedProduct.setId(id);
+            productRepository.save(updatedProduct);
+            return "the product has been successfully updated:\n"+ updatedProduct;
     }
     @Transactional(rollbackFor = DataException.class)
     public String removeProductById(Long id) {
         if(productRepository.existsById(id)){
             Product existingProduct = productRepository.getProductById(id);
+            List<Basket> baskets = basketRepository.findAll();
+            for (Basket basket : baskets) {
+                //basket.getProductList().remove(existingProduct);
+            }
             productRepository.delete(existingProduct);
             return "Deletion done";
         }else {
@@ -81,6 +84,20 @@ public class ProductService {
                 product.getDescrizione() != null &&
                 !product.getDescrizione().isEmpty() &&
                 product.getCosto() > 0.0f &&
-                product.getMagazzino() >= 0;
+                product.getQuantity() > 0;
+    }
+
+    public int checkAvailableQuantity(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new NotFoundException("Product not found"));
+        return product.getQuantity();
+    }
+
+    @Transactional(rollbackFor = DataException.class)
+    public void updateProductQuantity(Long productId, int newQuantity) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new NotFoundException("Product not found id - " + productId));
+        product.setQuantity(newQuantity);
+        productRepository.save(product);
     }
 }

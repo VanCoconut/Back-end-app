@@ -21,27 +21,27 @@ public class ProductController {
     }
 
     @PostMapping()
-    public ResponseEntity<String> insertProduct(@RequestBody Product product)  {
+    public ResponseEntity<String> insertProduct(@RequestBody Product product) {
         return ResponseEntity.ok(productService.createProduct(product));
     }
 
     @GetMapping()
-    public ResponseEntity<List<Product>> getAllProducts() throws DataException {
+    public ResponseEntity<List<Product>> getAllProducts() {
         return ResponseEntity.ok(productService.getAllProducts());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductbyId(@PathVariable Long id) throws DataException {
+    public ResponseEntity<Product> getProductbyId(@PathVariable Long id){
         return ResponseEntity.ok(productService.getProductById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateProductById(@RequestBody Product product, @PathVariable Long id) throws DataException {
+    public ResponseEntity<String> updateProductById(@RequestBody Product product, @PathVariable Long id) {
         return ResponseEntity.ok(productService.updateProductById(product, id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> removeProductById(@PathVariable Long id) throws DataException {
+    public ResponseEntity<String> removeProductById(@PathVariable Long id) {
         return ResponseEntity.ok(productService.removeProductById(id));
     }
 

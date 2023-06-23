@@ -2,10 +2,8 @@ package com.lipari.app.orders.services;
 
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import com.lipari.app.basket.repositories.BasketRepository;
-import com.lipari.app.commons.exception.utils.AlreadyExistsException;
 import com.lipari.app.commons.exception.utils.InvalidDataException;
 import com.lipari.app.commons.exception.utils.NotFoundException;
 import com.lipari.app.orders.entities.Order;
@@ -16,7 +14,6 @@ import com.lipari.app.users.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lipari.app.commons.exception.utils.DataException;
 import com.lipari.app.users.repositories.AddressRepo;
 import com.lipari.app.basket.entities.Basket;
 import com.lipari.app.products.entities.Product;
@@ -75,9 +72,9 @@ public class OrderService {
     }*/
 
     public String addProduct(Long userId, Long productId, int qta) {
-        if (userId == null || productId == null || qta > 0){
+        /*if (userId == null || productId == null || qta > 0){
             throw new InvalidDataException("");
-        }
+        }*/
         Basket basket;
         User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(""));
         Product product = productRepository.findById(productId).orElseThrow(() -> new NotFoundException(""));
@@ -86,7 +83,8 @@ public class OrderService {
         }else {
             basket = user.getBasket();
         }
-        basket.addProduct(product);
+        //basket.addProduct(product);
+        //basket.setQta(qta);
         user.setBasket(basket);
         userRepository.save(user);
         return "Product added";
