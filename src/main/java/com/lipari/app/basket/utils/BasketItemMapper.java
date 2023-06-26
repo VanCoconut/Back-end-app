@@ -5,6 +5,7 @@ import com.lipari.app.basket.entities.BasketItem;
 import com.lipari.app.basket.entities.BasketItemDTO;
 import com.lipari.app.basket.repositories.BasketRepository;
 import com.lipari.app.basket.services.BasketService;
+import com.lipari.app.commons.exception.utils.DataException;
 import com.lipari.app.commons.exception.utils.InvalidDataException;
 import com.lipari.app.commons.exception.utils.NotFoundException;
 import com.lipari.app.products.entities.Product;
@@ -15,6 +16,7 @@ import com.lipari.app.users.services.UserService;
 import org.springframework.beans.NotReadablePropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.zip.DataFormatException;
 
@@ -41,14 +43,14 @@ public class BasketItemMapper {
         basketItem.setQuantity(dto.getQuantity());
         return basketItem;
     }
-
+    @Transactional(rollbackFor = DataException.class)
     public Basket findBasketByUserId(Long userId) {
         User user = userService.findUserById(userId);
         Basket basket = user.getBasket();
         if (basket == null) {
             basket = new Basket();
-            basketRepository.save(basket);
             user.setBasket(basket);
+            basketRepository.save(basket);
             userService.changeUser(user.getId(),user);
         }
         return basket;

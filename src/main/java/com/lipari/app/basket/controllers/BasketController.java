@@ -25,7 +25,7 @@ public class BasketController {
         return ResponseEntity.ok(basketService.addBasketItem(basketItemDTO));
     }
 
-    @PatchMapping("/updateQuantity")
+    @PatchMapping("/items/quantity")
     public void updateBasketItemQuantity(@RequestParam Long basketItemId, @RequestParam int quantityChange ){
         basketService.updateBasketItemQuantity(basketItemId, quantityChange);
     }
@@ -35,4 +35,13 @@ public class BasketController {
         return ResponseEntity.ok(basketService.getUserBasket(userId));
     }
 
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<String> deleteUserBasket(@PathVariable Long userId){
+        return ResponseEntity.ok(basketService.deleteUserBasket(userId));
+    }
+
+    @DeleteMapping("/items")
+    public ResponseEntity<String> deleteUserBasketItem(@RequestParam Long userId, @RequestParam Long basketItem){
+        return ResponseEntity.ok(basketService.deleteUserBasketItem(userId, basketItem));
+    }
 }

@@ -34,7 +34,7 @@ public class ErrorResponse {
     public DataErrorResponse validationExceptionHandler(ValidationException ex) {
 
         DataErrorResponse error = new DataErrorResponse();
-        error.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        error.setStatus(HttpStatus.BAD_REQUEST.value());
         error.setMessage(ex.getMessage());
         error.setTimeStamp(System.currentTimeMillis());
 

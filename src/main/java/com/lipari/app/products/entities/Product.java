@@ -37,18 +37,6 @@ public class Product {
 		this.basketItems = basketItems;
 	}
 
-    @Override
-	public String toString() {
-		return "Product{" +
-				"id=" + id +
-				", codice=" + codice +
-				", descrizione='" + descrizione + '\'' +
-				", costo=" + costo +
-				", quantity=" + quantity +
-				", basketItems=" + basketItems +
-				'}';
-	}
-
 	public Long getId() {
 		return id;
 	}

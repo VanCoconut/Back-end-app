@@ -24,17 +24,6 @@ public class Basket {
 		this.basketItems = basketItems;
 	}
 
-	public Basket(Long basketId) {
-	}
-
-	@Override
-	public String toString() {
-		return "Basket{" +
-				"id=" + id +
-				", basketItems=" + basketItems +
-				'}';
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -51,15 +40,4 @@ public class Basket {
 		this.basketItems = basketItems;
 	}
 
-	public void addItem(BasketItem basketItem) {
-		if (basketItems == null){
-			basketItems = new ArrayList<>();
-		}
-		basketItems.add(basketItem);
-	}
-
-	public void removeItem(BasketItem basketItem) {
-		basketItems.remove(basketItem);
-		basketItem.getProduct().getBasketItems().remove(basketItem);
-	}
 }

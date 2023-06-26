@@ -53,7 +53,6 @@ public class UserService {
 	// USER
 
 	public User findUserById(Long id) {
-
 		try {
 			generalValidation.positiveLong(id);
 			User u = userRepo.findById(id).orElseThrow(() -> new NotFoundException("user not found"));

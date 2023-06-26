@@ -68,10 +68,6 @@ public class ProductService {
     public String removeProductById(Long id) {
         if(productRepository.existsById(id)){
             Product existingProduct = productRepository.getProductById(id);
-            List<Basket> baskets = basketRepository.findAll();
-            for (Basket basket : baskets) {
-                //basket.getProductList().remove(existingProduct);
-            }
             productRepository.delete(existingProduct);
             return "Deletion done";
         }else {
