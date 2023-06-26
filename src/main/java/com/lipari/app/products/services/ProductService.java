@@ -26,6 +26,14 @@ public class ProductService {
         this.basketRepository = basketRepository;
     }
 
+    /**
+     * Creates a new product.
+     *
+     * @param product the product to create
+     * @return a success message indicating that the product was created
+     * @throws InvalidDataException    if the product data is invalid
+     * @throws AlreadyExistsException if the product code already exists in the database
+     */
     @Transactional(rollbackFor = DataException.class)
     public String createProduct(Product product){
             if (!isValidProduct(product)) {
@@ -37,18 +45,43 @@ public class ProductService {
         productRepository.save(product);
         return "Product created";
     }
+
+    /**
+     * Retrieves a product by its ID.
+     *
+     * @param id the ID of the product
+     * @return the retrieved product
+     * @throws NotFoundException if the product is not found
+     */
     @Transactional(rollbackFor = DataException.class, readOnly = true)
     public Product getProductById(Long id) {
         Product product = productRepository.findById(id)
                           .orElseThrow(() -> new NotFoundException("Product not found id - "+id));
         return product;
     }
+
+    /**
+     * Retrieves all products.
+     *
+     * @return a list of all products
+     */
     @Transactional(rollbackFor = DataException.class,readOnly = true)
     public List<Product> getAllProducts() {
         List<Product> products;
         products = productRepository.findAll();
         return products;
     }
+
+    /**
+     * Updates a product by its ID.
+     *
+     * @param updatedProduct the updated product data
+     * @param id             the ID of the product to update
+     * @return a success message indicating that the product was updated
+     * @throws NotFoundException    if the product is not found
+     * @throws InvalidDataException if the updated product data is invalid
+     * @throws AlreadyExistsException if the product code already exists
+     */
     @Transactional(rollbackFor = DataException.class)
     public String updateProductById(Product updatedProduct, Long id) {
             if (!productRepository.existsById(id)) {
@@ -64,6 +97,14 @@ public class ProductService {
             productRepository.save(updatedProduct);
             return "the product has been successfully updated:\n"+ updatedProduct;
     }
+
+    /**
+     * Removes a product by its ID.
+     *
+     * @param id the ID of the product to remove
+     * @return a success message indicating that the product was deleted
+     * @throws NotFoundException if the product is not found
+     */
     @Transactional(rollbackFor = DataException.class)
     public String removeProductById(Long id) {
         if(productRepository.existsById(id)){
@@ -75,6 +116,12 @@ public class ProductService {
         }
     }
 
+    /**
+     * Checks if the product data is valid.
+     *
+     * @param product the product to validate
+     * @return true if the product data is valid, false otherwise
+     */
     private boolean isValidProduct(Product product) {
         return product.getCodice() > 0 &&
                 product.getDescrizione() != null &&
@@ -83,12 +130,26 @@ public class ProductService {
                 product.getQuantity() > 0;
     }
 
+    /**
+     * Checks the available quantity of a product.
+     *
+     * @param productId the ID of the product
+     * @return the available quantity of the product
+     * @throws NotFoundException if the product is not found
+     */
     public int checkAvailableQuantity(Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new NotFoundException("Product not found"));
         return product.getQuantity();
     }
 
+    /**
+     * Updates the quantity of a product.
+     *
+     * @param productId  the ID of the product to update
+     * @param newQuantity the new quantity value
+     * @throws NotFoundException if the product is not found
+     */
     @Transactional(rollbackFor = DataException.class)
     public void updateProductQuantity(Long productId, int newQuantity) {
         Product product = productRepository.findById(productId)

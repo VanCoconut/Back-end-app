@@ -35,6 +35,13 @@ public class BasketService {
         this.userService = userService;
     }
 
+    /**
+     * Adds a basket item to the user's basket.
+     *
+     * @param basketItemDTO the DTO object representing the basket item to be added
+     * @return a success message indicating that the basket item has been added successfully
+     * @throws InvalidDataException if the requested quantity is greater than the available quantity
+     */
     @Transactional(rollbackFor = DataException.class)
     public String addBasketItem(BasketItemDTO basketItemDTO) {
         BasketItem basketItem = basketItemMapper.mapToEntity(basketItemDTO);
@@ -54,12 +61,30 @@ public class BasketService {
         }
         return "Basket item added successfully";
     }
+
+    /**
+     * Handles the addition of a new basket item to the user's basket.
+     *
+     * @param basketItem        the basket item to be added
+     * @param requestedQuantity the requested quantity of the basket item
+     * @param product           the product associated with the basket item
+     * @throws InvalidDataException if the requested quantity is less than 0
+     */
     @Transactional(rollbackFor = DataException.class)
     private void handleNewBasketItem(BasketItem basketItem, int requestedQuantity, Product product) {
         if(requestedQuantity < 0) {throw new InvalidDataException("The quantity may not be less than 0");}
             productService.updateProductQuantity(product.getId(), (product.getQuantity() - requestedQuantity));
             basketItemRepository.save(basketItem);
     }
+
+    /**
+     * Updates the quantity of a basket item.
+     *
+     * @param basketItemId   the ID of the basket item to be updated
+     * @param quantityChange the change in quantity for the basket item
+     * @throws NotFoundException    if the basket item is not found
+     * @throws InvalidDataException if the quantity change is invalid or there is insufficient quantity available
+     */
     @Transactional(rollbackFor = DataException.class)
     public void updateBasketItemQuantity(Long basketItemId, int quantityChange) {
         BasketItem basketItem = basketItemRepository.findById(basketItemId).orElseThrow(() -> new NotFoundException("Basket Item not found"));
@@ -78,9 +103,24 @@ public class BasketService {
                 throw new InvalidDataException("Invalid quantity change or insufficient quantity available");
             }
         }
+
+    /**
+     * Retrieves the user's basket based on the user ID.
+     *
+     * @param userId the ID of the user
+     * @return the user's basket
+     */
     public Basket getUserBasket(Long userId) {
         return basketItemMapper.findBasketByUserId(userId);
     }
+
+    /**
+     * Deletes the user's basket.
+     *
+     * @param userId the ID of the user
+     * @return a success message indicating that the basket has been cleared
+     * @throws InvalidDataException if the basket is already empty
+     */
     public String deleteUserBasket(Long userId) {
         Long idBasket = basketIdByUserId(userId);
         if(idBasket == null ){
@@ -90,6 +130,16 @@ public class BasketService {
             return "Basket clear";
         }
     }
+
+    /**
+     * Deletes a basket item from the user's basket.
+     *
+     * @param userId       the ID of the user
+     * @param basketItemId the ID of the basket item to be deleted
+     * @return a success message indicating that the basket item has been deleted successfully
+     * @throws InvalidDataException if the basket is empty
+     * @throws NotFoundException    if the basket item is not found in the user's basket
+     */
     public String deleteUserBasketItem(Long userId, Long basketItemId) {
         Long basketId = basketIdByUserId(userId);
         Basket basket = basketRepository.findById(basketId).orElseThrow(() -> new InvalidDataException("Basket is empty"));
@@ -105,6 +155,13 @@ public class BasketService {
         productService.updateProductQuantity(product.getId(), product.getQuantity() + basketItemQuantity);
         return "Basket item deleted successfully";
     }
+
+    /**
+     * Retrieves the ID of the user's basket based on the user ID.
+     *
+     * @param userId the ID of the user
+     * @return the ID of the user's basket
+     */
     private Long basketIdByUserId(Long userId) {
         User user = userService.findUserById(userId);
         return user.getBasket().getId();

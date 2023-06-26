@@ -4,16 +4,11 @@ import com.lipari.app.basket.entities.Basket;
 import com.lipari.app.basket.entities.BasketItem;
 import com.lipari.app.basket.entities.BasketItemDTO;
 import com.lipari.app.basket.repositories.BasketRepository;
-import com.lipari.app.basket.services.BasketService;
 import com.lipari.app.commons.exception.utils.DataException;
-import com.lipari.app.commons.exception.utils.InvalidDataException;
-import com.lipari.app.commons.exception.utils.NotFoundException;
 import com.lipari.app.products.entities.Product;
-import com.lipari.app.products.repositories.ProductRepository;
 import com.lipari.app.products.services.ProductService;
 import com.lipari.app.users.entities.User;
 import com.lipari.app.users.services.UserService;
-import org.springframework.beans.NotReadablePropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +29,12 @@ public class BasketItemMapper {
         this.basketRepository = basketRepository;
     }
 
+    /**
+     * Maps a BasketItemDTO object to a BasketItem entity.
+     *
+     * @param dto the DTO object representing the basket item
+     * @return the mapped BasketItem entity
+     */
     public BasketItem mapToEntity(BasketItemDTO dto) {
         Basket basket = findBasketByUserId(dto.getUserId());
         Product product = productService.getProductById(dto.getProductId());
@@ -43,6 +44,14 @@ public class BasketItemMapper {
         basketItem.setQuantity(dto.getQuantity());
         return basketItem;
     }
+
+    /**
+     * Finds the basket associated with the specified user ID.
+     * If the user does not have a basket, a new basket will be created and associated with the user.
+     *
+     * @param userId the ID of the user
+     * @return the basket associated with the user
+     */
     @Transactional(rollbackFor = DataException.class)
     public Basket findBasketByUserId(Long userId) {
         User user = userService.findUserById(userId);
