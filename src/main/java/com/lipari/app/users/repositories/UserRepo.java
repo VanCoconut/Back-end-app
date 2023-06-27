@@ -11,21 +11,22 @@ import com.lipari.app.commons.exception.utils.DataException;
 import com.lipari.app.users.entities.Role;
 import com.lipari.app.users.entities.User;
 
+import java.util.Optional;
 
 
 @Repository
 public interface UserRepo extends JpaRepository<User, Long> {
 
-	
+	Optional<User> findByUsername(String username);
+
 	@Query(value = "SELECT * FROM t_user WHERE username = :usr AND password= :psw", nativeQuery = true)
 	User getUserByCredential(@Param("usr") String username, @Param("psw") String password);
 
-	
 	@Modifying
 	@Query(value = "UPDATE t_user SET name= :nome,surname= :cog,username= :usr,password= :psw,email= :email,role= :role WHERE user_id= :id", nativeQuery = true)
 	int updateUser(@Param("id") Long userId, @Param("nome") String nome, @Param("cog") String cognome,
-			@Param("usr") String username, @Param("psw") String password, @Param("email") String email,
-			@Param("role") Role role);
+				   @Param("usr") String username, @Param("psw") String password, @Param("email") String email,
+				   @Param("role") Role role);
 
 
 }

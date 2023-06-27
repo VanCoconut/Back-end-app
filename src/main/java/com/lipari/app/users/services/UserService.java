@@ -3,6 +3,8 @@ package com.lipari.app.users.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,12 +26,13 @@ import com.lipari.app.users.validations.ChangePasswordValidation;
 import com.lipari.app.users.validations.SignInValidation;
 import com.lipari.app.users.validations.SignUpValidation;
 
+@RequiredArgsConstructor
 @Service
 public class UserService {
 
-	private UserRepo userRepo;
-	private AddressRepo addressRepo;
-	private RoleRepo roleRepo;
+	private final UserRepo userRepo;
+	private final AddressRepo addressRepo;
+	private final RoleRepo roleRepo;
 
 	@Autowired
 	private SignInValidation signInValidation;
@@ -43,15 +46,7 @@ public class UserService {
 	@Autowired
 	private ChangePasswordValidation changePasswordValidation;
 
-	@Autowired
-	public UserService(RoleRepo roleDao, UserRepo userDao, AddressRepo addressDao) {
-		this.userRepo = userDao;
-		this.addressRepo = addressDao;
-		this.roleRepo = roleDao;
-	}
-
 	// USER
-
 	public User findUserById(Long id) {
 
 		try {
@@ -93,12 +88,12 @@ public class UserService {
 			User u = userRepo.findById(id).orElseThrow(() -> new NotFoundException("user not found"));
 			// userRepo.updateUser(id, user.getNome(), user.getCognome(),
 			// user.getUsername(), user.getPassword(),
-			// user.getEmail(), user.getRole());
+			// user.getEmail(), user.getRoles());
 			user.setId(id);
 			if (user.getBasket() == null)
 				user.setBasket(u.getBasket());
-			if (user.getRole() == null)
-				user.setRole(u.getRole());
+			if (user.getRoles() == null)
+				user.setRoles(u.getRoles());
 			if (user.getAddressList() == null)
 				user.setAddressList(u.getAddressList());
 			return userRepo.save(user);
@@ -151,7 +146,6 @@ public class UserService {
 			List<Address> l = new ArrayList<>();
 			l.add(a);
 			user.getAddressList().addAll(l);
-			// user.addAddress(a);
 			return userRepo.save(user);
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
@@ -215,10 +209,10 @@ public class UserService {
 	public Role addRole(Role role) {
 		try {
 			generalValidation.positiveLong(role.getId());
-			generalValidation.stringNotBlank(role.getDescrizione());
-			if (roleRepo.roleAlreadyExist(role.getId(), role.getDescrizione()) != null)
+			generalValidation.stringNotBlank(role.getName());
+			if (roleRepo.roleAlreadyExist(role.getId(), role.getName()) != null)
 				throw new AlreadyExistsException("id and/or description already exist");
-			Role r = new Role(role.getId(), role.getDescrizione());
+			Role r = new Role(role.getId(), role.getName());
 			return roleRepo.save(r);
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
@@ -230,11 +224,11 @@ public class UserService {
 		try {
 			generalValidation.positiveLong(role.getId());
 			generalValidation.positiveLong(oldId);
-			generalValidation.stringNotBlank(role.getDescrizione());
+			generalValidation.stringNotBlank(role.getName());
 			roleRepo.findById(oldId).orElseThrow(() -> new NotFoundException("id not found"));
-			if (roleRepo.roleAlreadyExist(role.getId(), role.getDescrizione()) != null)
+			if (roleRepo.roleAlreadyExist(role.getId(), role.getName()) != null)
 				throw new AlreadyExistsException("id and/or description already exist");
-			roleRepo.updateRole(oldId, role.getId(), role.getDescrizione());
+			roleRepo.updateRole(oldId, role.getId(), role.getName());
 			return roleRepo.findById(role.getId()).get();
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
@@ -250,7 +244,7 @@ public class UserService {
 			List<User> userList = userRepo.findAll();
 
 			for (User user : userList) {
-				if (user.getRole().getId() == id) {
+				if (user.getRoles().getId() == id) {
 					user.setRole(null);
 				}
 			}
@@ -274,7 +268,7 @@ public class UserService {
 			List<User> userList = userRepo.findAll();
 
 			for (User user : userList) {
-				if (user.getRole().getDescrizione().equals(descr)) {
+				if (user.getRoles().getName().equals(descr)) {
 					user.setRole(null);
 				}
 			}
