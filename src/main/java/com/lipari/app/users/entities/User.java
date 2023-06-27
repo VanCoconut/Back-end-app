@@ -1,48 +1,20 @@
 package com.lipari.app.users.entities;
 
+import com.lipari.app.basket.entities.Basket;
+import jakarta.persistence.*;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import com.lipari.app.basket.entities.Basket;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "t_user")
-public class User implements UserDetails{
+public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
 	private Long id;
-	
-	
 
 	@Column(name = "name")
 	private String nome;
@@ -50,7 +22,7 @@ public class User implements UserDetails{
 	@Column(name = "surname")
 	private String cognome;
 
-	@Column(name = "username",unique = true)
+	@Column(name = "username")
 	private String username;
 
 	@Column(name = "password")
@@ -58,64 +30,123 @@ public class User implements UserDetails{
 
 	@Column(name = "email")
 	private String email;
-
+	
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "basket_id")
 	private Basket basket;
-
+	
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "user_id")
-	private Collection<Address> addressList;
-
-	//@ManyToMany(fetch = FetchType.EAGER)
-	//private Collection<Role> roles;
+	private List<Address> addressList;
 	
-	@Enumerated(EnumType.STRING)
-	private RoleEnum role;
+	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+	@JoinColumn(name = "role_id")
+	private Role role;
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority(role.name()));
+	public User() {
+	}
+
+	public User(String nome, String cognome, String username, String password, String email, Basket basket, List<Address> addressList, Role role) {
+		this.nome = nome;
+		this.cognome = cognome;
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.basket = basket;
+		this.addressList = addressList;
+		this.role = role;
 	}
 
 	@Override
-	public String getPassword() {
-		return password;
+	public String toString() {
+		return "User{" +
+				"id=" + id +
+				", nome='" + nome + '\'' +
+				", cognome='" + cognome + '\'' +
+				", username='" + username + '\'' +
+				", password='" + password + '\'' +
+				", email='" + email + '\'' +
+				", address=" + addressList +
+				", role=" + role +
+				'}';
 	}
 
+	public Long getId() {
+		return id;
+	}
 
-	@Override
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getCognome() {
+		return cognome;
+	}
+
+	public void setCognome(String cognome) {
+		this.cognome = cognome;
+	}
+
 	public String getUsername() {
 		return username;
 	}
 
-	@Override
-	public boolean isAccountNonExpired() {
-	
-		return true;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
-	@Override
-	public boolean isAccountNonLocked() {
-		
-		return true;
+	public String getPassword() {
+		return password;
 	}
 
-	@Override
-	public boolean isCredentialsNonExpired() {
-		
-		return true;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
-	@Override
-	public boolean isEnabled() {
-		
-		return true;
+	public String getEmail() {
+		return email;
 	}
 
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
+	public List<Address> getAddressList() {
+		return addressList;
+	}
 
+	public void setAddressList(List<Address> addressList) {
+		this.addressList = addressList;
+	}
 
-	
+	public Role getRole() {
+		return role;
+	}
 
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public void addAddress(Address address){
+		if (addressList.size() == 0){
+			addressList = new ArrayList<>();
+		}
+		addressList.add(address);
+	}
+
+	public Basket getBasket() {
+		return basket;
+	}
+
+	public void setBasket(Basket basket) {
+		this.basket = basket;
+	}
 }

@@ -64,22 +64,19 @@ public class UserController {
 
 	// POST
 
-	/*
-	 * @PostMapping("/login") public User login(@RequestBody LogInDto log) { return
-	 * userService.loging(log.getUsername(), log.getPassword()); }
-	 * 
-	 * @PostMapping("") public User addUser(@RequestBody User user) { return
-	 * userService.createUser(user); }
-	 */
+	@PostMapping("/login")
+	public User login(@RequestBody LogInDto log) {
+		return userService.loging(log.getUsername(), log.getPassword());
+	}
+
+	@PostMapping("")
+	public User addUser(@RequestBody User user) {
+		return userService.createUser(user);
+	}
 
 	@PostMapping("/role")
-	public Role addRole(@RequestParam String name) {
-		return userService.addRole(name);
-	}
-	
-	@PostMapping("/{userId}/role")
-	public User addARoleForUser(@PathVariable Long userId, @RequestParam String roleName) {
-		return userService.addRoleForUser(userId, roleName);
+	public Role addRole(@RequestBody Role role) {
+		return userService.addRole(role);
 	}
 
 	@PostMapping("/{userId}/address")
