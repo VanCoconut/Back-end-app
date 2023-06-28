@@ -33,7 +33,7 @@ public class UserController {
 	// GET
 
 	@GetMapping("/{id}")
-	public User getuserById(@PathVariable Long id) {
+	public User getUserById(@PathVariable Long id) {
 		return userService.findUserById(id);
 	}
 
@@ -72,10 +72,6 @@ public class UserController {
 	 * userService.createUser(user); }
 	 */
 
-	@PostMapping("/role")
-	public Role addRole(@RequestParam String name) {
-		return userService.addRole(name);
-	}
 	
 	@PostMapping("/{userId}/role")
 	public User addARoleForUser(@PathVariable Long userId, @RequestParam String roleName) {

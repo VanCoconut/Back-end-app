@@ -206,19 +206,6 @@ public class UserService {
     }
 
     @Transactional(rollbackFor = DataException.class)
-    public Role addRole(String roleName) {
-        try {
-            generalValidation.stringNotBlank(roleName);
-            if (!roleRepo.findByName(roleName.toUpperCase()).isEmpty())
-                throw new AlreadyExistsException("role name already exist");
-            Role r = new Role(roleName.toUpperCase());
-            return roleRepo.save(r);
-        } catch (InvalidDataException e) {
-            throw new ValidationException("Operzione negata " + e.getMessage());
-        }
-    }
-
-    @Transactional(rollbackFor = DataException.class)
     public User addRoleForUser(Long userId, String roleName) {
         try {
             generalValidation.positiveLong(userId);
