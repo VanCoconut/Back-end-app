@@ -25,6 +25,12 @@ import com.lipari.app.users.repositories.UserRepo;
 import com.lipari.app.users.validations.ChangePasswordValidation;
 import com.lipari.app.users.validations.SignInValidation;
 import com.lipari.app.users.validations.SignUpValidation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -34,52 +40,52 @@ public class UserService {
 	private final AddressRepo addressRepo;
 	private final RoleRepo roleRepo;
 
-	@Autowired
-	private SignInValidation signInValidation;
+    @Autowired
+    private SignInValidation signInValidation;
 
-	@Autowired
-	private SignUpValidation signUpUpValidation;
+    @Autowired
+    private SignUpValidation signUpUpValidation;
 
-	@Autowired
-	private GeneralValidation generalValidation;
+    @Autowired
+    private GeneralValidation generalValidation;
 
-	@Autowired
-	private ChangePasswordValidation changePasswordValidation;
+    @Autowired
+    private ChangePasswordValidation changePasswordValidation;
 
 	// USER
 	public User findUserById(Long id) {
 
-		try {
-			generalValidation.positiveLong(id);
-			User u = userRepo.findById(id).orElseThrow(() -> new NotFoundException("user not found"));
-			return u;
-		} catch (InvalidDataException e) {
-			throw new AuthException("Accesso non autorizzato " + e.getMessage());
-		}
-	}
+        try {
+            generalValidation.positiveLong(id);
+            User u = userRepo.findById(id).orElseThrow(() -> new NotFoundException("user not found"));
+            return u;
+        } catch (InvalidDataException e) {
+            throw new AuthException("Accesso non autorizzato " + e.getMessage());
+        }
+    }
 
-	public User loging(String username, String pass) {
+    public User loging(String username, String pass) {
 
-		try {
-			signInValidation.validation(username, pass);
-			User u = userRepo.getUserByCredential(username, pass);
-			if (u == null)
-				throw new AuthException("Accesso non autorizzato password o username errati");
-			return u;
-		} catch (InvalidDataException e) {
-			throw new InvalidDataException("Accesso non autorizzato " + e.getMessage());
-		}
-	}
+        try {
+            signInValidation.validation(username, pass);
+            User u = userRepo.getUserByCredential(username, pass);
+            if (u == null)
+                throw new AuthException("Accesso non autorizzato password o username errati");
+            return u;
+        } catch (InvalidDataException e) {
+            throw new InvalidDataException("Accesso non autorizzato " + e.getMessage());
+        }
+    }
 
-	@Transactional(rollbackFor = DataException.class)
-	public User createUser(User user) {
-		try {
-			signUpUpValidation.validation(user);
-			return userRepo.save(user);
-		} catch (InvalidDataException e) {
-			throw new ValidationException(e.getMessage());
-		}
-	}
+    @Transactional(rollbackFor = DataException.class)
+    public User createUser(User user) {
+        try {
+            signUpUpValidation.validation(user);
+            return userRepo.save(user);
+        } catch (InvalidDataException e) {
+            throw new ValidationException(e.getMessage());
+        }
+    }
 
 	@Transactional(rollbackFor = DataException.class)
 	public User changeUser(Long id, User user) {
@@ -101,38 +107,38 @@ public class UserService {
 			throw new ValidationException("Operzione negata " + e.getMessage());
 		}
 
-	}
+    }
 
-	@Transactional(rollbackFor = DataException.class)
-	public User changePassword(Long id, String oldPsw, String newPsw, String confPsw) {
-		try {
-			changePasswordValidation.validation(oldPsw, newPsw, confPsw);
-			User user = userRepo.findById(id).orElseThrow(() -> new NotFoundException("user not found"));
-			user.setPassword(newPsw);
-			return userRepo.save(user);
-		} catch (InvalidDataException e) {
-			throw new ValidationException("Operzione negata " + e.getMessage());
-		}
-	}
+    @Transactional(rollbackFor = DataException.class)
+    public User changePassword(Long id, String oldPsw, String newPsw, String confPsw) {
+        try {
+            changePasswordValidation.validation(oldPsw, newPsw, confPsw);
+            User user = userRepo.findById(id).orElseThrow(() -> new NotFoundException("user not found"));
+            user.setPassword(newPsw);
+            return userRepo.save(user);
+        } catch (InvalidDataException e) {
+            throw new ValidationException("Operzione negata " + e.getMessage());
+        }
+    }
 
-	@Transactional(rollbackFor = DataException.class)
-	public void cancelUser(Long userId) {
-		try {
-			generalValidation.positiveLong(userId);
-			if (userRepo.getReferenceById(userId) == null)
-				throw new NotFoundException("user not found");
-			userRepo.deleteById(userId);
-		} catch (InvalidDataException e) {
-			throw new ValidationException("Operzione negata " + e.getMessage());
-		}
+    @Transactional(rollbackFor = DataException.class)
+    public void cancelUser(Long userId) {
+        try {
+            generalValidation.positiveLong(userId);
+            if (userRepo.getReferenceById(userId) == null)
+                throw new NotFoundException("user not found");
+            userRepo.deleteById(userId);
+        } catch (InvalidDataException e) {
+            throw new ValidationException("Operzione negata " + e.getMessage());
+        }
 
-	}
+    }
 
-	// ADDRESS
+    // ADDRESS
 
-	public List<String> adressList(Long userId) {
-		return addressRepo.getAllUserAddress(userId);
-	}
+    public List<String> adressList(Long userId) {
+        return addressRepo.getAllUserAddress(userId);
+    }
 
 	@Transactional(rollbackFor = DataException.class)
 	public User addAddress(Long userId, String newAddress) {
@@ -152,49 +158,49 @@ public class UserService {
 		}
 	}
 
-	public Address getAddressById(Long id) {
-		try {
-			generalValidation.positiveLong(id);
-			Address a = addressRepo.getAddressById(id).orElseThrow(() -> new NotFoundException("address not found"));
-			return a;
-		} catch (InvalidDataException e) {
-			throw new ValidationException("Operzione negata " + e.getMessage());
-		} catch (Exception e) {
+    public Address getAddressById(Long id) {
+        try {
+            generalValidation.positiveLong(id);
+            Address a = addressRepo.getAddressById(id).orElseThrow(() -> new NotFoundException("address not found"));
+            return a;
+        } catch (InvalidDataException e) {
+            throw new ValidationException("Operzione negata " + e.getMessage());
+        } catch (Exception e) {
 
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-	}
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
 
-	@Transactional(rollbackFor = DataException.class)
-	public void cancelAddress(Long id) {
-		try {
-			generalValidation.positiveLong(id);
-			Address a = addressRepo.getAddressById(id).orElseThrow(() -> new NotFoundException("address not found"));
-			addressRepo.delete(a);
-		} catch (InvalidDataException e) {
-			throw new ValidationException("Operzione negata " + e.getMessage());
-		} catch (Exception e) {
+    @Transactional(rollbackFor = DataException.class)
+    public void cancelAddress(Long id) {
+        try {
+            generalValidation.positiveLong(id);
+            Address a = addressRepo.getAddressById(id).orElseThrow(() -> new NotFoundException("address not found"));
+            addressRepo.delete(a);
+        } catch (InvalidDataException e) {
+            throw new ValidationException("Operzione negata " + e.getMessage());
+        } catch (Exception e) {
 
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-	}
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
 
-	// ROLE
+    // ROLE
 
-	public List<Role> findAllRole() {
-		return roleRepo.findAll();
-	}
+    public List<Role> findAllRole() {
+        return roleRepo.findAll();
+    }
 
-	public Role findRoleById(Long id) {
-		try {
-			generalValidation.positiveLong(id);
-			return roleRepo.findById(id).orElseThrow(() -> new NotFoundException("role not found"));
-		} catch (InvalidDataException e) {
-			throw new ValidationException("Operzione negata " + e.getMessage());
-		}
-	}
+    public Role findRoleById(Long id) {
+        try {
+            generalValidation.positiveLong(id);
+            return roleRepo.findById(id).orElseThrow(() -> new NotFoundException("role not found"));
+        } catch (InvalidDataException e) {
+            throw new ValidationException("Operzione negata " + e.getMessage());
+        }
+    }
 
 	public Role findRoleByDescription(String d) {
 		try {
@@ -234,7 +240,7 @@ public class UserService {
 			throw new ValidationException("Operzione negata " + e.getMessage());
 		}
 
-	}
+    }
 
 	@Transactional(rollbackFor = DataException.class)
 	public void cancelRoleById(Long id) {
@@ -254,10 +260,10 @@ public class UserService {
 			throw new ValidationException("Operzione negata " + e.getMessage());
 		} catch (Exception e) {
 
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-	}
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
 
 	@Transactional(rollbackFor = DataException.class)
 	public void cancelRoleByDescription(String descr) {

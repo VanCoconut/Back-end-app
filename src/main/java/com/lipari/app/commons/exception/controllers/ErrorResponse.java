@@ -1,21 +1,28 @@
 package com.lipari.app.commons.exception.controllers;
 
+import com.lipari.app.commons.exception.entities.DataErrorResponse;
+import com.lipari.app.commons.exception.utils.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.lipari.app.commons.exception.entities.DataErrorResponse;
-import com.lipari.app.commons.exception.utils.AlreadyExistsException;
-import com.lipari.app.commons.exception.utils.AuthException;
-import com.lipari.app.commons.exception.utils.DataException;
-import com.lipari.app.commons.exception.utils.InvalidDataException;
-import com.lipari.app.commons.exception.utils.NotFoundException;
-import com.lipari.app.commons.exception.utils.ValidationException;
-
 
 @RestControllerAdvice
 public class ErrorResponse {
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public DataErrorResponse badCredentialExceptionHandler(BadCredentialsException ex) {
+
+        DataErrorResponse error = new DataErrorResponse();
+        error.setStatus(HttpStatus.FORBIDDEN.value());
+        error.setMessage(ex.getMessage());
+        error.setTimeStamp(System.currentTimeMillis());
+
+        return error;
+    }
 
     @ExceptionHandler(DataException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -28,7 +35,7 @@ public class ErrorResponse {
 
         return error;
     }
-    
+
     @ExceptionHandler(ValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public DataErrorResponse validationExceptionHandler(ValidationException ex) {
@@ -40,8 +47,8 @@ public class ErrorResponse {
 
         return error;
     }
-    
-    
+
+
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public DataErrorResponse notFoundExceptionHandler(NotFoundException ex) {
@@ -79,7 +86,7 @@ public class ErrorResponse {
 
     @ExceptionHandler(AuthException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public DataErrorResponse authExceptionHandler(AuthException exc){
+    public DataErrorResponse authExceptionHandler(AuthException exc) {
 
         DataErrorResponse error = new DataErrorResponse();
         error.setStatus(HttpStatus.BAD_REQUEST.value());
