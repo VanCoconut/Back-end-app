@@ -148,7 +148,7 @@ public class UserService {
 			if (addressRepo.addressAlreadyExist(userId, newAddress) != null)
 				throw new AlreadyExistsException("address' id already exist");
 			User user = userRepo.findById(userId).orElseThrow(() -> new NotFoundException("user not found"));
-			Address a = new Address(newAddress);
+			Address a = new Address(null,newAddress);
 			List<Address> l = new ArrayList<>();
 			l.add(a);
 			user.getAddressList().addAll(l);
@@ -211,7 +211,7 @@ public class UserService {
 		}
 	}
 
-	@Transactional(rollbackFor = DataException.class)
+	/*@Transactional(rollbackFor = DataException.class)
 	public Role addRole(Role role) {
 		try {
 			generalValidation.positiveLong(role.getId());
@@ -240,7 +240,7 @@ public class UserService {
 			throw new ValidationException("Operzione negata " + e.getMessage());
 		}
 
-    }
+    }*/
 
 	@Transactional(rollbackFor = DataException.class)
 	public void cancelRoleById(Long id) {
@@ -249,11 +249,11 @@ public class UserService {
 			Role r = roleRepo.findById(id).orElseThrow(() -> new NotFoundException("id not found"));
 			List<User> userList = userRepo.findAll();
 
-			for (User user : userList) {
+			/*for (User user : userList) {
 				if (user.getRoles().getId() == id) {
 					user.setRole(null);
 				}
-			}
+			}*/
 
 			roleRepo.delete(r);
 		} catch (InvalidDataException e) {
@@ -273,11 +273,11 @@ public class UserService {
 					.orElseThrow(() -> new NotFoundException("description not found"));
 			List<User> userList = userRepo.findAll();
 
-			for (User user : userList) {
+			/*for (User user : userList) {
 				if (user.getRoles().getName().equals(descr)) {
 					user.setRole(null);
 				}
-			}
+			}*/
 			roleRepo.delete(r);
 			;
 		} catch (InvalidDataException e) {

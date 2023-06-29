@@ -2,15 +2,11 @@ package com.lipari.app.users.entities;
 
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.NaturalId;
 
 @Data
 @NoArgsConstructor
@@ -20,8 +16,12 @@ import lombok.NoArgsConstructor;
 public class Role {
 
 	@Id
-	@Column(name = "role_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String name;
+
+	@Enumerated(EnumType.STRING)
+	@NaturalId
+	@Column(length = 60)
+	private RoleEnum roleName;
 
 }

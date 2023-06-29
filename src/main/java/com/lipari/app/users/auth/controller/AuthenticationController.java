@@ -3,7 +3,6 @@ package com.lipari.app.users.auth.controller;
 import com.lipari.app.users.auth.dto.request.AuthenticationRequest;
 import com.lipari.app.users.auth.dto.request.RegisterRequest;
 import com.lipari.app.users.auth.dto.response.AuthenticationResponse;
-import com.lipari.app.users.auth.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

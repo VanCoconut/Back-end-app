@@ -2,6 +2,7 @@ package com.lipari.app.users.controllers;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,25 +14,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lipari.app.users.dto.LogInDto;
 import com.lipari.app.users.entities.Address;
 import com.lipari.app.users.entities.Role;
 import com.lipari.app.users.entities.User;
 import com.lipari.app.users.services.UserService;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
-	private UserService userService;
-
-	@Autowired
-	public UserController(UserService userService) {
-		this.userService = userService;
-	}
+	private final UserService userService;
 
 	// GET
-
 	@GetMapping("/{id}")
 	public User getuserById(@PathVariable Long id) {
 		return userService.findUserById(id);
@@ -64,20 +59,20 @@ public class UserController {
 
 	// POST
 
-	@PostMapping("/login")
-	public User login(@RequestBody LogInDto log) {
-		return userService.loging(log.getUsername(), log.getPassword());
-	}
+//	@PostMapping("/login")
+//	public User login(@RequestBody LogInDto log) {
+//		return userService.loging(log.getUsername(), log.getPassword());
+//	}
 
-	@PostMapping("")
-	public User addUser(@RequestBody User user) {
-		return userService.createUser(user);
-	}
+//	@PostMapping("")
+//	public User addUser(@RequestBody User user) {
+//		return userService.createUser(user);
+//	}
 
-	@PostMapping("/role")
-	public Role addRole(@RequestBody Role role) {
-		return userService.addRole(role);
-	}
+//	@PostMapping("/role")
+//	public Role addRole(@RequestBody Role role) {
+//		return userService.addRole(role);
+//	}
 
 	@PostMapping("/{userId}/address")
 	public User addAddress(@PathVariable Long userId, @RequestParam String address) {
@@ -98,11 +93,11 @@ public class UserController {
 		return userService.changePassword(id, oldPassword, newPassword, confirmPassword);
 	}
 
-	@PutMapping("/role/{id}")
-	public Role updateRole(@PathVariable Long id, @RequestBody Role role) {
-		return userService.updateRole(id, role);
-
-	}
+//	@PutMapping("/role/{id}")
+//	public Role updateRole(@PathVariable Long id, @RequestBody Role role) {
+//		return userService.updateRole(id, role);
+//
+//	}
 
 	// DELETE
 	@DeleteMapping("/{userId}")

@@ -48,7 +48,7 @@ public class AdminService {
 		this.roleRepo = roleDao;
 	}
 
-	@Transactional(rollbackFor = DataException.class)
+	/*@Transactional(rollbackFor = DataException.class)
 	public User addRoleForUser(Long userId) {
 		try {
 
@@ -58,13 +58,13 @@ public class AdminService {
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
 		}
-	}
+	}*/
 
 	public List<User> findAllUser() {
 		return userRepo.findAll();
 	}
 
-	@Transactional(rollbackFor = DataException.class)
+	/*@Transactional(rollbackFor = DataException.class)
 	public Role addRole(String roleName) {
 		try {
 			generalValidation.stringNotBlank(roleName);
@@ -75,5 +75,5 @@ public class AdminService {
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
 		}
-	}
+	}*/
 }
