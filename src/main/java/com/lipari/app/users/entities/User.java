@@ -7,9 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Data
 @NoArgsConstructor
@@ -20,7 +18,7 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "user_id")
+	@Column(name = "id")
 	private Long id;
 
 	@Column(name = "name")
@@ -47,7 +45,9 @@ public class User {
 	private Collection<Address> addressList = new ArrayList<>();
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	private Collection<Role> roles = new ArrayList<>();
+	@JoinTable(name="user_roles",joinColumns = @JoinColumn(name="user_id",referencedColumnName = "id"),
+	inverseJoinColumns = @JoinColumn(name = "role_id",referencedColumnName = "id"))
+	private Set<Role> roles = new HashSet<>();
 
 
 }

@@ -243,11 +243,11 @@ public class UserService {
 			Role r = roleRepo.findById(id).orElseThrow(() -> new NotFoundException("id not found"));
 			List<User> userList = userRepo.findAll();
 
-			for (User user : userList) {
+			/*for (User user : userList) {
 				if (user.getRoles().getId() == id) {
 					user.setRole(null);
 				}
-			}
+			}*/
 
 			roleRepo.delete(r);
 		} catch (InvalidDataException e) {
@@ -267,11 +267,11 @@ public class UserService {
 					.orElseThrow(() -> new NotFoundException("description not found"));
 			List<User> userList = userRepo.findAll();
 
-			for (User user : userList) {
+			/*for (User user : userList) {
 				if (user.getRoles().getName().equals(descr)) {
 					user.setRole(null);
 				}
-			}
+			}*/
 			roleRepo.delete(r);
 			;
 		} catch (InvalidDataException e) {
