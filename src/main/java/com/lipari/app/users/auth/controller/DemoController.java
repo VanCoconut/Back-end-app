@@ -16,8 +16,7 @@ public class DemoController {
 
         return ResponseEntity.ok("Hello from secured endpoint");
     }*/
-  @GetMapping("")
-  @PreAuthorize("hasRole('ADMIN')")
+  @GetMapping("/hello")
   public String sayHello() {
 
       return "Hello from secured endpoint";

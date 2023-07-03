@@ -32,6 +32,12 @@ public class UserController {
 
 	// GET
 
+	@GetMapping("/hello")
+	public String sayHello() {
+
+		return "Hello from secured endpoint";
+	}
+
 	@GetMapping("/{id}")
 	public User getUserById(@PathVariable Long id) {
 		return userService.findUserById(id);

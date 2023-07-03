@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -22,7 +23,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http
+      /*  http
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
@@ -37,6 +38,16 @@ public class SecurityConfiguration {
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
 
+        return http.build();*/
+
+        http.csrf(AbstractHttpConfigurer::disable);
+        http.sessionManagement(management -> management
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.authorizeHttpRequests(authz -> authz
+                .requestMatchers("/api/auth/**").permitAll()
+                //.requestMatchers("/h2/**").permitAll()
+                .anyRequest().authenticated());
+        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
