@@ -9,9 +9,8 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 @AllArgsConstructor
 @Component
-public class LogInDto {
+public class RegisterDto {
 
-	private String username;
-	private String password;
-
+    private String username;
+    private String password;
 }
