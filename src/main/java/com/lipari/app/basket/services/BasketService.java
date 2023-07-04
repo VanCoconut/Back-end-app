@@ -9,7 +9,6 @@ import com.lipari.app.basket.utils.BasketItemMapper;
 import com.lipari.app.commons.exception.utils.InvalidDataException;
 import com.lipari.app.products.entities.Product;
 import com.lipari.app.products.services.ProductService;
-import com.lipari.app.users.entities.User;
 import com.lipari.app.users.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

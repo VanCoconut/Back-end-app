@@ -2,13 +2,10 @@ package com.lipari.app.orders.entities;
 
 import com.lipari.app.basket.entities.Basket;
 import com.lipari.app.users.entities.Address;
-import com.lipari.app.users.entities.User;
-import com.lipari.app.utils.RandomId;
+import com.lipari.app.users.entities.AppUser;
 import jakarta.persistence.*;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Entity
 @Table(name = "t_order")
@@ -19,7 +16,7 @@ public class Order {
 	private Long id;
 	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE})
 	@JoinColumn(name = "user_id", unique = false)
-	private User user;
+	private AppUser appUser;
 	@Column(name = "date")
 	private LocalDate data;
 	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE})
@@ -32,8 +29,8 @@ public class Order {
 	public Order() {
 	}
 
-	public Order(User user, LocalDate data, Address indirizzo, Basket basket) {
-		this.user = user;
+	public Order(AppUser appUser, LocalDate data, Address indirizzo, Basket basket) {
+		this.appUser = appUser;
 		this.data = data;
 		this.indirizzo = indirizzo;
 		this.basket = basket;
@@ -50,7 +47,7 @@ public class Order {
 	public String toString() {
 		return "Order{" +
 				"id=" + id +
-				", user=" + user +
+				", user=" + appUser +
 				", data=" + data +
 				", indirizzo=" + indirizzo +
 				", basket=" + basket +
@@ -65,12 +62,12 @@ public class Order {
 		this.id = id;
 	}
 
-	public User getUser() {
-		return user;
+	public AppUser getUser() {
+		return appUser;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUser(AppUser appUser) {
+		this.appUser = appUser;
 	}
 
 	public LocalDate getData() {

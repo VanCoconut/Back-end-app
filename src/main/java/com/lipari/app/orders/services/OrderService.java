@@ -2,25 +2,19 @@ package com.lipari.app.orders.services;
 
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import com.lipari.app.basket.repositories.BasketRepository;
-import com.lipari.app.commons.exception.utils.AlreadyExistsException;
 import com.lipari.app.commons.exception.utils.InvalidDataException;
 import com.lipari.app.commons.exception.utils.NotFoundException;
 import com.lipari.app.orders.entities.Order;
 import com.lipari.app.orders.repositories.OrderRepository;
 import com.lipari.app.products.repositories.ProductRepository;
-import com.lipari.app.users.entities.User;
 import com.lipari.app.users.repositories.UserRepo;
 import com.lipari.app.utils.RandomId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lipari.app.commons.exception.utils.DataException;
 import com.lipari.app.users.repositories.AddressRepo;
-import com.lipari.app.basket.entities.Basket;
-import com.lipari.app.products.entities.Product;
 
 @Service
 public class OrderService {
@@ -44,8 +38,8 @@ public class OrderService {
 
 
 
-    public List<Order> retrieveAllOrders(Long userId) {
-        List<Order> orders = orderRepository.findAllOrderByUserId(userId);
+   /* public List<Order> retrieveAllOrders(Long userId) {
+        List<Order> orders = orderRepository.findAllOrderAppByUserId(userId);
         if (!userRepository.existsById(userId)){
             throw new NotFoundException("User not found");
         }
@@ -53,7 +47,7 @@ public class OrderService {
             throw new InvalidDataException("Invalid user data");
         }
         return orders;
-    }
+    }*/
 
 
     /*public Map<Integer, String> retrieveBasketXOrder(String orderId) {

@@ -30,10 +30,10 @@ public class OrderController {
         return ResponseEntity.ok(orderService.findOrderById(id));
     }
 
-    @GetMapping("/allorders/{id}")
+   /* @GetMapping("/allorders/{id}")
     public ResponseEntity<List<Order>> allOrdersById(@PathVariable Long id){
         return ResponseEntity.ok(orderService.retrieveAllOrders(id));
-    }
+    }*/
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Long id){
