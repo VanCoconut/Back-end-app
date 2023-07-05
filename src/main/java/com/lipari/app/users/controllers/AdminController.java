@@ -22,7 +22,7 @@ public class AdminController {
     }
 
 	@GetMapping("/hello")
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	//@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public String hello(){
 		return "hello";
 	}
