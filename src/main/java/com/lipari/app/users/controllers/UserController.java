@@ -76,8 +76,8 @@ public class UserController {
 	}
 
 	@PostMapping("/role")
-	public Role addRole(@RequestBody Role role) {
-		return userService.addRole(role);
+	public Role addRole(@RequestParam String name) {
+		return userService.addRole(name);
 	}
 
 	@PostMapping("/{userId}/address")

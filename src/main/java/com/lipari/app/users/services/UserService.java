@@ -80,12 +80,13 @@ public class UserService {
 	public AppUser createUser(RegisterDto registerDto) {
 		try {
 			//signUpUpValidation.validation(registerDto);
-			Set<Role> s = new HashSet<>();
-			Role r = new Role(null,registerDto.getRole());
-			s.add(r);
-			var user = new AppUser(null,registerDto.getFirstname(),
-					registerDto.getLastname(),  registerDto.getUsername(),
-					passwordEncoder.encode(registerDto.getPassword()), null,null,null,s);
+			AppUser user = new AppUser();
+			user.setNome(registerDto.getFirstname());
+			user.setCognome(registerDto.getLastname());
+			user.setUsername(registerDto.getUsername());
+			user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
+			user.getRoles().add(
+					roleRepo.findByName(registerDto.getRole()).orElseThrow(()->new NotFoundException("role name not found")));
 			return userRepo.save(user);
 		} catch (InvalidDataException e) {
 			throw new ValidationException(e.getMessage());
@@ -217,13 +218,12 @@ public class UserService {
 	}
 
 	@Transactional(rollbackFor = DataException.class)
-	public Role addRole(Role role) {
+	public Role addRole(String name) {
 		try {
-			generalValidation.positiveLong(role.getId());
-			generalValidation.stringNotBlank(role.getName());
-			if (roleRepo.roleAlreadyExist(role.getId(), role.getName()) != null)
-				throw new AlreadyExistsException("id and/or description already exist");
-			Role r = new Role(role.getId(), role.getName());
+			generalValidation.stringNotBlank(name);
+			//if (roleRepo.roleAlreadyExist(role.getId(), role.getName()) != null)
+			//	throw new AlreadyExistsException("id and/or description already exist");
+			Role r = new Role(null, name);
 			return roleRepo.save(r);
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
