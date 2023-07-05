@@ -1,8 +1,12 @@
 package com.lipari.app.users.controllers;
 
 import com.lipari.app.users.dto.AuthRequest;
+import com.lipari.app.users.dto.RegisterDto;
+import com.lipari.app.users.dto.response.AuthenticationResponse;
+import com.lipari.app.users.services.AuthenticationService;
 import com.lipari.app.users.services.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,14 +24,29 @@ public class AuthController {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    private final AuthenticationService service;
+
+//    @PostMapping("/login")
+//    public String getToken(@RequestBody AuthRequest request) {
+//        Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+//        if (auth.isAuthenticated()) {
+//            return jwtService.generateToken(request.getUsername());
+//        } else {
+//            throw new UsernameNotFoundException("user not foud");
+//        }
+//
+//    }
+
+    @PostMapping("/register")
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterDto request) {
+        return ResponseEntity.ok(service.register(request));
+
+    }
+
+
     @PostMapping("/login")
-    public String getToken(@RequestBody AuthRequest request) {
-        Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        if (auth.isAuthenticated()) {
-            return jwtService.generateToken(request.getUsername());
-        } else {
-            throw new UsernameNotFoundException("user not foud");
-        }
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthRequest request) {
+        return ResponseEntity.ok(service.authenticate(request));
 
     }
 }
