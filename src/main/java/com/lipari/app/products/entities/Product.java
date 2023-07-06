@@ -1,7 +1,7 @@
 package com.lipari.app.products.entities;
 
 import com.lipari.app.basket.entities.BasketItem;
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 import java.util.List;
 

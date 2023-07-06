@@ -2,7 +2,7 @@ package com.lipari.app.basket.entities;
 
 import com.lipari.app.products.entities.Product;
 import com.lipari.app.users.entities.Address;
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;

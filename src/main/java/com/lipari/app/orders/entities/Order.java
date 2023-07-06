@@ -4,7 +4,7 @@ import com.lipari.app.basket.entities.Basket;
 import com.lipari.app.users.entities.Address;
 import com.lipari.app.users.entities.User;
 import com.lipari.app.utils.RandomId;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDate;
