@@ -2,7 +2,7 @@ package com.lipari.app.orders.entities;
 
 import com.lipari.app.basket.entities.Basket;
 import com.lipari.app.users.entities.Address;
-import com.lipari.app.users.entities.User;
+import com.lipari.app.users.entities.AppUser;
 import com.lipari.app.utils.RandomId;
 import javax.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -19,7 +19,7 @@ public class Order {
 	private Long id;
 	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE})
 	@JoinColumn(name = "user_id", unique = false)
-	private User user;
+	private AppUser user;
 	@Column(name = "date")
 	private LocalDate data;
 	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE})
@@ -32,7 +32,7 @@ public class Order {
 	public Order() {
 	}
 
-	public Order(User user, LocalDate data, Address indirizzo, Basket basket) {
+	public Order(AppUser user, LocalDate data, Address indirizzo, Basket basket) {
 		this.user = user;
 		this.data = data;
 		this.indirizzo = indirizzo;
@@ -65,11 +65,11 @@ public class Order {
 		this.id = id;
 	}
 
-	public User getUser() {
+	public AppUser getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(AppUser user) {
 		this.user = user;
 	}
 

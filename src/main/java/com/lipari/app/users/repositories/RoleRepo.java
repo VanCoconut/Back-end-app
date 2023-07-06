@@ -1,19 +1,15 @@
 package com.lipari.app.users.repositories;
 
-import java.util.Optional;
-
+import com.lipari.app.commons.exception.utils.DataException;
+import com.lipari.app.users.entities.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import com.lipari.app.commons.exception.utils.DataException;
-import com.lipari.app.users.entities.Role;
-
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
+import java.util.Optional;
 
 @Repository
 public interface RoleRepo extends JpaRepository<Role, Long> {

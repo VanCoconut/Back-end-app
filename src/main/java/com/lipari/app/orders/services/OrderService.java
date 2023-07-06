@@ -11,7 +11,7 @@ import com.lipari.app.commons.exception.utils.NotFoundException;
 import com.lipari.app.orders.entities.Order;
 import com.lipari.app.orders.repositories.OrderRepository;
 import com.lipari.app.products.repositories.ProductRepository;
-import com.lipari.app.users.entities.User;
+import com.lipari.app.users.entities.AppUser;
 import com.lipari.app.users.repositories.UserRepo;
 import com.lipari.app.utils.RandomId;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,9 +1,8 @@
 package com.lipari.app.users.validations;
 
-import org.springframework.stereotype.Component;
-
 import com.lipari.app.commons.exception.utils.InvalidDataException;
 import com.lipari.app.commons.validations.GeneralValidation;
+import org.springframework.stereotype.Component;
 
 @Component
 public class ChangePasswordValidation extends GeneralValidation {

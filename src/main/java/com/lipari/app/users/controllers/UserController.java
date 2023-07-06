@@ -1,23 +1,15 @@
 package com.lipari.app.users.controllers;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lipari.app.users.dto.LogInDto;
+import com.lipari.app.users.dto.RegisterDto;
 import com.lipari.app.users.entities.Address;
+import com.lipari.app.users.entities.AppUser;
 import com.lipari.app.users.entities.Role;
-import com.lipari.app.users.entities.User;
 import com.lipari.app.users.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -33,7 +25,7 @@ public class UserController {
 	// GET
 
 	@GetMapping("/{id}")
-	public User getuserById(@PathVariable Long id) {
+	public AppUser getuserById(@PathVariable Long id) {
 		return userService.findUserById(id);
 	}
 
@@ -65,36 +57,36 @@ public class UserController {
 	// POST
 
 	@PostMapping("/login")
-	public User login(@RequestBody LogInDto log) {
+	public AppUser login(@RequestBody LogInDto log) {
 		return userService.loging(log.getUsername(), log.getPassword());
 	}
 
-	@PostMapping("")
-	public User addUser(@RequestBody User user) {
-		return userService.createUser(user);
+	@PostMapping("/save")
+	public AppUser addUser(@RequestBody RegisterDto form) {
+		return userService.createUser(form);
 	}
 
 	@PostMapping("/role")
-	public Role addRole(@RequestBody Role role) {
-		return userService.addRole(role);
+	public Role addRole(@RequestParam String name) {
+		return userService.addRole(name);
 	}
 
 	@PostMapping("/{userId}/address")
-	public User addAddress(@PathVariable Long userId, @RequestParam String address) {
+	public AppUser addAddress(@PathVariable Long userId, @RequestParam String address) {
 		return userService.addAddress(userId, address);
 	}
 
 	// PUT
 
 	@PutMapping("/{id}")
-	public User updateUser(@PathVariable Long id, @RequestBody User user) {
-		return userService.changeUser(id,user);
+	public AppUser updateUser(@PathVariable Long id, @RequestBody AppUser appUser) {
+		return userService.changeUser(id, appUser);
 
 	}
 
 	@PutMapping("/{id}/password")
-	public User updateUserPassword(@PathVariable Long id, @RequestParam String oldPassword,
-			@RequestParam String newPassword, @RequestParam String confirmPassword) {
+	public AppUser updateUserPassword(@PathVariable Long id, @RequestParam String oldPassword,
+									  @RequestParam String newPassword, @RequestParam String confirmPassword) {
 		return userService.changePassword(id, oldPassword, newPassword, confirmPassword);
 	}
 

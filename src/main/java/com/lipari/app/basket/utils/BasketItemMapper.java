@@ -10,7 +10,7 @@ import com.lipari.app.commons.exception.utils.NotFoundException;
 import com.lipari.app.products.entities.Product;
 import com.lipari.app.products.repositories.ProductRepository;
 import com.lipari.app.products.services.ProductService;
-import com.lipari.app.users.entities.User;
+import com.lipari.app.users.entities.AppUser;
 import com.lipari.app.users.services.UserService;
 import org.springframework.beans.NotReadablePropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ public class BasketItemMapper {
     }
 
     public Basket findBasketByUserId(Long userId) {
-        User user = userService.findUserById(userId);
+        AppUser user = userService.findUserById(userId);
         Basket basket = user.getBasket();
         if (basket == null) {
             basket = new Basket();

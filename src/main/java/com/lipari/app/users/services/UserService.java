@@ -1,30 +1,25 @@
 package com.lipari.app.users.services;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.lipari.app.commons.exception.utils.AlreadyExistsException;
-import com.lipari.app.commons.exception.utils.AuthException;
-import com.lipari.app.commons.exception.utils.DataException;
-import com.lipari.app.commons.exception.utils.InvalidDataException;
-import com.lipari.app.commons.exception.utils.NotFoundException;
-import com.lipari.app.commons.exception.utils.ValidationException;
+import com.lipari.app.commons.exception.utils.*;
 import com.lipari.app.commons.validations.GeneralValidation;
+import com.lipari.app.users.dto.RegisterDto;
 import com.lipari.app.users.entities.Address;
+import com.lipari.app.users.entities.AppUser;
 import com.lipari.app.users.entities.Role;
-import com.lipari.app.users.entities.User;
 import com.lipari.app.users.repositories.AddressRepo;
 import com.lipari.app.users.repositories.RoleRepo;
 import com.lipari.app.users.repositories.UserRepo;
 import com.lipari.app.users.validations.ChangePasswordValidation;
 import com.lipari.app.users.validations.SignInValidation;
 import com.lipari.app.users.validations.SignUpValidation;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -33,6 +28,7 @@ public class UserService {
 	private final UserRepo userRepo;
 	private final AddressRepo addressRepo;
 	private final RoleRepo roleRepo;
+	private final PasswordEncoder passwordEncoder;
 
 	@Autowired
 	private SignInValidation signInValidation;
@@ -47,22 +43,22 @@ public class UserService {
 	private ChangePasswordValidation changePasswordValidation;
 
 	// USER
-	public User findUserById(Long id) {
+	public AppUser findUserById(Long id) {
 
 		try {
 			generalValidation.positiveLong(id);
-			User u = userRepo.findById(id).orElseThrow(() -> new NotFoundException("user not found"));
+			AppUser u = userRepo.findById(id).orElseThrow(() -> new NotFoundException("user not found"));
 			return u;
 		} catch (InvalidDataException e) {
 			throw new AuthException("Accesso non autorizzato " + e.getMessage());
 		}
 	}
 
-	public User loging(String username, String pass) {
+	public AppUser loging(String username, String pass) {
 
 		try {
 			signInValidation.validation(username, pass);
-			User u = userRepo.getUserByCredential(username, pass);
+			AppUser u = userRepo.getUserByCredential(username, pass);
 			if (u == null)
 				throw new AuthException("Accesso non autorizzato password o username errati");
 			return u;
@@ -72,9 +68,16 @@ public class UserService {
 	}
 
 	@Transactional(rollbackFor = DataException.class)
-	public User createUser(User user) {
+	public AppUser createUser(RegisterDto registerDto) {
 		try {
-			signUpUpValidation.validation(user);
+			//signUpUpValidation.validation(registerDto);
+			AppUser user = new AppUser();
+			user.setNome(registerDto.getFirstname());
+			user.setCognome(registerDto.getLastname());
+			user.setUsername(registerDto.getUsername());
+			user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
+			user.getRoles().add(
+					roleRepo.findByName(registerDto.getRole()).orElseThrow(()->new NotFoundException("role name not found")));
 			return userRepo.save(user);
 		} catch (InvalidDataException e) {
 			throw new ValidationException(e.getMessage());
@@ -82,21 +85,21 @@ public class UserService {
 	}
 
 	@Transactional(rollbackFor = DataException.class)
-	public User changeUser(Long id, User user) {
+	public AppUser changeUser(Long id, AppUser appUser) {
 		try {
-			signUpUpValidation.validation(user);
-			User u = userRepo.findById(id).orElseThrow(() -> new NotFoundException("user not found"));
+			signUpUpValidation.validation(appUser);
+			AppUser u = userRepo.findById(id).orElseThrow(() -> new NotFoundException("user not found"));
 			// userRepo.updateUser(id, user.getNome(), user.getCognome(),
 			// user.getUsername(), user.getPassword(),
 			// user.getEmail(), user.getRoles());
-			user.setId(id);
-			if (user.getBasket() == null)
-				user.setBasket(u.getBasket());
-			if (user.getRoles() == null)
-				user.setRoles(u.getRoles());
-			if (user.getAddressList() == null)
-				user.setAddressList(u.getAddressList());
-			return userRepo.save(user);
+			appUser.setId(id);
+			if (appUser.getBasket() == null)
+				appUser.setBasket(u.getBasket());
+			if (appUser.getRoles() == null)
+				appUser.setRoles(u.getRoles());
+			if (appUser.getAddressList() == null)
+				appUser.setAddressList(u.getAddressList());
+			return userRepo.save(appUser);
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
 		}
@@ -104,12 +107,12 @@ public class UserService {
 	}
 
 	@Transactional(rollbackFor = DataException.class)
-	public User changePassword(Long id, String oldPsw, String newPsw, String confPsw) {
+	public AppUser changePassword(Long id, String oldPsw, String newPsw, String confPsw) {
 		try {
 			changePasswordValidation.validation(oldPsw, newPsw, confPsw);
-			User user = userRepo.findById(id).orElseThrow(() -> new NotFoundException("user not found"));
-			user.setPassword(newPsw);
-			return userRepo.save(user);
+			AppUser appUser = userRepo.findById(id).orElseThrow(() -> new NotFoundException("user not found"));
+			appUser.setPassword(newPsw);
+			return userRepo.save(appUser);
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
 		}
@@ -135,18 +138,18 @@ public class UserService {
 	}
 
 	@Transactional(rollbackFor = DataException.class)
-	public User addAddress(Long userId, String newAddress) {
+	public AppUser addAddress(Long userId, String newAddress) {
 		try {
 			generalValidation.positiveLong(userId);
 			generalValidation.stringNotBlank(newAddress);
 			if (addressRepo.addressAlreadyExist(userId, newAddress) != null)
 				throw new AlreadyExistsException("address' id already exist");
-			User user = userRepo.findById(userId).orElseThrow(() -> new NotFoundException("user not found"));
+			AppUser appUser = userRepo.findById(userId).orElseThrow(() -> new NotFoundException("user not found"));
 			Address a = new Address(newAddress);
 			List<Address> l = new ArrayList<>();
 			l.add(a);
-			user.getAddressList().addAll(l);
-			return userRepo.save(user);
+			appUser.getAddressList().addAll(l);
+			return userRepo.save(appUser);
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
 		}
@@ -206,13 +209,12 @@ public class UserService {
 	}
 
 	@Transactional(rollbackFor = DataException.class)
-	public Role addRole(Role role) {
+	public Role addRole(String name) {
 		try {
-			generalValidation.positiveLong(role.getId());
-			generalValidation.stringNotBlank(role.getName());
-			if (roleRepo.roleAlreadyExist(role.getId(), role.getName()) != null)
-				throw new AlreadyExistsException("id and/or description already exist");
-			Role r = new Role(role.getId(), role.getName());
+			generalValidation.stringNotBlank(name);
+			//if (roleRepo.roleAlreadyExist(role.getId(), role.getName()) != null)
+			//	throw new AlreadyExistsException("id and/or description already exist");
+			Role r = new Role(null, name);
 			return roleRepo.save(r);
 		} catch (InvalidDataException e) {
 			throw new ValidationException("Operzione negata " + e.getMessage());
@@ -241,7 +243,7 @@ public class UserService {
 		try {
 			generalValidation.positiveLong(id);
 			Role r = roleRepo.findById(id).orElseThrow(() -> new NotFoundException("id not found"));
-			List<User> userList = userRepo.findAll();
+			List<AppUser> appUserList = userRepo.findAll();
 
 //			for (User user : userList) {
 //				if (user.getRoles().getId() == id) {
@@ -265,7 +267,7 @@ public class UserService {
 			generalValidation.stringNotBlank(descr);
 			Role r = roleRepo.getRoleByDescription(descr)
 					.orElseThrow(() -> new NotFoundException("description not found"));
-			List<User> userList = userRepo.findAll();
+			List<AppUser> appUserList = userRepo.findAll();
 
 //			for (User user : userList) {
 //				if (user.getRoles().getName().equals(descr)) {

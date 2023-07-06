@@ -1,15 +1,6 @@
 package com.lipari.app.users.services;
 
-import java.util.List;
-
-import com.lipari.app.users.repositories.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import com.lipari.app.commons.exception.utils.DataException;
-import com.lipari.app.orders.entities.Order;
 
 @Service
 public class AdminService {

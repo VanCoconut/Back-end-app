@@ -1,16 +1,15 @@
 package com.lipari.app.users.controllers;
 
 
-import com.lipari.app.orders.entities.Order;
 import com.lipari.app.users.services.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/api/admins")
 public class AdminController {
 
     AdminService adminService;
@@ -19,6 +18,12 @@ public class AdminController {
     public AdminController(AdminService adminService){
         this.adminService=adminService;
     }
+
+	@GetMapping("/hello")
+	//@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	public String hello(){
+		return "hello";
+	}
 
 	/*
 	 * @GetMapping("/get-user-by-id/{idUser}") public ResponseEntity<?>
