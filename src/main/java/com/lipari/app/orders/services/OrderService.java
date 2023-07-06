@@ -22,16 +22,47 @@ import com.lipari.app.users.repositories.AddressRepo;
 import com.lipari.app.basket.entities.Basket;
 import com.lipari.app.products.entities.Product;
 
+/**
+ * The type Order service.
+ */
 @Service
 public class OrderService {
 
+    /**
+     * The Order repository.
+     */
     private final OrderRepository orderRepository;
+    /**
+     * The User repository.
+     */
     private final UserRepo userRepository;
+    /**
+     * The Product repository.
+     */
     private final ProductRepository productRepository;
+    /**
+     * The Address repository.
+     */
     private final AddressRepo addressRepository ;
+    /**
+     * The Basket repository.
+     */
     private final BasketRepository basketRepository;
+    /**
+     * The Random id.
+     */
     private final RandomId randomId;
 
+    /**
+     * Instantiates a new Order service.
+     *
+     * @param orderRepository   the order repository
+     * @param userRepository    the user repository
+     * @param productRepository the product repository
+     * @param addressRepository the address repository
+     * @param basketRepository  the basket repository
+     * @param randomId          the random id
+     */
     @Autowired
     public OrderService(OrderRepository orderRepository, UserRepo userRepository, ProductRepository productRepository, AddressRepo addressRepository, BasketRepository basketRepository, RandomId randomId) {
         this.orderRepository = orderRepository;
@@ -43,7 +74,12 @@ public class OrderService {
     }
 
 
-
+    /**
+     * Retrieve all orders list.
+     *
+     * @param userId the user id
+     * @return the list
+     */
     public List<Order> retrieveAllOrders(Long userId) {
         List<Order> orders = orderRepository.findAllOrderByUserId(userId);
         if (!userRepository.existsById(userId)){
@@ -78,12 +114,25 @@ public class OrderService {
     }*/
 
 
+    /**
+     * Find order by id optional.
+     *
+     * @param id the id
+     * @return the optional
+     */
     public Optional<Order> findOrderById(Long id){
         if (!orderRepository.existsById(id)){
             throw new NotFoundException("Order not found");
         }
             return orderRepository.findById(id);
     }
+
+    /**
+     * Add order string.
+     *
+     * @param order the order
+     * @return the string
+     */
     public String addOrder(Order order) {
        // order.setId(randomId.generateVarchar());
         //order.setBasket(order.getUser().getBasket());
@@ -97,6 +146,12 @@ public class OrderService {
 
     }
 
+    /**
+     * Delete order string.
+     *
+     * @param orderId the order id
+     * @return the string
+     */
     public String deleteOrder(Long orderId) {
         if (!orderRepository.existsById(orderId)) {
             throw new NotFoundException("Order not found");
@@ -105,6 +160,13 @@ public class OrderService {
         return "Deletion done";
     }
 
+    /**
+     * Update string.
+     *
+     * @param updateOrder the update order
+     * @param id          the id
+     * @return the string
+     */
     public String update(Order updateOrder, Long id){
         if (!orderRepository.existsById(id)){
             throw new NotFoundException("Order not found");
@@ -122,6 +184,12 @@ public class OrderService {
     }
 
 
+    /**
+     * Is valid order boolean.
+     *
+     * @param order the order
+     * @return the boolean
+     */
     private boolean isValidOrder(Order order) {
         return
                 order.getUser() != null &&

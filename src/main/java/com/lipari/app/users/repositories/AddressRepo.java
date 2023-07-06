@@ -9,17 +9,39 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The interface Address repo.
+ */
 @Repository
 public interface AddressRepo extends JpaRepository<Address, Long> {
 
-	@Query(value = "SELECT * FROM t_address WHERE user_id = :userId", nativeQuery = true)
+    /**
+     * Gets all user address.
+     *
+     * @param userId the user id
+     * @return the all user address
+     */
+    @Query(value = "SELECT * FROM t_address WHERE user_id = :userId", nativeQuery = true)
 	List<String> getAllUserAddress(@Param("userId") Long userId);
-	
-	
-	@Query(value = "SELECT * FROM t_address WHERE address_id = :id", nativeQuery = true)
+
+
+    /**
+     * Gets address by id.
+     *
+     * @param id the id
+     * @return the address by id
+     */
+    @Query(value = "SELECT * FROM t_address WHERE address_id = :id", nativeQuery = true)
 	Optional<Address> getAddressById(@Param("id") Long id);
-	
-	@Query(value = "SELECT * FROM t_address WHERE user_id = :user_id AND address = :i", nativeQuery = true)
+
+    /**
+     * Address already exist address.
+     *
+     * @param id        the id
+     * @param indirizzo the indirizzo
+     * @return the address
+     */
+    @Query(value = "SELECT * FROM t_address WHERE user_id = :user_id AND address = :i", nativeQuery = true)
 	Address addressAlreadyExist(@Param("user_id") Long id, @Param("i") String indirizzo);
 	
 

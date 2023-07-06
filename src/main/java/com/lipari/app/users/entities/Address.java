@@ -2,38 +2,75 @@ package com.lipari.app.users.entities;
 
 import javax.persistence.*;
 
+/**
+ * The type Address.
+ */
 @Entity
 @Table(name="t_address")
 public class Address {
-	
-	@Id
+
+    /**
+     * The Id.
+     */
+    @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="address_id")
 	private Long id;
-	
-	@Column(name="address")
-	private String indirizzo;
-	
-	public Address() {}
 
-	public Address(String indirizzo) {
+    /**
+     * The Indirizzo.
+     */
+    @Column(name="address")
+	private String indirizzo;
+
+    /**
+     * Instantiates a new Address.
+     */
+    public Address() {}
+
+    /**
+     * Instantiates a new Address.
+     *
+     * @param indirizzo the indirizzo
+     */
+    public Address(String indirizzo) {
 		this.indirizzo = indirizzo;
 	}
 
-	public Long getId() {
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
+    public Long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+    /**
+     * Sets id.
+     *
+     * @param id the id
+     */
+    public void setId(Long id) {
 		this.id = id;
 	}
 
 
-	public String getIndirizzo() {
+    /**
+     * Gets indirizzo.
+     *
+     * @return the indirizzo
+     */
+    public String getIndirizzo() {
 		return indirizzo;
 	}
 
-	public void setIndirizzo(String indirizzo) {
+    /**
+     * Sets indirizzo.
+     *
+     * @param indirizzo the indirizzo
+     */
+    public void setIndirizzo(String indirizzo) {
 		this.indirizzo = indirizzo;
 	}
 

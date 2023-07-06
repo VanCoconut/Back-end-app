@@ -17,11 +17,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The type Jwt filter.
+ */
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
+    /**
+     * The Jwt Service.
+     */
     @Autowired
     private JwtService jwtUtil;
+    /**
+     * The UserDetailsService.
+     */
     @Autowired
     private UserDetailsService service;
 

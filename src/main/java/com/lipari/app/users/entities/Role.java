@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * The type Role.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,10 +15,16 @@ import lombok.NoArgsConstructor;
 @Table(name="t_role")
 public class Role {
 
-	@Id
+    /**
+     * The Id.
+     */
+    @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "role_id")
 	private Long id;
-	private String name;
+    /**
+     * The Name.
+     */
+    private String name;
 
 }

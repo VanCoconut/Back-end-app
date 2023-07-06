@@ -15,6 +15,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * The type App user.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,35 +25,62 @@ import java.util.stream.Collectors;
 @Table(name = "t_user")
 public class AppUser implements UserDetails {
 
-	@Id
+    /**
+     * The Id.
+     */
+    @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
 	private Long id;
 
-	@Column(name = "name")
+    /**
+     * The Nome.
+     */
+    @Column(name = "name")
 	private String nome;
 
-	@Column(name = "surname")
+    /**
+     * The Cognome.
+     */
+    @Column(name = "surname")
 	private String cognome;
 
-	@Column(name = "username")
+    /**
+     * The Username.
+     */
+    @Column(name = "username")
 	private String username;
 
-	@Column(name = "password")
+    /**
+     * The Password.
+     */
+    @Column(name = "password")
 	private String password;
 
-	@Column(name = "email")
+    /**
+     * The Email.
+     */
+    @Column(name = "email")
 	private String email;
 
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    /**
+     * The Basket.
+     */
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "basket_id")
 	private Basket basket;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    /**
+     * The Address list.
+     */
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "user_id")
 	private Collection<Address> addressList = new ArrayList<>();
 
-	@ManyToMany(fetch = FetchType.EAGER)
+    /**
+     * The Roles.
+     */
+    @ManyToMany(fetch = FetchType.EAGER)
 	private Set<Role> roles = new HashSet<>();
 
 

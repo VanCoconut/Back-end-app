@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * The interface Basket repository.
+ */
 @Repository
 public interface BasketRepository extends JpaRepository<Basket,Long> {
 

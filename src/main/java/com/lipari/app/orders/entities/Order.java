@@ -10,29 +10,58 @@ import org.hibernate.annotations.GenericGenerator;
 import java.time.LocalDate;
 import java.util.UUID;
 
+/**
+ * The type Order.
+ */
 @Entity
 @Table(name = "t_order")
 public class Order {
-	@Id
+    /**
+     * The Id.
+     */
+    @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "order_id")
 	private Long id;
-	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE})
+    /**
+     * The User.
+     */
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE})
 	@JoinColumn(name = "user_id", unique = false)
 	private AppUser user;
-	@Column(name = "date")
+    /**
+     * The Data.
+     */
+    @Column(name = "date")
 	private LocalDate data;
-	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE})
+    /**
+     * The Indirizzo.
+     */
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE})
 	@JoinColumn(name = "address_id", unique = false)
 	private Address indirizzo;
-	@OneToOne(cascade = CascadeType.ALL)
+    /**
+     * The Basket.
+     */
+    @OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "basket_id", unique = false)
 	private Basket basket;
 
-	public Order() {
+    /**
+     * Instantiates a new Order.
+     */
+    public Order() {
 	}
 
-	public Order(AppUser user, LocalDate data, Address indirizzo, Basket basket) {
+    /**
+     * Instantiates a new Order.
+     *
+     * @param user      the user
+     * @param data      the data
+     * @param indirizzo the indirizzo
+     * @param basket    the basket
+     */
+    public Order(AppUser user, LocalDate data, Address indirizzo, Basket basket) {
 		this.user = user;
 		this.data = data;
 		this.indirizzo = indirizzo;
@@ -57,43 +86,93 @@ public class Order {
 				'}';
 	}
 
-	public Long getId() {
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
+    public Long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+    /**
+     * Sets id.
+     *
+     * @param id the id
+     */
+    public void setId(Long id) {
 		this.id = id;
 	}
 
-	public AppUser getUser() {
+    /**
+     * Gets user.
+     *
+     * @return the user
+     */
+    public AppUser getUser() {
 		return user;
 	}
 
-	public void setUser(AppUser user) {
+    /**
+     * Sets user.
+     *
+     * @param user the user
+     */
+    public void setUser(AppUser user) {
 		this.user = user;
 	}
 
-	public LocalDate getData() {
+    /**
+     * Gets data.
+     *
+     * @return the data
+     */
+    public LocalDate getData() {
 		return data;
 	}
 
-	public void setData(LocalDate data) {
+    /**
+     * Sets data.
+     *
+     * @param data the data
+     */
+    public void setData(LocalDate data) {
 		this.data = data;
 	}
 
-	public Address getIndirizzo() {
+    /**
+     * Gets indirizzo.
+     *
+     * @return the indirizzo
+     */
+    public Address getIndirizzo() {
 		return indirizzo;
 	}
 
-	public void setIndirizzo(Address indirizzo) {
+    /**
+     * Sets indirizzo.
+     *
+     * @param indirizzo the indirizzo
+     */
+    public void setIndirizzo(Address indirizzo) {
 		this.indirizzo = indirizzo;
 	}
 
-	public Basket getBasket() {
+    /**
+     * Gets basket.
+     *
+     * @return the basket
+     */
+    public Basket getBasket() {
 		return basket;
 	}
 
-	public void setBasket(Basket basket) {
+    /**
+     * Sets basket.
+     *
+     * @param basket the basket
+     */
+    public void setBasket(Basket basket) {
 		this.basket = basket;
 	}
 }

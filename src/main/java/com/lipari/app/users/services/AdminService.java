@@ -2,6 +2,9 @@ package com.lipari.app.users.services;
 
 import org.springframework.stereotype.Service;
 
+/**
+ * The type Admin service.
+ */
 @Service
 public class AdminService {
 	

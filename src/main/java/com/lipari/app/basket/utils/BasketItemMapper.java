@@ -18,13 +18,32 @@ import org.springframework.stereotype.Component;
 
 import java.util.zip.DataFormatException;
 
+/**
+ * The type Basket item mapper.
+ */
 @Component
 public class BasketItemMapper {
 
+    /**
+     * The Product service.
+     */
     private ProductService productService;
+    /**
+     * The User service.
+     */
     private UserService userService;
+    /**
+     * The Basket repository.
+     */
     private BasketRepository basketRepository;
 
+    /**
+     * Instantiates a new Basket item mapper.
+     *
+     * @param productService   the product service
+     * @param userService      the user service
+     * @param basketRepository the basket repository
+     */
     @Autowired
     public BasketItemMapper(ProductService productService, UserService userService, BasketRepository basketRepository){
         this.productService = productService;
@@ -32,6 +51,12 @@ public class BasketItemMapper {
         this.basketRepository = basketRepository;
     }
 
+    /**
+     * Map to entity basket item.
+     *
+     * @param dto the dto
+     * @return the basket item
+     */
     public BasketItem mapToEntity(BasketItemDTO dto) {
         Basket basket = findBasketByUserId(dto.getUserId());
         Product product = productService.getProductById(dto.getProductId());
@@ -42,6 +67,12 @@ public class BasketItemMapper {
         return basketItem;
     }
 
+    /**
+     * Find basket by user id basket.
+     *
+     * @param userId the user id
+     * @return the basket
+     */
     public Basket findBasketByUserId(Long userId) {
         AppUser user = userService.findUserById(userId);
         Basket basket = user.getBasket();

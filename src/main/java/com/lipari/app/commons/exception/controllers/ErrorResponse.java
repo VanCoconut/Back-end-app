@@ -14,9 +14,18 @@ import com.lipari.app.commons.exception.utils.NotFoundException;
 import com.lipari.app.commons.exception.utils.ValidationException;
 
 
+/**
+ * The type Error response.
+ */
 @RestControllerAdvice
 public class ErrorResponse {
 
+    /**
+     * Data exception handler data error response.
+     *
+     * @param ex the ex
+     * @return the data error response
+     */
     @ExceptionHandler(DataException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public DataErrorResponse dataExceptionHandler(DataException ex) {
@@ -28,7 +37,13 @@ public class ErrorResponse {
 
         return error;
     }
-    
+
+    /**
+     * Validation exception handler data error response.
+     *
+     * @param ex the ex
+     * @return the data error response
+     */
     @ExceptionHandler(ValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public DataErrorResponse validationExceptionHandler(ValidationException ex) {
@@ -40,8 +55,14 @@ public class ErrorResponse {
 
         return error;
     }
-    
-    
+
+
+    /**
+     * Not found exception handler data error response.
+     *
+     * @param ex the ex
+     * @return the data error response
+     */
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public DataErrorResponse notFoundExceptionHandler(NotFoundException ex) {
@@ -54,6 +75,12 @@ public class ErrorResponse {
         return error;
     }
 
+    /**
+     * Invalid data exception handler data error response.
+     *
+     * @param ex the ex
+     * @return the data error response
+     */
     @ExceptionHandler(InvalidDataException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public DataErrorResponse invalidDataExceptionHandler(InvalidDataException ex) {
@@ -66,6 +93,12 @@ public class ErrorResponse {
         return error;
     }
 
+    /**
+     * Already exists exception handler data error response.
+     *
+     * @param ex the ex
+     * @return the data error response
+     */
     @ExceptionHandler(AlreadyExistsException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public DataErrorResponse alreadyExistsExceptionHandler(AlreadyExistsException ex) {
@@ -77,6 +110,12 @@ public class ErrorResponse {
         return error;
     }
 
+    /**
+     * Auth exception handler data error response.
+     *
+     * @param exc the exc
+     * @return the data error response
+     */
     @ExceptionHandler(AuthException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public DataErrorResponse authExceptionHandler(AuthException exc){
@@ -88,6 +127,12 @@ public class ErrorResponse {
         return error;
     }
 
+    /**
+     * Generic exception handler data error response.
+     *
+     * @param ex the ex
+     * @return the data error response
+     */
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public DataErrorResponse genericExceptionHandler(Exception ex) {
