@@ -87,7 +87,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      *     <li>allow the admin users only to access the admins APIs</li>
      *     <li>allow the common users only to access the users APIs</li>
      *     <li>set the sessions stateless</li>
-     *     <li>add the filter before using the {@link UserDetailsService#}</li>
+     *     <li>add the filter before using the {@link UserDetailsService#loadUserByUsername(String string)}</li>
      * </ul>
      *
      *

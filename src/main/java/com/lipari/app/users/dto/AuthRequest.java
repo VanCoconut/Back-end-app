@@ -11,11 +11,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthRequest {
+
     /**
      * The Username.
      */
-    private String username, /**
+    private String username;
+
+    /**
      * The Password.
      */
-    password;
+    private String password;
 }

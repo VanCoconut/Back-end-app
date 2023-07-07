@@ -48,8 +48,8 @@ public class AuthenticationService {
     /**
      * Register authentication response.
      *
-     * @param request the request
-     * @return the authentication response
+     * @param request the request {@link  RegisterDto}
+     * @return the authentication response {@link  AuthenticationResponse}
      */
     public AuthenticationResponse register(RegisterDto request) {
         AppUser user = new AppUser();
@@ -69,8 +69,8 @@ public class AuthenticationService {
     /**
      * Authenticate authentication response.
      *
-     * @param request the request
-     * @return the authentication response
+     * @param request the request {@link  AuthRequest}
+     * @return the authentication response {@link  AuthenticationResponse}
      */
     public AuthenticationResponse authenticate(AuthRequest request) {
         authenticationManager.authenticate(

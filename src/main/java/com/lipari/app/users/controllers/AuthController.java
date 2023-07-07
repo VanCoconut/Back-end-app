@@ -22,35 +22,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     /**
-     * The Jwt service.
-     */
-    private final JwtService jwtService;
-    /**
-     * The Authentication manager.
-     */
-    private final AuthenticationManager authenticationManager;
-
-    /**
      * The Service.
      */
     private final AuthenticationService service;
 
-//    @PostMapping("/login")
-//    public String getToken(@RequestBody AuthRequest request) {
-//        Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-//        if (auth.isAuthenticated()) {
-//            return jwtService.generateToken(request.getUsername());
-//        } else {
-//            throw new UsernameNotFoundException("user not foud");
-//        }
-//
-//    }
-
     /**
      * Register response entity.
      *
-     * @param request the request
-     * @return the response entity
+     * @param request the request {@link  RegisterDto}
+     * @return the response entity {@link  AuthenticationResponse}
      */
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterDto request) {
@@ -62,8 +42,8 @@ public class AuthController {
     /**
      * Login response entity.
      *
-     * @param request the request
-     * @return the response entity
+     * @param request the request {@link  AuthRequest}
+     * @return the response entity {@link  AuthenticationResponse}
      */
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthRequest request) {
