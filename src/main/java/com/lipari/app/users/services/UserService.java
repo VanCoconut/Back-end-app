@@ -30,28 +30,61 @@ import com.lipari.app.users.validations.ChangePasswordValidation;
 import com.lipari.app.users.validations.SignInValidation;
 import com.lipari.app.users.validations.SignUpValidation;
 
+/**
+ * The type User service.
+ */
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
-	private final UserRepo userRepo;
-	private final AddressRepo addressRepo;
-	private final RoleRepo roleRepo;
-	private final PasswordEncoder passwordEncoder;
+    /**
+     * The User repo.
+     */
+    private final UserRepo userRepo;
+    /**
+     * The Address repo.
+     */
+    private final AddressRepo addressRepo;
+    /**
+     * The Role repo.
+     */
+    private final RoleRepo roleRepo;
+    /**
+     * The Password encoder.
+     */
+    private final PasswordEncoder passwordEncoder;
 
-	@Autowired
+    /**
+     * The Sign in validation.
+     */
+    @Autowired
 	private SignInValidation signInValidation;
 
-	@Autowired
+    /**
+     * The Sign up up validation.
+     */
+    @Autowired
 	private SignUpValidation signUpUpValidation;
 
-	@Autowired
+    /**
+     * The General validation.
+     */
+    @Autowired
 	private GeneralValidation generalValidation;
 
-	@Autowired
+    /**
+     * The Change password validation.
+     */
+    @Autowired
 	private ChangePasswordValidation changePasswordValidation;
 
-	// USER
+    /**
+     * Find user by id app user.
+     *
+     * @param id the id
+     * @return the app user
+     */
+// USER
 	public AppUser findUserById(Long id) {
 
 		try {
@@ -63,7 +96,14 @@ public class UserService {
 		}
 	}
 
-	public AppUser loging(String username, String pass) {
+    /**
+     * Loging app user.
+     *
+     * @param username the username
+     * @param pass     the pass
+     * @return the app user
+     */
+    public AppUser loging(String username, String pass) {
 
 		try {
 			signInValidation.validation(username, pass);
@@ -76,7 +116,13 @@ public class UserService {
 		}
 	}
 
-	@Transactional(rollbackFor = DataException.class)
+    /**
+     * Create user app user.
+     *
+     * @param registerDto the register dto
+     * @return the app user
+     */
+    @Transactional(rollbackFor = DataException.class)
 	public AppUser createUser(RegisterDto registerDto) {
 		try {
 			//signUpUpValidation.validation(registerDto);
@@ -93,7 +139,14 @@ public class UserService {
 		}
 	}
 
-	@Transactional(rollbackFor = DataException.class)
+    /**
+     * Change user app user.
+     *
+     * @param id      the id
+     * @param appUser the app user
+     * @return the app user
+     */
+    @Transactional(rollbackFor = DataException.class)
 	public AppUser changeUser(Long id, AppUser appUser) {
 		try {
 			signUpUpValidation.validation(appUser);
@@ -115,7 +168,16 @@ public class UserService {
 
 	}
 
-	@Transactional(rollbackFor = DataException.class)
+    /**
+     * Change password app user.
+     *
+     * @param id      the id
+     * @param oldPsw  the old psw
+     * @param newPsw  the new psw
+     * @param confPsw the conf psw
+     * @return the app user
+     */
+    @Transactional(rollbackFor = DataException.class)
 	public AppUser changePassword(Long id, String oldPsw, String newPsw, String confPsw) {
 		try {
 			changePasswordValidation.validation(oldPsw, newPsw, confPsw);
@@ -127,7 +189,12 @@ public class UserService {
 		}
 	}
 
-	@Transactional(rollbackFor = DataException.class)
+    /**
+     * Cancel user.
+     *
+     * @param userId the user id
+     */
+    @Transactional(rollbackFor = DataException.class)
 	public void cancelUser(Long userId) {
 		try {
 			generalValidation.positiveLong(userId);
@@ -142,11 +209,24 @@ public class UserService {
 
 	// ADDRESS
 
-	public List<String> adressList(Long userId) {
+    /**
+     * Adress list list.
+     *
+     * @param userId the user id
+     * @return the list
+     */
+    public List<String> adressList(Long userId) {
 		return addressRepo.getAllUserAddress(userId);
 	}
 
-	@Transactional(rollbackFor = DataException.class)
+    /**
+     * Add address app user.
+     *
+     * @param userId     the user id
+     * @param newAddress the new address
+     * @return the app user
+     */
+    @Transactional(rollbackFor = DataException.class)
 	public AppUser addAddress(Long userId, String newAddress) {
 		try {
 			generalValidation.positiveLong(userId);
@@ -164,7 +244,13 @@ public class UserService {
 		}
 	}
 
-	public Address getAddressById(Long id) {
+    /**
+     * Gets address by id.
+     *
+     * @param id the id
+     * @return the address by id
+     */
+    public Address getAddressById(Long id) {
 		try {
 			generalValidation.positiveLong(id);
 			Address a = addressRepo.getAddressById(id).orElseThrow(() -> new NotFoundException("address not found"));
@@ -178,7 +264,12 @@ public class UserService {
 		}
 	}
 
-	@Transactional(rollbackFor = DataException.class)
+    /**
+     * Cancel address.
+     *
+     * @param id the id
+     */
+    @Transactional(rollbackFor = DataException.class)
 	public void cancelAddress(Long id) {
 		try {
 			generalValidation.positiveLong(id);
@@ -195,11 +286,22 @@ public class UserService {
 
 	// ROLE
 
-	public List<Role> findAllRole() {
+    /**
+     * Find all role list.
+     *
+     * @return the list
+     */
+    public List<Role> findAllRole() {
 		return roleRepo.findAll();
 	}
 
-	public Role findRoleById(Long id) {
+    /**
+     * Find role by id role.
+     *
+     * @param id the id
+     * @return the role
+     */
+    public Role findRoleById(Long id) {
 		try {
 			generalValidation.positiveLong(id);
 			return roleRepo.findById(id).orElseThrow(() -> new NotFoundException("role not found"));
@@ -208,7 +310,13 @@ public class UserService {
 		}
 	}
 
-	public Role findRoleByDescription(String d) {
+    /**
+     * Find role by description role.
+     *
+     * @param d the d
+     * @return the role
+     */
+    public Role findRoleByDescription(String d) {
 		try {
 			generalValidation.stringNotBlank(d);
 			return roleRepo.getRoleByDescription(d).orElseThrow(() -> new NotFoundException("description not found"));
@@ -217,7 +325,13 @@ public class UserService {
 		}
 	}
 
-	@Transactional(rollbackFor = DataException.class)
+    /**
+     * Add role role.
+     *
+     * @param name the name
+     * @return the role
+     */
+    @Transactional(rollbackFor = DataException.class)
 	public Role addRole(String name) {
 		try {
 			generalValidation.stringNotBlank(name);
@@ -230,7 +344,14 @@ public class UserService {
 		}
 	}
 
-	@Transactional(rollbackFor = DataException.class)
+    /**
+     * Update role role.
+     *
+     * @param oldId the old id
+     * @param role  the role
+     * @return the role
+     */
+    @Transactional(rollbackFor = DataException.class)
 	public Role updateRole(Long oldId, Role role) {
 		try {
 			generalValidation.positiveLong(role.getId());
@@ -247,7 +368,12 @@ public class UserService {
 
 	}
 
-	@Transactional(rollbackFor = DataException.class)
+    /**
+     * Cancel role by id.
+     *
+     * @param id the id
+     */
+    @Transactional(rollbackFor = DataException.class)
 	public void cancelRoleById(Long id) {
 		try {
 			generalValidation.positiveLong(id);
@@ -270,7 +396,12 @@ public class UserService {
 		}
 	}
 
-	@Transactional(rollbackFor = DataException.class)
+    /**
+     * Cancel role by description.
+     *
+     * @param descr the descr
+     */
+    @Transactional(rollbackFor = DataException.class)
 	public void cancelRoleByDescription(String descr) {
 		try {
 			generalValidation.stringNotBlank(descr);

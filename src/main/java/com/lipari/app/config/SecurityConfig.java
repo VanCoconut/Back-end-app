@@ -2,6 +2,9 @@ package com.lipari.app.config;
 
 
 import com.lipari.app.filter.JwtAuthFilter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,16 +23,39 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * The type Security config where setting up the security beans and the securityFilterChain.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    /**
+     * The Auth filter.
+     */
     @Autowired
     private final JwtAuthFilter authFilter;
 
+    /**
+     * The Authenticcation provider.
+     */
     private final AuthenticationProvider authenticcationProvider;
 
+    /**
+     * Security filter is divided in 3 main points.
+     * <ul>
+     *     <li>permit  registration and login</li>
+     *     <li>allow only who have the rightful authority to access at some endpoints</li>
+     *     <li>set the connection type on STATELESS</li>
+     *     <li>set the authentication provider {@link AppConfig#authenticationProvider()}</li>
+     *     <li>set the jwt filter {@link JwtAuthFilter}</li>
+     * </ul>
+     *
+     * @param http the http
+     * @return the security filter chain
+     * @throws Exception the exception
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()

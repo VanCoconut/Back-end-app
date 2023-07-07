@@ -14,18 +14,39 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
+/**
+ * The type Product service.
+ */
 @Service
 public class ProductService {
 
+    /**
+     * The Product repository.
+     */
     ProductRepository productRepository;
+    /**
+     * The Basket repository.
+     */
     BasketRepository basketRepository;
 
+    /**
+     * Instantiates a new Product service.
+     *
+     * @param productRepository the product repository
+     * @param basketRepository  the basket repository
+     */
     @Autowired
     public ProductService(ProductRepository productRepository, BasketRepository basketRepository){
         this.productRepository = productRepository;
         this.basketRepository = basketRepository;
     }
 
+    /**
+     * Create product string.
+     *
+     * @param product the product
+     * @return the string
+     */
     @Transactional(rollbackFor = DataException.class)
     public String createProduct(Product product){
             if (!isValidProduct(product)) {
@@ -37,18 +58,39 @@ public class ProductService {
         productRepository.save(product);
         return "Product created";
     }
+
+    /**
+     * Gets product by id.
+     *
+     * @param id the id
+     * @return the product by id
+     */
     @Transactional(rollbackFor = DataException.class, readOnly = true)
     public Product getProductById(Long id) {
         Product product = productRepository.findById(id)
                           .orElseThrow(() -> new NotFoundException("Product not found id - "+id));
         return product;
     }
+
+    /**
+     * Gets all products.
+     *
+     * @return the all products
+     */
     @Transactional(rollbackFor = DataException.class,readOnly = true)
     public List<Product> getAllProducts() {
         List<Product> products;
         products = productRepository.findAll();
         return products;
     }
+
+    /**
+     * Update product by id string.
+     *
+     * @param updatedProduct the updated product
+     * @param id             the id
+     * @return the string
+     */
     @Transactional(rollbackFor = DataException.class)
     public String updateProductById(Product updatedProduct, Long id) {
             if (!productRepository.existsById(id)) {
@@ -64,6 +106,13 @@ public class ProductService {
             productRepository.save(updatedProduct);
             return "the product has been successfully updated:\n"+ updatedProduct;
     }
+
+    /**
+     * Remove product by id string.
+     *
+     * @param id the id
+     * @return the string
+     */
     @Transactional(rollbackFor = DataException.class)
     public String removeProductById(Long id) {
         if(productRepository.existsById(id)){
@@ -79,6 +128,12 @@ public class ProductService {
         }
     }
 
+    /**
+     * Is valid product boolean.
+     *
+     * @param product the product
+     * @return the boolean
+     */
     private boolean isValidProduct(Product product) {
         return product.getCodice() > 0 &&
                 product.getDescrizione() != null &&
@@ -87,12 +142,24 @@ public class ProductService {
                 product.getQuantity() > 0;
     }
 
+    /**
+     * Check available quantity int.
+     *
+     * @param productId the product id
+     * @return the int
+     */
     public int checkAvailableQuantity(Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new NotFoundException("Product not found"));
         return product.getQuantity();
     }
 
+    /**
+     * Update product quantity.
+     *
+     * @param productId   the product id
+     * @param newQuantity the new quantity
+     */
     @Transactional(rollbackFor = DataException.class)
     public void updateProductQuantity(Long productId, int newQuantity) {
         Product product = productRepository.findById(productId)

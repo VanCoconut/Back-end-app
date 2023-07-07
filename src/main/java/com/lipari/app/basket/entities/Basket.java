@@ -7,24 +7,47 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Basket.
+ */
 @Entity
 @Table(name="t_basket")
 public class Basket {
-	@Id
+    /**
+     * The Id.
+     */
+    @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@OneToMany(mappedBy = "basket", cascade = CascadeType.ALL)
+    /**
+     * The Basket items.
+     */
+    @OneToMany(mappedBy = "basket", cascade = CascadeType.ALL)
 	private List<BasketItem> basketItems;
 
-	public Basket() {
+    /**
+     * Instantiates a new Basket.
+     */
+    public Basket() {
 	}
 
-	public Basket(Long id, List<BasketItem> basketItems) {
+    /**
+     * Instantiates a new Basket.
+     *
+     * @param id          the id
+     * @param basketItems the basket items
+     */
+    public Basket(Long id, List<BasketItem> basketItems) {
 		this.id = id;
 		this.basketItems = basketItems;
 	}
 
-	public Basket(Long basketId) {
+    /**
+     * Instantiates a new Basket.
+     *
+     * @param basketId the basket id
+     */
+    public Basket(Long basketId) {
 	}
 
 	@Override
@@ -35,30 +58,60 @@ public class Basket {
 				'}';
 	}
 
-	public Long getId() {
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
+    public Long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+    /**
+     * Sets id.
+     *
+     * @param id the id
+     */
+    public void setId(Long id) {
 		this.id = id;
 	}
 
-	public List<BasketItem> getBasketItems() {
+    /**
+     * Gets basket items.
+     *
+     * @return the basket items
+     */
+    public List<BasketItem> getBasketItems() {
 		return basketItems;
 	}
 
-	public void setBasketItems(List<BasketItem> basketItems) {
+    /**
+     * Sets basket items.
+     *
+     * @param basketItems the basket items
+     */
+    public void setBasketItems(List<BasketItem> basketItems) {
 		this.basketItems = basketItems;
 	}
 
-	public void addItem(BasketItem basketItem) {
+    /**
+     * Add item.
+     *
+     * @param basketItem the basket item
+     */
+    public void addItem(BasketItem basketItem) {
 		if (basketItems == null){
 			basketItems = new ArrayList<>();
 		}
 		basketItems.add(basketItem);
 	}
 
-	public void removeItem(BasketItem basketItem) {
+    /**
+     * Remove item.
+     *
+     * @param basketItem the basket item
+     */
+    public void removeItem(BasketItem basketItem) {
 		basketItems.remove(basketItem);
 		basketItem.getProduct().getBasketItems().remove(basketItem);
 	}

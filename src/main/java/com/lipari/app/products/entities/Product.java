@@ -5,31 +5,65 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
+/**
+ * The type Product.
+ */
 @Entity
 @Table(name="t_product")
 public class Product {
-	@Id
+    /**
+     * The Id.
+     */
+    @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "product_id")
 	private Long id;
 
-	@Column(name = "code", columnDefinition = "int")
+    /**
+     * The Codice.
+     */
+    @Column(name = "code", columnDefinition = "int")
 	private int codice;
 
-	@Column(name = "description", columnDefinition = "varchar(255)")
+    /**
+     * The Descrizione.
+     */
+    @Column(name = "description", columnDefinition = "varchar(255)")
 	private String descrizione;
 
-	@Column(name = "cost", columnDefinition = "double(10, 2)")
+    /**
+     * The Costo.
+     */
+    @Column(name = "cost", columnDefinition = "double(10, 2)")
 	private double costo;
 
-	@Column(name = "quantity", columnDefinition = "int")
+    /**
+     * The Quantity.
+     */
+    @Column(name = "quantity", columnDefinition = "int")
 	private int quantity;
 
-	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    /**
+     * The Basket items.
+     */
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
 	private List<BasketItem> basketItems;
-	public Product(){}
 
-	public Product(int codice, String descrizione, double costo, int quantity, List<BasketItem> basketItems) {
+    /**
+     * Instantiates a new Product.
+     */
+    public Product(){}
+
+    /**
+     * Instantiates a new Product.
+     *
+     * @param codice      the codice
+     * @param descrizione the descrizione
+     * @param costo       the costo
+     * @param quantity    the quantity
+     * @param basketItems the basket items
+     */
+    public Product(int codice, String descrizione, double costo, int quantity, List<BasketItem> basketItems) {
 		this.codice = codice;
 		this.descrizione = descrizione;
 		this.costo = costo;
@@ -49,51 +83,111 @@ public class Product {
 				'}';
 	}
 
-	public Long getId() {
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
+    public Long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+    /**
+     * Sets id.
+     *
+     * @param id the id
+     */
+    public void setId(Long id) {
 		this.id = id;
 	}
 
-	public int getCodice() {
+    /**
+     * Gets codice.
+     *
+     * @return the codice
+     */
+    public int getCodice() {
 		return codice;
 	}
 
-	public void setCodice(int codice) {
+    /**
+     * Sets codice.
+     *
+     * @param codice the codice
+     */
+    public void setCodice(int codice) {
 		this.codice = codice;
 	}
 
-	public String getDescrizione() {
+    /**
+     * Gets descrizione.
+     *
+     * @return the descrizione
+     */
+    public String getDescrizione() {
 		return descrizione;
 	}
 
-	public void setDescrizione(String descrizione) {
+    /**
+     * Sets descrizione.
+     *
+     * @param descrizione the descrizione
+     */
+    public void setDescrizione(String descrizione) {
 		this.descrizione = descrizione;
 	}
 
-	public double getCosto() {
+    /**
+     * Gets costo.
+     *
+     * @return the costo
+     */
+    public double getCosto() {
 		return costo;
 	}
 
-	public void setCosto(double costo) {
+    /**
+     * Sets costo.
+     *
+     * @param costo the costo
+     */
+    public void setCosto(double costo) {
 		this.costo = costo;
 	}
 
-	public int getQuantity() {
+    /**
+     * Gets quantity.
+     *
+     * @return the quantity
+     */
+    public int getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(int quantity) {
+    /**
+     * Sets quantity.
+     *
+     * @param quantity the quantity
+     */
+    public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
 
-	public List<BasketItem> getBasketItems() {
+    /**
+     * Gets basket items.
+     *
+     * @return the basket items
+     */
+    public List<BasketItem> getBasketItems() {
 		return basketItems;
 	}
 
-	public void setBasketItems(List<BasketItem> basketItems) {
+    /**
+     * Sets basket items.
+     *
+     * @param basketItems the basket items
+     */
+    public void setBasketItems(List<BasketItem> basketItems) {
 		this.basketItems = basketItems;
 	}
 }

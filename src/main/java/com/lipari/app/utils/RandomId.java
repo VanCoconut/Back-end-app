@@ -5,8 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Random;
+
+/**
+ * The type Random id.
+ */
 @Component
 public class RandomId {
+    /**
+     * The Order repository.
+     */
     @Autowired
     private OrderRepository orderRepository;
    /* public String generateVarchar() {

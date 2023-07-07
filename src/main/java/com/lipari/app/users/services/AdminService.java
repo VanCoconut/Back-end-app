@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import com.lipari.app.commons.exception.utils.DataException;
 import com.lipari.app.orders.entities.Order;
 
+/**
+ * The type Admin service.
+ */
 @Service
 public class AdminService {
 	

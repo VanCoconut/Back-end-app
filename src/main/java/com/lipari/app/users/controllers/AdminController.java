@@ -10,17 +10,33 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * The type Admin controller.
+ */
 @RestController
 @RequestMapping("/api/admins")
 public class AdminController {
 
-    AdminService adminService;
+	/**
+	 * The Admin service.
+	 */
+	AdminService adminService;
 
-    @Autowired
+	/**
+	 * Instantiates a new Admin controller.
+	 *
+	 * @param adminService the admin service
+	 */
+	@Autowired
     public AdminController(AdminService adminService){
         this.adminService=adminService;
     }
 
+	/**
+	 * Hello string.
+	 *
+	 * @return the string
+	 */
 	@GetMapping("/hello")
 	//@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public String hello(){

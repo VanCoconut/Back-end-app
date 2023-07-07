@@ -15,20 +15,44 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/**
+ * The type Authentication service.
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
 
+    /**
+     * The User repo.
+     */
     private final UserRepo userRepo;
 
+    /**
+     * The Password encoder.
+     */
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * The Jwt service.
+     */
     private final JwtService jwtService;
 
+    /**
+     * The Authentication manager.
+     */
     private final AuthenticationManager authenticationManager;
 
+    /**
+     * The Role repo.
+     */
     private final RoleRepo roleRepo;
 
+    /**
+     * Register authentication response.
+     *
+     * @param request the request
+     * @return the authentication response
+     */
     public AuthenticationResponse register(RegisterDto request) {
         AppUser user = new AppUser();
         user.setNome(request.getFirstname());
@@ -44,6 +68,12 @@ public class AuthenticationService {
                 .build();
     }
 
+    /**
+     * Authenticate authentication response.
+     *
+     * @param request the request
+     * @return the authentication response
+     */
     public AuthenticationResponse authenticate(AuthRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(

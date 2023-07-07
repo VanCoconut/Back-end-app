@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * The interface Order repository.
+ */
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
    // List<Order> findAllOrderAppByUserId(Long userID);

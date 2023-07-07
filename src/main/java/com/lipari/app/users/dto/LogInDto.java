@@ -2,28 +2,60 @@ package com.lipari.app.users.dto;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * The type Log in dto.
+ */
 @Component
 public class LogInDto {
 
-	private String username,password;
-	
-	public LogInDto() {
+    /**
+     * The Username.
+     */
+    private String username, /**
+     * The Password.
+     */
+    password;
+
+    /**
+     * Instantiates a new Log in dto.
+     */
+    public LogInDto() {
 		
 	}
 
-	public String getUsername() {
+    /**
+     * Gets username.
+     *
+     * @return the username
+     */
+    public String getUsername() {
 		return username;
 	}
 
-	public void setUsername(String username) {
+    /**
+     * Sets username.
+     *
+     * @param username the username
+     */
+    public void setUsername(String username) {
 		this.username = username;
 	}
 
-	public String getPassword() {
+    /**
+     * Gets password.
+     *
+     * @return the password
+     */
+    public String getPassword() {
 		return password;
 	}
 
-	public void setPassword(String password) {
+    /**
+     * Sets password.
+     *
+     * @param password the password
+     */
+    public void setPassword(String password) {
 		this.password = password;
 	}
 

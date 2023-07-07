@@ -4,10 +4,18 @@ import org.springframework.stereotype.Component;
 
 import com.lipari.app.commons.exception.utils.InvalidDataException;
 
+/**
+ * The type General validation.
+ */
 @Component
 public class GeneralValidation {
 
-	public void stringNotBlank(String... strings) {
+    /**
+     * String not blank.
+     *
+     * @param strings the strings
+     */
+    public void stringNotBlank(String... strings) {
 
 		for (String s : strings) {
 			if (s.isBlank())
@@ -16,14 +24,24 @@ public class GeneralValidation {
 
 	}
 
-	public void positiveLong(Long... longs) {
+    /**
+     * Positive long.
+     *
+     * @param longs the longs
+     */
+    public void positiveLong(Long... longs) {
 		for (Long i : longs) {
 			if (i == null || i < 0)
 				throw new InvalidDataException("il numero è nullo o minore di zero");
 		}
 	}
 
-	public void stringNoSpace(String... strings) {
+    /**
+     * String no space.
+     *
+     * @param strings the strings
+     */
+    public void stringNoSpace(String... strings) {
 
 		for (String s : strings) {
 			if (s.contains(" "))
@@ -31,7 +49,12 @@ public class GeneralValidation {
 		}
 	}
 
-	public void minimumLenght8(String... strings) {
+    /**
+     * Minimum lenght 8.
+     *
+     * @param strings the strings
+     */
+    public void minimumLenght8(String... strings) {
 
 		for (String s : strings) {
 			if (s.length() < 8)
@@ -47,7 +70,13 @@ public class GeneralValidation {
 	 * InvalidDataException("i campi devondo essere uguali"); } }
 	 */
 
-	public void equalStrings(String s1, String s2) {
+    /**
+     * Equal strings.
+     *
+     * @param s1 the s 1
+     * @param s2 the s 2
+     */
+    public void equalStrings(String s1, String s2) {
 
 		if (s1.equals(s2))
 			throw new InvalidDataException("i campi devondo essere uguali");

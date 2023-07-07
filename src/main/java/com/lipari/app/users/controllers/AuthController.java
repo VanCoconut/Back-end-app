@@ -16,14 +16,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * The type Auth controller.
+ */
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
+    /**
+     * The Jwt service.
+     */
     private final JwtService jwtService;
+    /**
+     * The Authentication manager.
+     */
     private final AuthenticationManager authenticationManager;
 
+    /**
+     * The Service.
+     */
     private final AuthenticationService service;
 
 //    @PostMapping("/login")
@@ -37,6 +49,12 @@ public class AuthController {
 //
 //    }
 
+    /**
+     * Register response entity.
+     *
+     * @param request the request
+     * @return the response entity
+     */
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterDto request) {
         return ResponseEntity.ok(service.register(request));
@@ -44,6 +62,12 @@ public class AuthController {
     }
 
 
+    /**
+     * Login response entity.
+     *
+     * @param request the request
+     * @return the response entity
+     */
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthRequest request) {
         return ResponseEntity.ok(service.authenticate(request));
