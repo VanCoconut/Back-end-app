@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * The type Register dto.
+ * The DTO for Register dto.
  */
 @Component
 @NoArgsConstructor

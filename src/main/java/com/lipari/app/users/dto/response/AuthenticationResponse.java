@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * The type Authentication response.
+ * The Authentication response display the auth token.
  */
 @Data
 @Builder

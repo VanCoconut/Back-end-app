@@ -14,7 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- * The Type App config where storing beans.
+ * The App config where storing beans.
  */
 @Configuration
 @RequiredArgsConstructor

@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * The type Jwt service.
+ * The Jwt service grant the jwt token manipulation.
  */
 @Component
 public class JwtService {

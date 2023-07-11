@@ -18,7 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 /**
- * The type Jwt auth filter.
+ * The  Jwt auth filter used to catch the token .
  */
 @Component
 @RequiredArgsConstructor

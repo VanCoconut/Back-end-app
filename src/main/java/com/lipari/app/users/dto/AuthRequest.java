@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * The type Auth request.
+ * The DTO for Auth request.
  */
 @Data
 @NoArgsConstructor

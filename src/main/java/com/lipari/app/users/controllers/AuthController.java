@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * The type Auth controller.
+ * The  Auth controller holds the registration and log in http methods.
  */
 @RestController
 @RequestMapping("/api/auth")
@@ -38,6 +38,9 @@ public class AuthController {
      */
     private final AuthenticationService service;
 
+/*   was replaced by the other one because of its length
+*
+* */
 //    @PostMapping("/login")
 //    public String getToken(@RequestBody AuthRequest request) {
 //        Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
@@ -50,7 +53,7 @@ public class AuthController {
 //    }
 
     /**
-     * Register response entity.
+     * Register http method.
      *
      * @param request the request
      * @return the response entity
@@ -63,7 +66,7 @@ public class AuthController {
 
 
     /**
-     * Login response entity.
+     * Login http method.
      *
      * @param request the request
      * @return the response entity
