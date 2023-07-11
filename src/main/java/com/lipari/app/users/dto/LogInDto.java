@@ -3,7 +3,7 @@ package com.lipari.app.users.dto;
 import org.springframework.stereotype.Component;
 
 /**
- * The type Log in dto.
+ * The type Log in dto not used.
  */
 @Component
 public class LogInDto {

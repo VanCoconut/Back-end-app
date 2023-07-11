@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
- * The type Authentication service.
+ * The  Authentication service defines the registration and log in functions.
  */
 @Service
 @RequiredArgsConstructor

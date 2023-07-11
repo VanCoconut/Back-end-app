@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 /**
- * The type Register dto.
+ * The  Register dto used in registration form.
  */
 @Component
 @NoArgsConstructor

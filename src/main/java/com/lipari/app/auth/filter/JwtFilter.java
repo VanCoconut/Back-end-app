@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * The type Jwt filter.
+ * The Jwt filter catch  and validate the token .
  */
 @Component
 public class JwtFilter extends OncePerRequestFilter {

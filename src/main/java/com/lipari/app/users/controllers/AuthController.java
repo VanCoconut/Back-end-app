@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * The type Auth controller.
+ * The Auth controller holds the http request for register and log in .
  */
 @RestController
 @RequestMapping("/api/auth")
@@ -29,8 +29,8 @@ public class AuthController {
     /**
      * Register response entity.
      *
-     * @param request the request {@link  RegisterDto}
-     * @return the response entity {@link  AuthenticationResponse}
+     * @param request the request {@link   RegisterDto}
+     * @return the response entity {@link   AuthenticationResponse}
      */
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterDto request) {
